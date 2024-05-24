@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+  <link rel="stylesheet" href="./ViewJewelry.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Source Serif Pro:ital,wght@0,400;0,700;1,300;1,700;1,900&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ABeeZee:wght@400&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
+</head>
+
+<body>
+  <div class="view-jewelry">
+    <main class="frame-parent">
+      <header class="mercury-parent-parent">
+        <div class="mercury-parent">
+          <div class="mercury-grandparent">
+            <h1 class="mercury">MERCURY</h1>
+            <div class="avatar-parent">
+              <div class="avatar-grandparent">
+                <button onclick="ViewProfile()"style="border: none; background: none; padding: 0; cursor: pointer;">
+                  <img
+                  class="avatar-icon"
+                  loading="lazy"
+                  alt=""
+                  src="./CategoryImage/avatar@2x.png"
+                />
+              </button>
+              <script>
+                function ViewProfile() {
+                    window.location.href = "ViewProfile.html";
+                }
+                </script>
+
+                <div class="language-parent">
+                  <b class="language">LANGUAGE</b>
+
+                </div>
+                <div class="currency-parent">
+                  <div class="currency-grandparent">
+                    <div class="currency-great-grandparent">
+                      <img class="currency-great-grandparent-child" loading="lazy" alt=""
+                        src="./ViewJewelryImage/ellipse-20@2x.png" />
+                    </div>
+                    <b class="vn">VNĐ</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-separator-parent">
+          <div class="content-separator"></div>
+          <div class="navigation-parent-wrapper">
+            <div class="navigation-parent">
+              <div class="navigation-options">
+                <div class="navigation-links">
+                  <div class="auctions">AUCTIONS</div>
+                  <div class="sell-blog-parent">
+                    <div class="sell">SELL</div>
+                    <div class="result-parent">
+                      <div class="result">RESULT</div>
+                    </div>
+                    <div class="category-parent">
+                      <div class="category"><button onclick="CategoryPage();" style="border: none; background: none;  cursor: pointer; color:white; font-size: 19px ; ">CATEGORY</button></div>
+                      <script>
+                        function CategoryPage() {
+                            window.location.href = "Category.html";
+                        }
+                    </script>
+                    </div>
+                    <div class="blog">BLOG</div>
+                  </div>
+                </div>
+              </div>
+              <div class="searchbar">
+                <div class="content">
+                  <div class="magnifyingglass">
+                    <i class="magnifyingglass1"></i>
+                  </div>
+                  <div class="placeholder-parent">
+                    <i class="placeholder-label">Search...</i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <section class="body">
+        <div class="image-banner">
+          <div class="back-home-parent">
+            <div class="back-to-home-container">
+              <span>&lt; </span>
+              <b class="back-to-home">BACK TO HOME</b>
+            </div>
+          </div>
+          <div class="image-parent">
+            <div class="jelwerypic">
+              <div class="image-slider">
+                <div class="image-slider-child"></div>
+                <img class="image-2-icon" loading="lazy" alt=""
+                  src="./ViewJewelryImage/14k Victorian Pearl & Turquoise Bangle_1.webp" />
+
+                <img class="image-3-icon" loading="lazy" alt="" src="./ViewJewelryImage/image-3@2x.png" />
+
+                <img class="image-4-icon" loading="lazy" alt="" src="./ViewJewelryImage/image-4@2x.png" />
+              </div>
+            </div>
+            <div class="content-parent">
+              <div class="content-details">
+                <div class="auction-details">
+                  <div class="title-parent">
+                    <div class="title-grandparent">
+                      <div class="title-great-grandparent">
+                        <h1 class="k-victorian-pearl">
+                          14k Victorian Pearl & Turquoise Bangle
+                        </h1>
+                        <img class="title-separator-icon" alt="" />
+                      </div>
+                      <div class="estimate-400-600-starting-container">
+                        <p class="estimate-400-600">
+                          <i class="estimate">Estimate</i>
+                          <span>: $400-$600</span>
+                        </p>
+                        <p class="starting-bid-375">
+                          <i class="starting-bid">Starting Bid</i>
+                          <span class="span">: $375</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="place-bid-button-parent">
+                    <button class="place-bid-button-grandparent" id="openPopup">
+                      <img class="rectangle-icon" alt="" src="./ViewJewelryImage/rectangle.svg" id="rectangle" />
+                      <b class="place-bid">PLACE BID</b>
+                  </button>
+              
+                  <div id="popup" class="popup">
+                      <div class="popup-content">
+                          <span class="close">&times;</span>
+                          <h2>PLACE BID</h2>
+                          <p>Enter the highest amount you are willing to bid. We'll bid you incrementally to keep you in the lead. </p>
+
+                          <div class="bid-summary">
+                            <div class="row">
+                                <span class="label">Maximum Bid</span>
+                                <h6>($)</h6>
+                                <select name="Bid_List">
+                                  <option>375</option>
+                                  <option>400</option>
+                                  <option>425</option>
+                                  <option>450</option>
+                                  <option>475</option>
+                                  <option>500</option>
+                                  <option>525</option>
+                                  <option>550</option>
+                              </select>
+                            
+                            </div>
+                            <div class="row">
+                                <span class="label">Buyer's Premium <button class="info-button">&#8505;</button></span>
+                                <span class="value">$21.00 (15%)</span>
+                            </div>
+                            <div class="row">
+                                <span class="label">Subtotal</span>
+                                <span class="value">$496.00</span>
+                            </div>
+                            
+                            <button class="PlaceBid_Button">NEXT</button>
+                        </div>
+                      </div>
+                  </div>
+              
+                  <script src="script.js"></script>
+
+
+                  </div>
+                  <div class="category-label">
+                    <div class="category-bracelet">
+                      <i class="category">Category</i>
+                      <span>: Bracelet </span>
+                    </div>
+                  </div>
+                  <div class="description-parent">
+                    <img class="description-parent-child" loading="lazy" alt="" src="./ViewJewelryImage/line-3.svg" />
+
+                    <div class="description-grandparent">
+                      <i class="description">Description</i>
+                    </div>
+                  </div>
+                  <div class="auction-description">
+                    <div class="a-late-19th">A late 19th century Victorian Period 14k Yellow Gold bangle bracelet with Turquoise and Pearl. Hinged filigree bracelet with engraved detail and seventeen alternating prong set Pearls and Turquoise stones. Marked 14k at clasp. 10.5 grams total weight. Minor wear. 2 1/2" long. ESTIMATE $400-600
+                    </div>
+                  </div>
+                </div>
+                <div class="footer">
+                  <img class="footer-child" alt="" src="./ViewJelweryImage/line-5-1.svg" />
+
+                  <div class="condition-wrapper">
+                    <i class="condition">Condition</i>
+                  </div>
+                  <div class="minor-wear-wrapper">
+                    <div class="minor-wear">Minor wear.</div>
+                  </div>
+                  <img class="footer-item" loading="lazy" alt="" src="./ViewJelweryImage/line-5-1.svg" />
+
+                  <div class="global-shipping-wrapper">
+                    <i class="global-shipping">Global Shipping</i>
+                  </div>
+                  <div class="shipping-description-parent">
+                    <div class="with-customers-in">
+                      With customers in over 100 countries, we provide fully
+                      insured global shipping, expertly arranged by our team.
+                      The shipping costs, determined based on the insured
+                      value of the package and its destination, will be
+                      calculated post-auction and added to your invoice.
+                      Please note, VAT, duties, or any additional charges
+                      related to international shipping are not included in
+                      these costs and remain the responsibility of the buyer.
+                    </div>
+                  </div>
+                </div>
+                <div class="content-header">
+                  <img class="content-header-child" loading="lazy" alt="" src="./ViewJelweryImage/line-5-1.svg" />
+
+                  <div class="content-titles">
+                    <i class="post-auction-support">Post-Auction Support</i>
+                  </div>
+                  <div class="content-subtitles">
+                    <div class="as-a-full-service">
+                      As a full-service auction house, we take pride in the
+                      comprehensive range of post-auction services we offer,
+                      including ring resizing, stone replacement, and repair
+                      work. It's part of our commitment to ensure a seamless
+                      transaction and to cater to your needs even after the
+                      gavel falls. However, please note that the applicability
+                      of certain services may vary depending on the specifics
+                      of the lot. If you have any questions or need additional
+                      information such as a cost estimate, we encourage you to
+                      reach out to us.
+                    </div>
+                  </div>
+                </div>
+                <div class="vector-parent">
+                  <img class="frame-child" loading="lazy" alt="" src="./ViewJelweryImage/line-5-1.svg" />
+
+                  <div class="bidding-title-parent">
+                    <i class="bidding-guidelines">Bidding Guidelines</i>
+                  </div>
+                  <div class="please-remember-that-once-you-wrapper">
+                    <div class="please-remember-that">
+                      Please remember that once you have placed a bid on our
+                      platform, it cannot be retracted or reduced.
+                    </div>
+                  </div>
+                </div>
+                <div class="content-header1">
+                  <img class="content-header-item" loading="lazy" alt="" src="./ViewJelweryImage/line-5-1.svg" />
+
+                  <div class="conditions-of-sale-wrapper">
+                    <i class="conditions-of-sale">Conditions of Sale</i>
+                  </div>
+                  <div class="we-encourage-all-potential-bid-wrapper">
+                    <div class="we-encourage-all">
+                      We encourage all potential bidders to consult our
+                      Conditions of Sale for comprehensive details. By placing
+                      a bid, you acknowledge that you have read and are bound
+                      by these conditions.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="copyright">
+      <div class="mercury-auction-llc">© MERCURY AUCTION LLC 2024</div>
+    </div>
+  </div>
+
+  <script>
+    var rectangle = document.getElementById("rectangle");
+    if (rectangle) {
+      rectangle.addEventListener("click", function (e) {
+        // Please sync "Frame 10" to the project
+      });
+    }
+  </script>
+</body>
+
+</html>

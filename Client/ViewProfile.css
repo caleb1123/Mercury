@@ -1,0 +1,704 @@
+.language,
+.mercury {
+  position: relative;
+  display: inline-block;
+}
+.mercury {
+  margin: 0;
+  width: 420px;
+  font-size: inherit;
+  font-weight: 700;
+  font-family: inherit;
+  flex-shrink: 0;
+  debug_commit: bf4bc93;
+  max-width: 166%;
+}
+.language {
+  min-width: 124px;
+}
+.frame-child {
+  width: 25px;
+  height: 25px;
+  position: relative;
+  object-fit: contain;
+}
+.vector-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 3px 0 0;
+}
+.vn {
+  position: relative;
+  display: inline-block;
+  min-width: 51px;
+}
+.frame-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.frame-inner,
+.frame-item {
+  height: 6.1px;
+  width: 6.9px;
+  position: absolute;
+  margin: 0 !important;
+  right: 119.1px;
+  bottom: 7.9px;
+  object-fit: contain;
+}
+.frame-inner {
+  height: 6px;
+  width: 6px;
+  right: 113px;
+  bottom: 8px;
+}
+.language-parent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  flex-shrink: 0;
+  debug_commit: bf4bc93;
+  gap: 20px;
+}
+.frame-wrapper,
+.mercury-parent {
+    display: flex;
+    align-items: flex-start;
+    max-width: 100%;
+}
+.frame-wrapper {
+  width: 254px;
+  flex-direction: column;
+  padding: 29px 0 0;
+  flex-shrink: 0;
+  font-size: 24px;
+}
+.mercury-parent {
+    align-self: stretch;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+.view-profile-child {
+  width: 700px;
+  height: 1px;
+  position: relative;
+  border-top: 1px solid #fff;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.auctions,
+.result,
+.sell {
+  position: relative;
+  display: inline-block;
+  min-width: 96px;
+}
+.result,
+.sell {
+  min-width: 46px;
+}
+.result {
+  min-width: 72px;
+}
+.result-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 14px 0 0;
+}
+.category-icon {
+  align-self: stretch;
+  height: 14px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.category-wrapper {
+  width: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 4.3px 12px 0 0;
+  box-sizing: border-box;
+}
+.blog {
+  position: relative;
+  display: inline-block;
+  min-width: 52px;
+}
+.sell-parent {
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+}
+.auctions-parent,
+.frame-wrapper1,
+.sell-parent {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+}
+.auctions-parent {
+  align-self: stretch;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 56px;
+}
+.frame-wrapper1 {
+  width: 583px;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 0 6px;
+  box-sizing: border-box;
+}
+.magnifyingglass1 {
+  height: 28px;
+  flex: 1;
+  position: relative;
+  line-height: 50px;
+  display: flex;
+  font-weight: 900;
+  align-items: center;
+  justify-content: center;
+}
+.magnifyingglass {
+  width: 28px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.placeholder-label {
+  align-self: stretch;
+  position: relative;
+  letter-spacing: -0.41px;
+  line-height: 22px;
+  font-weight: 300;
+}
+.placeholder-label-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 3px 0 0;
+  max-width: 100%;
+  text-align: left;
+  font-size: 17px;
+}
+.content,
+.placeholder-label-wrapper,
+.searchbar {
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.content {
+  flex: 1;
+  border-radius: 10px;
+  background-color: #000;
+  border: 1px solid #fff;
+  display: flex;
+  flex-direction: row;
+  padding: 2px 7px;
+  max-width: 100%;
+}
+.searchbar {
+  width: 416px;
+  border: 1px solid #000;
+  padding: 0 0 1px;
+  font-size: 18px;
+}
+.frame-container,
+.frame-div,
+.searchbar {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+}
+.frame-div {
+  flex: 1;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.frame-container {
+  align-self: stretch;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 0 0 8px;
+  box-sizing: border-box;
+}
+.your-profile {
+  margin: 0;
+  position: relative;
+  font-size: 36px;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: left;
+  white-space: nowrap;
+}
+.frame-group,
+.view-profile-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frame-group {
+  flex: 1;
+  flex-direction: column;
+  gap: 63px;
+}
+.view-profile-inner {
+  width: 1425px;
+  flex-direction: row;
+  padding: 0 48px 54px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 20px;
+  color: #fff;
+  font-family: "Source Serif Pro";
+}
+.auction-id,
+.blank-line,
+.location-noida {
+  margin: 0;
+}
+.auction-id-container {
+  width: 313px;
+  position: absolute;
+  margin: 0 !important;
+  right: 63px;
+  bottom: 74px;
+  display: inline-block;
+}
+.avatar-icon {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  debug_commit: bf4bc93;
+}
+.rectangle-icon {
+  height: 71px;
+  width: 184px;
+  position: relative;
+  display: none;
+}
+.edit-profile {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.vector-parent {
+  width: 184px;
+  background-color: #b0b0b0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 17px 9px 25px 14px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  debug_commit: bf4bc93;
+  white-space: nowrap;
+}
+.avatar-parent,
+.frame-wrapper2 {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+}
+.frame-wrapper2 {
+  width: 374.8px;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.avatar-parent {
+  margin-top: -3.600000000000364px;
+  height: 503.6px;
+  width: 414.1px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 35.5px;
+  min-width: 414.1000000000003px;
+  font-size: 24px;
+  font-family: Inter;
+}
+.nguyen-minh-trung {
+  margin: 0;
+  width: 535px;
+  position: relative;
+  font-size: inherit;
+  font-weight: 700;
+  font-family: inherit;
+  display: inline-block;
+  max-width: 100%;
+}
+.i {
+  position: relative;
+}
+.nguyenminhtrung18072004gmail {
+  align-self: stretch;
+  position: relative;
+  white-space: nowrap;
+}
+.frame-wrapper4,
+.parent {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+}
+.parent {
+  width: 672px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 13px;
+}
+.frame-wrapper4 {
+  align-self: stretch;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0 0 6px;
+  box-sizing: border-box;
+}
+.male {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  font-weight: 400;
+  font-family: inherit;
+  display: inline-block;
+  min-width: 84px;
+}
+.male-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 59px 3px;
+}
+.vinhomes-grand-park {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  font-weight: 400;
+  font-family: inherit;
+  display: inline-block;
+  max-width: 100%;
+}
+.vinhomes-grand-park-wrapper {
+  width: 490px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 59px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.auction-id1,
+.blank-line1,
+.location-mumbai {
+  margin: 0;
+}
+.auction-id-container1 {
+  height: 87px;
+  flex: 1;
+  position: relative;
+  display: inline-block;
+}
+.div {
+  width: 246px;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: 16px;
+  font-size: 36px;
+  font-family: "Source Serif Pro";
+  color: #fff;
+  text-align: left;
+  display: inline-block;
+  z-index: 1;
+}
+.auction-id-123876-location-parent {
+  width: 313px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  color: #000;
+  font-family: Karla;
+}
+.frame-parent2,
+.frame-wrapper3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frame-parent2 {
+  align-self: stretch;
+  gap: 17px;
+}
+.frame-wrapper3 {
+  width: 731px;
+  padding: 1px 0 0;
+  box-sizing: border-box;
+}
+.vuesaxlinearcake-icon {
+  width: 38px;
+  height: 39px;
+  position: relative;
+}
+.vuesaxlinearsms-icon {
+  width: 37.8px;
+  height: 38.7px;
+  position: relative;
+}
+.vuesaxlinearuser-icon {
+  width: 38px;
+  height: 39px;
+  position: relative;
+}
+.vuesaxlinearcall-icon,
+.vuesaxlinearlocation-icon {
+  position: relative;
+  flex-shrink: 0;
+  debug_commit: bf4bc93;
+}
+.vuesaxlinearlocation-icon {
+  width: 37.8px;
+  height: 38.7px;
+  overflow: hidden;
+}
+.vuesaxlinearcall-icon {
+  height: 39px;
+  width: 38px;
+}
+.vuesaxlinearcall-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 0 0 3px;
+}
+.vuesaxlinearlocation-parent,
+.vuesaxlinearuser-parent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 22.3px;
+}
+.vuesaxlinearuser-parent {
+  gap: 28px;
+}
+.vuesaxlinearcake-parent {
+  flex-direction: column;
+  gap: 24.7px;
+  margin-left: -727px;
+}
+.frame-parent1,
+.nguyen-minh-trung-parent,
+.user,
+.view-profile,
+.vuesaxlinearcake-parent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frame-parent1 {
+  width: 731px;
+  flex-direction: row;
+  max-width: 107%;
+  flex-shrink: 0;
+  font-size: 36px;
+}
+.nguyen-minh-trung-parent,
+.user,
+.view-profile {
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.nguyen-minh-trung-parent {
+  width: 718px;
+  flex-shrink: 0;
+  flex-direction: column;
+  padding: 6px 16px;
+  gap: 37px;
+  min-width: 718px;
+  max-width: 100%;
+  z-index: 1;
+  text-align: left;
+  font-size: 48px;
+  color: #fff;
+  font-family: "Source Serif Pro";
+}
+.user,
+.view-profile {
+  position: relative;
+  text-align: center;
+}
+.user {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 67px 44px;
+  gap: 54.7px;
+  max-width: 100%;
+  font-size: 20px;
+  color: #000;
+  font-family: Karla;
+}
+.view-profile {
+  width: 100%;
+  background-color: #010600;
+  flex-direction: column;
+  padding: 30px 0 290px;
+  gap: 6px;
+  line-height: normal;
+  letter-spacing: normal;
+  font-size: 64px;
+  color: #fff;
+  font-family: "Source Serif Pro";
+}
+@media screen and (max-width: 1350px) {
+  .mercury-parent {
+    flex-wrap: wrap;
+  }
+  .sell-parent {
+    display: none;
+  }
+  .avatar-parent,
+  .nguyen-minh-trung-parent {
+    flex: 1;
+  }
+  .user {
+    flex-wrap: wrap;
+    padding-left: 33px;
+    padding-right: 33px;
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 1125px) {
+  .nguyen-minh-trung-parent {
+    min-width: 100%;
+  }
+}
+@media screen and (max-width: 800px) {
+  .mercury {
+    font-size: 51px;
+  }
+  .mercury-parent {
+    gap: 181px;
+    padding-left: 279px;
+    box-sizing: border-box;
+  }
+  .auctions-parent {
+    gap: 28px;
+  }
+  .content {
+    display: none;
+  }
+  .searchbar {
+    width: 0;
+  }
+  .frame-group {
+    gap: 31px;
+  }
+  .view-profile-inner {
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+  .avatar-parent {
+    min-width: 100%;
+  }
+  .nguyen-minh-trung {
+    font-size: 38px;
+  }
+  .i,
+  .male,
+  .nguyenminhtrung18072004gmail,
+  .vinhomes-grand-park {
+    font-size: 29px;
+  }
+  .vinhomes-grand-park-wrapper {
+    padding-left: 29px;
+    padding-right: 29px;
+    box-sizing: border-box;
+  }
+  .div {
+    font-size: 29px;
+  }
+  .user {
+    gap: 27px;
+    padding-bottom: 29px;
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 450px) {
+  .mercury {
+    font-size: 38px;
+  }
+  .vn {
+    font-size: 19px;
+  }
+  .mercury-parent {
+    gap: 90px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+  .frame-group {
+    gap: 16px;
+  }
+  .auction-id-container {
+    font-size: 16px;
+  }
+  .avatar-parent {
+    gap: 18px;
+  }
+  .nguyen-minh-trung {
+    font-size: 29px;
+  }
+  .i,
+  .male,
+  .nguyenminhtrung18072004gmail,
+  .vinhomes-grand-park {
+    font-size: 22px;
+  }
+  .auction-id-container1 {
+    font-size: 16px;
+  }
+  .div {
+    font-size: 22px;
+  }
+  .nguyen-minh-trung-parent {
+    gap: 18px;
+  }
+}
