@@ -21,11 +21,5 @@ public class AccountDTO {
     private Boolean sex;
     private String phone;
     private Boolean status;
-    private Collection<Auction> auctions;
-    private Collection<Bid> bids;
-    private Collection<Payment> payments;
-    private Collection<AuctionSession> auctionSessions;
-    private Collection<Post> posts;
-    private Role role;
-    private Collection<Request> requests;
+
 }

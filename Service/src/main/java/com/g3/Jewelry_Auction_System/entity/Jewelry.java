@@ -33,6 +33,12 @@ public class Jewelry {
     private String description;
 
     @Column
+    private String condition;
+
+    @Column
+    private double estimate;
+
+    @Column
     private double startingPrice;
 
     @Column
@@ -44,8 +50,6 @@ public class Jewelry {
     @ManyToOne
     @JoinColumn(name = "jewelryCategoryId")
     private JewelryCategory jewelryCategory;
-
-
 
     @OneToMany(mappedBy = "jewelry")
     private Collection<Auction> auctions;

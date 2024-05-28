@@ -22,13 +22,6 @@ public class AccountConverter {
         entity.setSex(accountDTO.getSex());
         entity.setPhone(accountDTO.getPhone());
         entity.setStatus(accountDTO.getStatus());
-        entity.setAuctions(accountDTO.getAuctions());
-        entity.setBids(accountDTO.getBids());
-        entity.setPayments(accountDTO.getPayments());
-        entity.setAuctionSessions(accountDTO.getAuctionSessions());
-        entity.setPosts(accountDTO.getPosts());
-        entity.setRole(accountDTO.getRole());
-        entity.setRequests(accountDTO.getRequests());
         return entity;
     }
 
@@ -48,13 +41,6 @@ public class AccountConverter {
         dto.setSex(account.getSex());
         dto.setPhone(account.getPhone());
         dto.setStatus(account.getStatus());
-        dto.setAuctions(account.getAuctions());
-        dto.setBids(account.getBids());
-        dto.setPayments(account.getPayments());
-        dto.setAuctionSessions(account.getAuctionSessions());
-        dto.setPosts(account.getPosts());
-        dto.setRole(account.getRole());
-        dto.setRequests(account.getRequests());
         return dto;
     }
 }
