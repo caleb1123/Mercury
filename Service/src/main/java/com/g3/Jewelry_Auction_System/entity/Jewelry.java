@@ -29,6 +29,7 @@ public class Jewelry {
     @Column
     private String image;
 
+
     @Column
     private String description;
 
