@@ -1,6 +1,6 @@
 package com.g3.Jewelry_Auction_System.controller;
 
-import com.g3.Jewelry_Auction_System.DTO.AccountDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

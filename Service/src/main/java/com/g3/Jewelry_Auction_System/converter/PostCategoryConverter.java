@@ -1,6 +1,6 @@
 package converter;
 
-import com.g3.Jewelry_Auction_System.DTO.PostCategoryDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.PostCategoryDTO;
 import com.g3.Jewelry_Auction_System.entity.PostCategory;
 import org.springframework.stereotype.Component;
 

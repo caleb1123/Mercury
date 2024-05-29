@@ -1,6 +1,6 @@
 package converter;
 
-import com.g3.Jewelry_Auction_System.DTO.RoleDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.RoleDTO;
 import com.g3.Jewelry_Auction_System.entity.Role;
 import org.springframework.stereotype.Component;
 

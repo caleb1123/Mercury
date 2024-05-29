@@ -12,8 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SercutiryConfig {
     private final String [] PUBLIC_ENDPOINTS = {
-            "/accounts/**"
-
+            "/accounts/**",
+            "/auth/**"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
