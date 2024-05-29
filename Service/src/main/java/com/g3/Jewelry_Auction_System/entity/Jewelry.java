@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Jewelry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +31,15 @@ public class Jewelry {
     @Column
     private String image;
 
+
     @Column
     private String description;
+
+    @Column
+    private String condition;
+
+    @Column
+    private double estimate;
 
     @Column
     private double startingPrice;
@@ -44,8 +53,6 @@ public class Jewelry {
     @ManyToOne
     @JoinColumn(name = "jewelryCategoryId")
     private JewelryCategory jewelryCategory;
-
-
 
     @OneToMany(mappedBy = "jewelry")
     private Collection<Auction> auctions;
