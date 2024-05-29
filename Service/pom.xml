@@ -46,7 +46,7 @@
 			<version>12.6.1.jre11</version>
 		</dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>
