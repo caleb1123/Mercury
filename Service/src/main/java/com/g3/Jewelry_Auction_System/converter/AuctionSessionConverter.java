@@ -1,6 +1,6 @@
 package converter;
 
-import com.g3.Jewelry_Auction_System.DTO.AuctionSessionDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.AuctionSessionDTO;
 import com.g3.Jewelry_Auction_System.entity.AuctionSession;
 
 public class AuctionSessionConverter {

@@ -1,4 +1,4 @@
-package com.g3.Jewelry_Auction_System.DTO;
+package com.g3.Jewelry_Auction_System.payload.DTO;
 
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import lombok.AllArgsConstructor;

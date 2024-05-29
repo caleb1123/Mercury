@@ -1,4 +1,4 @@
-package com.g3.Jewelry_Auction_System.DTO;
+package com.g3.Jewelry_Auction_System.payload.DTO;
 
 import com.g3.Jewelry_Auction_System.entity.*;
 import lombok.AllArgsConstructor;
@@ -21,5 +21,5 @@ public class AccountDTO {
     private Boolean sex;
     private String phone;
     private Boolean status;
-
+    private int roleId;
 }
