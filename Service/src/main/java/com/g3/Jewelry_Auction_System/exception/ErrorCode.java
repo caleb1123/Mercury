@@ -15,7 +15,9 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
-    PASSWORD_NOT_CORRECT(1009, "Incorrect password", HttpStatus.UNAUTHORIZED);
+    PASSWORD_NOT_CORRECT(1009, "Incorrect password", HttpStatus.UNAUTHORIZED),
+    EMAIL_TAKEN(1010, "Email already in use", HttpStatus.BAD_REQUEST),
+    EMPTY_FIELD(1010, "You cannot leave required field(s) empty", HttpStatus.BAD_REQUEST),
     ;
 
 

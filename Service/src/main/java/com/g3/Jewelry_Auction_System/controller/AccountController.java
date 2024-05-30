@@ -6,13 +6,10 @@ import com.g3.Jewelry_Auction_System.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/account")
 public class AccountController {
     @Autowired
     AccountService accountService;
@@ -21,5 +18,27 @@ public class AccountController {
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO accountDTO) {
         Account createdAccount = accountService.createAccount(accountDTO);
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{userName}")
+    public ResponseEntity<?> deactivateAccount(@PathVariable String userName) {
+        try {
+            accountService.deactivateAccount(userName);
+            return ResponseEntity.ok().build(); // Return 200 OK on successful deletion
+        } catch (Exception e) {
+            // Handle other potential exceptions (e.g., database issues)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
+        }
+    }
+
+    @PutMapping("/{userName}")
+    public ResponseEntity<?> updateAccount(@PathVariable int userName, @RequestBody AccountDTO accountDTO) {
+        try {
+            accountService.updateAccount(accountDTO);
+            return ResponseEntity.ok().build(); // Return 200 OK on successful deletion
+        } catch (Exception e) {
+            // Handle other potential exceptions (e.g., database issues)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
+        }
     }
 }
