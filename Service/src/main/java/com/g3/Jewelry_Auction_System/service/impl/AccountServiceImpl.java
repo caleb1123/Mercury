@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,7 +47,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateAccount(AccountDTO accountDTO) {
+    public void updateAccount(AccountDTO accountDTO) {
         String userName = accountDTO.getUserName();
         Optional<Account> existingAccount = accountRepository.findByEmail(accountDTO.getEmail());
         AccountDTO beforeUpdate = accountConverter.toDTO(accountRepository
@@ -60,11 +61,19 @@ public class AccountServiceImpl implements AccountService {
         if (existingAccount.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
-        if (accountDTO.getAddress().isEmpty() || accountDTO.getEmail().isEmpty() || accountDTO.getPassword().isEmpty()) {
+        if (accountDTO.getAddress().isEmpty()
+                || accountDTO.getEmail().isEmpty()
+                || accountDTO.getPassword().isEmpty()
+                || accountDTO.getFullName().isEmpty()
+                || accountDTO.getPhone().isEmpty()) {
             throw new AppException(ErrorCode.EMPTY_FIELD);
         }
+        //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         Account updateAccount = accountConverter.toEntity(accountDTO);
         accountRepository.save(updateAccount);
-        return updateAccount;
+    }
+    @Override
+    public List<Account> getAccountList() {
+        return accountRepository.findAll();
     }
 }

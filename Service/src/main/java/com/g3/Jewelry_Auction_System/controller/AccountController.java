@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -20,8 +22,8 @@ public class AccountController {
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{userName}")
-    public ResponseEntity<?> deactivateAccount(@PathVariable String userName) {
+    @PutMapping("/deactivate/{userName}")
+    public ResponseEntity<Account> deactivateAccount(@PathVariable String userName) {
         try {
             accountService.deactivateAccount(userName);
             return ResponseEntity.ok().build(); // Return 200 OK on successful deletion
@@ -31,8 +33,8 @@ public class AccountController {
         }
     }
 
-    @PutMapping("/{userName}")
-    public ResponseEntity<?> updateAccount(@PathVariable int userName, @RequestBody AccountDTO accountDTO) {
+    @PutMapping("/update/{userName}")
+    public ResponseEntity<Account> updateAccount(@RequestBody AccountDTO accountDTO) {
         try {
             accountService.updateAccount(accountDTO);
             return ResponseEntity.ok().build(); // Return 200 OK on successful deletion
@@ -40,5 +42,16 @@ public class AccountController {
             // Handle other potential exceptions (e.g., database issues)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
         }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Account>> getAccountList() {
+        List<Account> accountList = accountService.getAccountList();
+        if (accountList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(accountList, HttpStatus.OK);
+        }
+
     }
 }
