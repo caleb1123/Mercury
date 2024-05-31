@@ -1,0 +1,117 @@
+.ViewJewelry{
+  padding: 30px 35px 9px;
+  position: relative;
+  max-width: fit-content; 
+  display: flex;
+  flex-wrap: wrap; 
+  align-items: center; 
+  text-align: center;
+  background-color: #000000;
+  color: white;
+}
+.PageName_ViewJewelry{
+  padding: 0 25px 0;
+  font-style: italic;
+  font-size: 35px;
+
+}
+body{
+  width: 100%;
+  background-color: black;
+  display: flex;
+  align-content: center;
+  text-align: left;
+
+}
+.Jewelry{
+  padding: 0 25px 0;
+  align-items: flex-start;
+  width: 100%; 
+  margin: 0 auto;
+  display: flex;
+}
+.ImageFrame{
+  display: flex;
+  align-self: stretch;
+  flex: 1;
+  background-color: #5f4a3a;
+  flex-direction: column;
+  padding: 56px 23px 69px;
+  gap: 84px;
+}
+.Image{
+  display: flex;
+width: 501px;
+height: 414px;
+right: 23px;
+top: 72px;
+
+}
+.info{
+  text-align: left;
+  flex:2;
+  padding: 5px 105px 0;
+    min-width: 539px;
+}
+.JewelryName{
+  font-weight: bold;
+  text-align: left;
+  max-width: 600px;
+  font-size: 48px;
+}
+.WordStyle_JewelryInfo{
+  padding: 25px 5px 0;
+  font-size: 24px;
+}
+.PlaceBidButton{
+  background-color: rgb(96, 74, 134);
+  font-size: 24px;
+  color: #f1e9e9;
+  font-weight: bold;
+  margin: 25px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  
+}
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  color: black;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.PlaceBidNextButton{
+  font-size: 24px; 
+  background-color: rgb(99 186 238);
+  color: white;
+  cursor: pointer;
+  border-radius:5px ;
+  margin: 15px 0 0 5px;
+}

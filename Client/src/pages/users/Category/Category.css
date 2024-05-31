@@ -1,0 +1,71 @@
+body {
+    width: 100%;
+    background-color: black;
+    display: flex;
+    align-content: center;
+    text-align: left;
+
+}
+
+.Category {
+    /* padding: 30px 35px 9px; */
+    padding: 50px;
+    position: relative;
+    max-width: fit-content;
+    /* display: flex; */
+    flex-wrap: wrap;
+    align-items: center;
+    text-align: left;
+    background-color: #000000;
+    color: white;
+}
+
+.PageName_Category {
+    margin-top: 100px;
+    padding: 0 25px 30px;
+    font-size: 40px;
+
+}
+
+.CategoryFrame {
+    display: flex;
+    position: relative;
+    background-color: rgb(210, 202, 196);
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(255, 255, 255);
+    border-image: initial;
+    padding: 200px;
+    gap: 200px;
+}
+
+/* .Bracelet {
+    height: 433px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    padding: 0px 0px 17px;
+    gap: 8px;
+    align-self: stretch;
+    max-width: 100%
+} */
+
+.image {
+    box-sizing: border-box;
+    width: 382px;
+    height: 372px;
+
+
+}
+.WordStyle_Category{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-size: 24px;
+    color: black;
+    text-decoration: underline;
+  }
