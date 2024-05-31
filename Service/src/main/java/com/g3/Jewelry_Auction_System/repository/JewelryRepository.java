@@ -10,9 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface JewelryRepository extends JpaRepository<Jewelry, Integer> {
-
     Optional<Jewelry> findByJewelryId(int jewelryId);
-    @Modifying
-    @Query("update Jewelry set status = false where jewelryId = :jewelryId")
-    void delistJewelry(int jewelryId);
 }

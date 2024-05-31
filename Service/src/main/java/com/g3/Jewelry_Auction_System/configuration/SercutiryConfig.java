@@ -12,14 +12,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SercutiryConfig {
     private final String [] PUBLIC_ENDPOINTS = {
-            "/accounts/**",
-            "/auth/**"
+            "/account/**",
+            "/auth/**",
+            "/jewelry/**",
+            "/request/**"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
 
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS) .permitAll()
                 .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.PUT,PUBLIC_ENDPOINTS).permitAll()
                 .anyRequest()
                 .authenticated());
 

@@ -1,20 +1,24 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
+import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import com.g3.Jewelry_Auction_System.service.JewelryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/jewelry")
 public class JewelryController {
     @Autowired
     JewelryService jewelryService;
+
+    @PostMapping("/add")
+    public ResponseEntity<Jewelry> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
+        Jewelry newJewelry = jewelryService.addJewelry(jewelryDTO);
+        return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
+    }
 
     @PutMapping("/delist/{jewelryId}")
     public ResponseEntity<Jewelry> delistJewelry(@PathVariable int jewelryId) {

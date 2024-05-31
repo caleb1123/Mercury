@@ -18,9 +18,9 @@ public class JewelryDTO {
     private String gemstone;
     private String image;
     private String description;
+    private String condition;
+    private double estimate;
     private double startingPrice;
     private Boolean status;
-    private Collection<Request> requests;
-    private JewelryCategory jewelryCategory;
-    private Collection<Auction> auctions;
+    private int jewelryCategoryId;
 }

@@ -14,8 +14,4 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findByUserName(String userName);
     Optional<Account> findByEmail(String email);
-
-    @Modifying
-    @Query("Update Account set status = 'Deactivated' where userName = :username ")
-    void deactivateByUserName(String userName);
 }

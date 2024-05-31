@@ -42,5 +42,4 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "sellerId")
     private Account account;
-
 }

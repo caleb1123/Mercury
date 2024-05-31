@@ -43,7 +43,9 @@ public class AccountServiceImpl implements AccountService {
         Account user = accountRepository
                 .findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        accountRepository.deactivateByUserName(userName);
+
+        user.setStatus(false);
+        accountRepository.save(user);
     }
 
     @Override
