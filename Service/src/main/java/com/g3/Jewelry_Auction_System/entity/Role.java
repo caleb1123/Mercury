@@ -19,8 +19,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
 
+    @Enumerated(EnumType.STRING) 
     @Column(unique = true)
-    private String roleName;
+    private ERole roleName;
 
     @OneToMany(mappedBy = "role")
     private Collection<Account> accounts;
