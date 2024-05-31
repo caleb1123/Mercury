@@ -1,5 +1,6 @@
 package converter;
 
+import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.payload.DTO.RoleDTO;
 import com.g3.Jewelry_Auction_System.entity.Role;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ public class RoleConverter {
 
         Role role = new Role();
         role.setRoleId(dto.getRoleId());
-        role.setRoleName(dto.getRoleName());
+        role.setRoleName(ERole.valueOf(dto.getRoleName()));
         role.setAccounts(dto.getAccounts());
         return role;
     }
@@ -21,7 +22,7 @@ public class RoleConverter {
 
         RoleDTO dto = new RoleDTO();
         dto.setRoleId(role.getRoleId());
-        dto.setRoleName(role.getRoleName());
+        dto.setRoleName(String.valueOf(role.getRoleName()));
         dto.setAccounts(role.getAccounts());
         return dto;
     }
