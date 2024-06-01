@@ -1,21 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# OS generated files
-.DS_Store # macOS folder settings
-Thumbs.db # Windows image file cache
-Desktop.ini # Windows desktop icon settings
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Editor directories and files
-.vscode/   # Visual Studio Code settings
-.idea/   # IntelliJ IDEA settings
-*.swp   # Vim swap files
-*.swo   # Vim swap files
-*.swn   # Vim swap files
+# testing
+/coverage
 
-# Temporary or cache files
-*.tmp   # Temporary files
-*.temp  # Temporary files
-*.cache   # Cache files
-*.bak   # Backup files
+# production
+/build
 
-# Others
-*.log   # Log files
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

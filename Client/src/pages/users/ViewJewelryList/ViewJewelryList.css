@@ -1,0 +1,130 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+
+}
+
+.Header {
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    color: white;
+    text-align: center;
+    padding-left: 150px;
+    background-color: rgb(156, 145, 145);
+    padding-bottom: 10px;
+    z-index: 1000;
+}
+.UpHeader {
+    display: flex;
+}
+
+.Mercury {
+    font-size: 40px;
+    padding: 0 0 0 20px;
+    font-weight: bold;
+}
+
+.Login_CreaAccount {
+    font-weight: bold;
+    display: flex;
+    margin: 20px 0 0 500px;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.LoginStyle {
+    margin: 0 0 0 100px;
+}
+.Line {
+    margin-top: 5px;
+    display: flex;
+}
+
+.Search {
+    font-size: 17px;
+    margin-left: 80px;
+    background-color: black;
+    border: solid white;
+    padding-left: 10px;
+    color: white;
+    border-radius: 3px;
+}
+
+.Down_Header {
+    display: flex;
+    font-size: 17px;
+    margin-top: 5px;
+    float: left;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.Bar {
+    display: flex;
+}
+
+.world_bar_style {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 80px;
+
+}
+
+.Bracelet {
+    display: flex;
+}
+
+.BraceletList {
+    margin-top: 50px;
+    padding-left: 150px;
+    display: flex;
+}
+
+.JewelryImg_Bracelet {
+    width: 288px;
+    height: 255px;
+    border-radius: 10px;
+    border-color: white;
+}
+
+.JewelryName_Bracelet{
+    width: 288px;
+    color: white;
+    font-weight: bold;
+}
+
+.JewelryDate_Bracelet{
+    color: white;
+}
+
+.ViewBraceletList{
+    margin-top: 50px;
+    padding-left: 150px;
+    display: flex;
+}
+
+.Footer{
+    margin-top: 30px;
+    background-color: rgb(156, 145, 145);
+    color: white;
+    padding-left: 100px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+.Footer_Small{
+    font-size: 30px;
+    padding-left: 150px;
+}
+.Footer_Style{
+    font-size: 20px;
+    padding: 30px;
+}
+
+.Footer_Info{
+    display: flex;
+}

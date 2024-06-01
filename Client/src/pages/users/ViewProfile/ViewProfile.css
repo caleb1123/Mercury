@@ -1,0 +1,64 @@
+body{
+    width: 100%;
+    background-color: black;
+    display: flex;
+    align-content: center;
+    text-align: left;
+  
+  }
+.ViewProfile{
+    padding: 30px 35px 9px;
+    position: relative;
+    max-width: fit-content; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    background-color: #000000;
+    color: white;
+  }
+  .PageName_YourProfile{
+    padding: 0 10px 25px;
+    font-size: 30px;
+    font-weight: bold;
+    
+  }
+  .User{
+    display: flex;
+    margin: auto;
+  }
+  .avt{
+    flex:1;
+    display: flex;
+    width: 413.97px;
+    height: 396.93px;
+
+  }
+  .UserInfo{
+    text-align: left;
+    flex:2;
+    padding: 0 105px 0;
+    min-width: 539px;
+}
+.UserName{
+    font-size: 45px;
+    font-weight: bold;
+}
+.WordStyleInfo{
+    font-size: 36px;
+    margin: 0 0 0 20px;
+    color: white;
+  }
+  .OtherInfo{
+    display: flex;
+    padding: 25px 25px 0 0;
+    font-size: 35px;
+  }
+  .EditProfileButton{
+    font-size: 24px; 
+    background-color: rgb(184, 195, 201);
+    color: rgb(228, 31, 31);
+    cursor: pointer;
+    border-radius:10px ;
+    margin: 15px 0 0 125px;
+    padding: 15px;
+
+  }
