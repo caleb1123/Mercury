@@ -1,5 +1,6 @@
 package com.g3.Jewelry_Auction_System.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,9 +38,11 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "jewelryId")
+    @JsonIgnoreProperties("requests")
     private Jewelry jewelry;
 
     @ManyToOne
     @JoinColumn(name = "sellerId")
+    @JsonIgnoreProperties("requests")
     private Account account;
 }

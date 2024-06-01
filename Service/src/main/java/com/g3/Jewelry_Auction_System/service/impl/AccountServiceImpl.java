@@ -24,7 +24,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account createAccount(AccountDTO accountDTO) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
         accountDTO.setPassword(encodedPassword);
@@ -43,36 +42,42 @@ public class AccountServiceImpl implements AccountService {
         Account user = accountRepository
                 .findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         user.setStatus(false);
         accountRepository.save(user);
     }
 
     @Override
-    public void updateAccount(AccountDTO accountDTO) {
-        String userName = accountDTO.getUserName();
-        Optional<Account> existingAccount = accountRepository.findByEmail(accountDTO.getEmail());
-        AccountDTO beforeUpdate = accountConverter.toDTO(accountRepository
-                .findByUserName(userName)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
-        if (!beforeUpdate.getPassword().equals(accountDTO.getPassword()) && !accountDTO.getPassword().isEmpty()) {
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
-            accountDTO.setPassword(encodedPassword);
-        }
-        if (existingAccount.isPresent()) {
+    public void updateAccount(AccountDTO updateDTO) {
+        Optional<Account> existingUserEmail = accountRepository.findByEmail(updateDTO.getEmail());
+        Optional<Account> existingUserPhone = accountRepository.findByPhone(updateDTO.getPhone());
+        Account user = accountRepository
+                .findByUserName(updateDTO.getUserName())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        String encodedPassword = passwordEncoder.encode(updateDTO.getPassword());
+        if (existingUserEmail.isPresent() && user.getAccountId() != existingUserEmail.get().getAccountId()) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
-        if (accountDTO.getAddress().isEmpty()
-                || accountDTO.getEmail().isEmpty()
-                || accountDTO.getPassword().isEmpty()
-                || accountDTO.getFullName().isEmpty()
-                || accountDTO.getPhone().isEmpty()) {
+        if (existingUserPhone.isPresent() && user.getAccountId() != existingUserPhone.get().getAccountId()) {
+            throw new AppException(ErrorCode.PHONE_TAKEN);
+        }
+        if (updateDTO.getPassword().isEmpty()
+                || updateDTO.getEmail().isEmpty()
+                || updateDTO.getAddress().isEmpty()
+                || updateDTO.getFullName().isEmpty()
+                || updateDTO.getPhone().isEmpty()) {
             throw new AppException(ErrorCode.EMPTY_FIELD);
+        } else {
+            user.setPassword(encodedPassword);
+            user.setEmail(updateDTO.getEmail());
+            user.setAddress(updateDTO.getAddress());
+            user.setFullName(updateDTO.getFullName());
+            user.setPhone(updateDTO.getPhone());
+            user.setDob(updateDTO.getDob());
+            user.setSex(updateDTO.getSex());
         }
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
-        Account updateAccount = accountConverter.toEntity(accountDTO);
-        accountRepository.save(updateAccount);
+        accountRepository.save(user);
     }
     @Override
     public List<Account> getAccountList() {
