@@ -45,8 +45,8 @@ public class AccountController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Account>> getAccountList() {
-        List<Account> accountList = accountService.getAccountList();
+    public ResponseEntity<List<AccountDTO>> getAccountList() {
+        List<AccountDTO> accountList = accountService.getAccountList();
         if (accountList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

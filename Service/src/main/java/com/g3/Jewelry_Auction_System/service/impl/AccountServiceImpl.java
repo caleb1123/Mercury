@@ -1,17 +1,19 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
+import com.g3.Jewelry_Auction_System.entity.*;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
-import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
+import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,9 @@ public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
     @Autowired
     AccountConverter accountConverter;
+    @Autowired
+    private AuctionRepository auctionRepository;
+
     @Override
     public Account createAccount(AccountDTO accountDTO) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -80,7 +85,13 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(user);
     }
     @Override
-    public List<Account> getAccountList() {
-        return accountRepository.findAll();
+    public List<AccountDTO> getAccountList() {
+        List<Account> accountList = accountRepository.findAll();
+        List<AccountDTO> accountDTOList = new ArrayList<>();
+        for (Account account : accountList) {
+            AccountDTO accountDTO = accountConverter.toDTO(account);
+            accountDTOList.add(accountDTO);
+        }
+        return accountDTOList;
     }
 }

@@ -1,6 +1,6 @@
 package com.g3.Jewelry_Auction_System.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,8 +48,6 @@ public class Account {
     @Column
     private Boolean status;
 
-
-
     @OneToMany(mappedBy = "account")
     private Collection<Auction> auctions;
 
@@ -69,7 +67,7 @@ public class Account {
     @JoinColumn(name = "roleId")
     private Role role;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "account")
-    @JsonIgnoreProperties("account")
     private Collection<Request> requests;
 }

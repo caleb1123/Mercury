@@ -9,5 +9,5 @@ public interface AccountService {
     Account createAccount(AccountDTO accountDTO);
     void deactivateAccount(String userName);
     void updateAccount(AccountDTO accountDTO);
-    List<Account> getAccountList();
+    List<AccountDTO> getAccountList();
 }

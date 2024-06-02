@@ -1,6 +1,6 @@
 package com.g3.Jewelry_Auction_System.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,8 +48,8 @@ public class Jewelry {
     @Column
     private Boolean status;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "jewelry")
-    @JsonIgnoreProperties("jewelry")
     private Collection<Request> requests;
 
     @ManyToOne
