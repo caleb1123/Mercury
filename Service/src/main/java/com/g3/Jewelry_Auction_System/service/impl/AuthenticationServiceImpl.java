@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.entity.Role;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
@@ -91,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
                 ))
-                .claim("customClain", "Custom")
+                .claim("scope", buildScope(account))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -106,5 +107,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-
+    private String buildScope(Account account) {
+        Role role = account.getRole();
+        if (role != null) {
+            return role.getRoleName().name(); // Assuming roleName is an enum or string
+        }
+        return "";
+    }
 }

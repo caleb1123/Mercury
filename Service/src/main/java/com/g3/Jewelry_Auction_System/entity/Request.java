@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "Request")
@@ -42,5 +41,4 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "sellerId")
     private Account account;
-
 }
