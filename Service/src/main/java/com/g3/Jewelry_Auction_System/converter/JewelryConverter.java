@@ -1,4 +1,4 @@
-package converter;
+package com.g3.Jewelry_Auction_System.converter;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class JewelryConverter {
     public Jewelry toEntity(JewelryDTO dto){
         if (dto==null) return null;
-
         Jewelry entity = new Jewelry();
         entity.setJewelryId(dto.getJewelryId());
         entity.setJewelryName(dto.getJewelryName());
@@ -18,9 +17,9 @@ public class JewelryConverter {
         entity.setDescription(dto.getDescription());
         entity.setStartingPrice(dto.getStartingPrice());
         entity.setStatus(dto.getStatus());
-        entity.setRequests(dto.getRequests());
-        entity.setJewelryCategory(dto.getJewelryCategory());
-        entity.setAuctions(dto.getAuctions());
+        entity.setCondition(dto.getCondition());
+        entity.setEstimate(dto.getEstimate());
+        entity.setJewelryId(dto.getJewelryId());
         return entity;
     }
 
@@ -36,9 +35,9 @@ public class JewelryConverter {
         dto.setDescription(entity.getDescription());
         dto.setStartingPrice(entity.getStartingPrice());
         dto.setStatus(entity.getStatus());
-        dto.setRequests(entity.getRequests());
-        dto.setJewelryCategory(entity.getJewelryCategory());
-        dto.setAuctions(entity.getAuctions());
+        dto.setCondition(entity.getCondition());
+        dto.setEstimate(entity.getEstimate());
+        dto.setJewelryId(entity.getJewelryId());
         return dto;
     }
 }

@@ -17,6 +17,6 @@ public class RequestDTO {
     private LocalDate evaluationDate;
     private double preliminaryPrice;
     private double finalPrice;
-    private Jewelry jewelry;
-    private Account account;
+    private int sellerId;
+    private int jewelryId;
 }
