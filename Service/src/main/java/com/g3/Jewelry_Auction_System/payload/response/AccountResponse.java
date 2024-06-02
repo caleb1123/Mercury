@@ -10,11 +10,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CreateAccountResponse {
+public class AccountResponse {
     private int accountId;
     private String fullName;
     private String userName;
-    private String password;
     private String address;
     private LocalDate dob;
     private String email;

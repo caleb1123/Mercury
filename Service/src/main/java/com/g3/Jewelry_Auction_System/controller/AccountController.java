@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,10 @@ public class AccountController {
             return new ResponseEntity<>(accountList, HttpStatus.OK);
         }
 
+    }
+    @GetMapping("/myinfor")
+    public ResponseEntity<AccountResponse> getMyInfo() {
+        AccountResponse accountResponse = accountService.getMyInfor();
+        return ResponseEntity.ok(accountResponse);
     }
 }

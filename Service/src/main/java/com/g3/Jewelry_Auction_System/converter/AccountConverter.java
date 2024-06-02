@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.converter;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,6 +36,24 @@ public class AccountConverter {
         dto.setFullName(account.getFullName());
         dto.setUserName(account.getUserName());
         dto.setPassword(account.getPassword());
+        dto.setAddress(account.getAddress());
+        dto.setDob(account.getDob());
+        dto.setEmail(account.getEmail());
+        dto.setSex(account.getSex());
+        dto.setPhone(account.getPhone());
+        dto.setStatus(account.getStatus());
+        return dto;
+    }
+
+    public AccountResponse toResponse(Account account) {
+        if (account == null){
+            return null;
+        }
+
+        AccountResponse dto = new AccountResponse();
+        dto.setAccountId(account.getAccountId());
+        dto.setFullName(account.getFullName());
+        dto.setUserName(account.getUserName());
         dto.setAddress(account.getAddress());
         dto.setDob(account.getDob());
         dto.setEmail(account.getEmail());

@@ -7,11 +7,14 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
+import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -92,6 +95,7 @@ public class AccountServiceImpl implements AccountService {
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         accountRepository.save(user);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<AccountDTO> getAccountList() {
         List<Account> accountList = accountRepository.findAll();
@@ -101,5 +105,17 @@ public class AccountServiceImpl implements AccountService {
             accountDTOList.add(accountDTO);
         }
         return accountDTOList;
+    }
+
+    @Override
+    public AccountResponse getMyInfor() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Account byUserName = accountRepository.findByUserName(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        AccountResponse accountResponse = accountConverter.toResponse(byUserName);
+        return accountResponse;
     }
 }
