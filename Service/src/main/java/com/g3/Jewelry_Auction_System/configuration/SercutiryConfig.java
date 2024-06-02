@@ -18,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SercutiryConfig {
     private final String [] PUBLIC_ENDPOINTS = {
-//            "/accounts/**",
+            "/accounts/**",
             "/auth/**"
     };
 
@@ -48,7 +48,5 @@ public class SercutiryConfig {
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
-
-
     }
 }
