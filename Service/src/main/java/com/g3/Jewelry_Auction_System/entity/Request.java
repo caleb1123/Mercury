@@ -1,7 +1,5 @@
 package com.g3.Jewelry_Auction_System.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,12 +34,10 @@ public class Request {
     @Column
     private double finalPrice;
 
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "jewelryId")
     private Jewelry jewelry;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "sellerId")
     private Account account;

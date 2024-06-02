@@ -67,7 +67,6 @@ public class Account {
     @JoinColumn(name = "roleId")
     private Role role;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "account")
     private Collection<Request> requests;
 }
