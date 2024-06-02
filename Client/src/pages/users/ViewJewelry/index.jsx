@@ -51,7 +51,7 @@ const ViewJewelry = () => {
             </div>
             <div className="Down_Header">
                 <div className="Bar">
-                    AUTIONS
+                    AUCTIONS
                     <div className="world_bar_style" >SELL</div>
                     <div className="world_bar_style" >RESULT</div>
                     <div className="world_bar_style" >CATEGORY</div>
