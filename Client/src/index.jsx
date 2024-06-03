@@ -12,9 +12,10 @@ import SignIn from './pages/users/Login';
 import SignUp from './pages/users/SignUp';
 import Reset from './pages/users/Reset';
 import ViewJewelryList from './pages/users/ViewJewelryList';
+import SendRequest from './pages/users/SendRequest';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<ViewJewelryList/>);
+root.render(<SignUp/>);
 
 
 
