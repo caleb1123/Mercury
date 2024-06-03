@@ -1,14 +1,17 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.entity.BlackListToken;
 import com.g3.Jewelry_Auction_System.entity.Role;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.request.IntrospectRequest;
+import com.g3.Jewelry_Auction_System.payload.request.LogoutRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
+import com.g3.Jewelry_Auction_System.repository.BlackListTokenRepository;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -16,6 +19,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,10 +35,12 @@ import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 @Service
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     AccountRepository accountRepository;
-
+    @Autowired
+    BlackListTokenRepository blackListTokenRepository;
 
 
     @Value("${app.jwt-secret}")
@@ -70,16 +76,55 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
+
+        boolean isValid = true;
+        try {
+            verifyToken(token,false);
+        } catch (AppException e){
+            isValid = false;
+        }
+
+        return IntrospectResponse.builder().valid(isValid).build();
+    }
+
+    @Override
+    public void logout(LogoutRequest logoutRequest) {
+        try {
+            var signToken = verifyToken(logoutRequest.getToken(), true);
+
+            String jit = signToken.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+            BlackListToken invalidatedToken =
+                    BlackListToken.builder().id(jit).expiryTime(expiryTime).build();
+
+            blackListTokenRepository.save(invalidatedToken);
+        } catch (AppException exception){
+            log.info("Token already expired");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        Date expiryTime = (isRefresh)
+                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime()
+                .toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);
-        return IntrospectResponse
-                .builder()
-                .valid(verified && expityTime.after(new Date()))
-                .build();
+
+        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        if (blackListTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        return signedJWT;
     }
 
     private String generateToken(Account account) {
@@ -92,6 +137,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(account))
                 .build();
 

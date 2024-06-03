@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.configuration;
 
 import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.entity.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,9 +30,9 @@ public class SercutiryConfig {
             "/jewelry/**",
             "/request/**"
     };
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
 
-    @Value("${app.jwt-secret}")
-    private String signerKey;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
 
@@ -42,7 +43,7 @@ public class SercutiryConfig {
                 .authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)
                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
 
@@ -60,12 +61,5 @@ public class SercutiryConfig {
     }
 
 
-    @Bean
-    JwtDecoder jwtDecoder(){
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
+
 }

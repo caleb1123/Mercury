@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.request.IntrospectRequest;
+import com.g3.Jewelry_Auction_System.payload.request.LogoutRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
@@ -33,5 +34,10 @@ public class AuthencationController {
             IntrospectResponse response = authenticationService.introspect(request);
             return ResponseEntity.ok(response);
 
+    }
+
+    @PostMapping("/logout")
+    public void logout(@RequestBody LogoutRequest logoutRequest) throws ParseException {
+        authenticationService.logout(logoutRequest);
     }
 }
