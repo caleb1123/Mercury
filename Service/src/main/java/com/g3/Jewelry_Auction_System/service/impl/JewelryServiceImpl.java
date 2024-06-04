@@ -20,18 +20,18 @@ public class JewelryServiceImpl implements JewelryService {
     JewelryConverter    jewelryConverter;
 
     @Override
+    public Jewelry addJewelry(JewelryDTO jewelryDTO) {
+        Jewelry newJewelry = jewelryConverter.toEntity(jewelryDTO);
+        jewelryRepository.save(newJewelry);
+        return newJewelry;
+    }
+
+    @Override
     public void delistJewelry(int jewelryId) {
         Jewelry jewelry = jewelryRepository
                 .findByJewelryId(jewelryId)
                 .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
         jewelry.setStatus(false);
         jewelryRepository.save(jewelry);
-    }
-
-    @Override
-    public Jewelry addJewelry(JewelryDTO jewelryDTO) {
-        Jewelry newJewelry = jewelryConverter.toEntity(jewelryDTO);
-        jewelryRepository.save(newJewelry);
-        return newJewelry;
     }
 }

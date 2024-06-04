@@ -49,8 +49,8 @@ public class AccountController {
         } else {
             return new ResponseEntity<>(accountList, HttpStatus.OK);
         }
-
     }
+
     @GetMapping("/myinfor")
     public ResponseEntity<AccountResponse> getMyInfo() {
         AccountResponse accountResponse = accountService.getMyInfor();

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class JewelryCategoryConverter {
     public JewelryCategory toEntity(JewelryCategoryDTO dto) {
         if (dto == null) return null;
-
         JewelryCategory entity = new JewelryCategory();
         entity.setJewelryCategoryId(dto.getJewelryCategoryId());
         entity.setTypeName(dto.getTypeName());

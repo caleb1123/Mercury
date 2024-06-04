@@ -11,7 +11,6 @@ public class AccountConverter {
         if (accountDTO == null){
             return null;
         }
-
         Account entity = new Account();
         entity.setAccountId(accountDTO.getAccountId());
         entity.setFullName(accountDTO.getFullName());
@@ -30,7 +29,6 @@ public class AccountConverter {
         if (account == null){
             return null;
         }
-
         AccountDTO dto = new AccountDTO();
         dto.setAccountId(account.getAccountId());
         dto.setFullName(account.getFullName());

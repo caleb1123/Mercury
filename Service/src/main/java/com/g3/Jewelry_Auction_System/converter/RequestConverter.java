@@ -19,7 +19,6 @@ public class RequestConverter {
     JewelryRepository jewelryRepository;
     public Request toEntity(RequestDTO dto){
         if (dto==null) return null;
-
         Request request = new Request();
         request.setRequestId(dto.getRequestId());
         request.setRequestDate(dto.getRequestDate());
@@ -32,9 +31,8 @@ public class RequestConverter {
         return request;
     }
 
-    public RequestDTO toEntity(Request request){
+    public RequestDTO toDTO(Request request){
         if (request==null) return null;
-
         RequestDTO dto = new RequestDTO();
         dto.setRequestId(request.getRequestId());
         dto.setRequestDate(request.getRequestDate());

@@ -9,21 +9,17 @@ import org.springframework.stereotype.Component;
 public class RoleConverter {
     public Role toEntity(RoleDTO dto){
         if (dto==null) return null;
-
         Role role = new Role();
         role.setRoleId(dto.getRoleId());
         role.setRoleName(ERole.valueOf(dto.getRoleName()));
-        role.setAccounts(dto.getAccounts());
         return role;
     }
 
     public RoleDTO toDTO(Role role){
         if (role==null) return null;
-
         RoleDTO dto = new RoleDTO();
         dto.setRoleId(role.getRoleId());
         dto.setRoleName(String.valueOf(role.getRoleName()));
-        dto.setAccounts(role.getAccounts());
         return dto;
     }
 }

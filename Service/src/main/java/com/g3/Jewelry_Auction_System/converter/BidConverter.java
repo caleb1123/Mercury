@@ -2,18 +2,29 @@ package com.g3.Jewelry_Auction_System.converter;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.entity.Bid;
+import com.g3.Jewelry_Auction_System.repository.AccountRepository;
+import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BidConverter {
+    @Autowired
+    AuctionConverter auctionConverter;
+    @Autowired
+    AuctionRepository auctionRepository;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    AccountConverter accountConverter;
     public Bid toEntity(BidDTO bidDTO) {
         if (bidDTO == null) return null;
         Bid bid = new Bid();
         bid.setBidId(bidDTO.getBidId());
         bid.setBidAmount(bidDTO.getBidAmount());
         bid.setBidTime(bidDTO.getBidTime());
-        bid.setAuction(bidDTO.getAuction());
-        bid.setAccount(bidDTO.getAccount());
+        bid.setAuction(auctionRepository.getReferenceById(bidDTO.getAuctionId()));
+        bid.setAccount(accountRepository.getReferenceById(bidDTO.getAccountId()));
         return bid;
     }
 
@@ -23,8 +34,8 @@ public class BidConverter {
         dto.setBidId(bid.getBidId());
         dto.setBidAmount(bid.getBidAmount());
         dto.setBidTime(bid.getBidTime());
-        dto.setAuction(bid.getAuction());
-        dto.setAccount(bid.getAccount());
+        dto.setAuctionId(auctionConverter.toDTO(bid.getAuction()).getAuctionId());
+        dto.setAccountId(accountConverter.toDTO(bid.getAccount()).getAccountId());
         return dto;
     }
 }

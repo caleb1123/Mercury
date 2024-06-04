@@ -16,6 +16,6 @@ public class PostDTO {
     private LocalDate postDate;
     private String content;
     private Boolean status;
-    private Account account;
-    private PostCategory postCategory;
+    private int accountId;
+    private int categoryId;
 }

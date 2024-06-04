@@ -2,12 +2,18 @@ package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.converter.RequestConverter;
 import com.g3.Jewelry_Auction_System.entity.Request;
+import com.g3.Jewelry_Auction_System.exception.AppException;
+import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.RequestDTO;
 import com.g3.Jewelry_Auction_System.repository.RequestRepository;
 import com.g3.Jewelry_Auction_System.service.RequestService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -21,5 +27,48 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestConverter.toEntity(requestDTO);
         requestRepository.save(request);
         return requestDTO;
+    }
+
+    @Override
+    public void updatePreliminaryPrice(RequestDTO requestDTO) {
+        Request request = requestRepository
+                .findByRequestId(requestDTO.getRequestId())
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+        if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
+            request.setPreliminaryPrice(request.getPreliminaryPrice());
+            request.setEvaluationDate(LocalDate.now());
+        }
+        requestRepository.save(request);
+    }
+
+    @Override
+    public void updateFinalPrice(RequestDTO requestDTO) {
+        Request request = requestRepository
+                .findByRequestId(requestDTO.getRequestId())
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+        if (request.getFinalPrice() != requestDTO.getFinalPrice()) {
+            request.setFinalPrice(request.getFinalPrice());
+            request.setEvaluationDate(LocalDate.now());
+        }
+        requestRepository.save(request);
+    }
+
+    @Override
+    public void deleteRequest (int requestId) {
+        Request request = requestRepository
+                .findByRequestId(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+        request.setStatus(false);
+        requestRepository.save(request);
+    }
+
+    @Override
+    public List<RequestDTO> getRequestList() {
+        List<Request> requestList = requestRepository.findAll();
+        List<RequestDTO> requestDTOList = new ArrayList<>();
+        for (Request request : requestList) {
+            requestDTOList.add(requestConverter.toDTO(request));
+        }
+        return requestDTOList;
     }
 }

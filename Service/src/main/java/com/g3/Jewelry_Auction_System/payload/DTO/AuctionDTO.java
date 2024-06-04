@@ -19,8 +19,6 @@ public class AuctionDTO {
     private LocalDate endDate;
     private double currentPrice;
     private Boolean status;
-    private Jewelry jewelry;
-    private Account account;
-    private Collection<Bid> bids;
-    private Collection<Payment> payments;
+    private int jewelryId;
+    private int winnerId;
 }

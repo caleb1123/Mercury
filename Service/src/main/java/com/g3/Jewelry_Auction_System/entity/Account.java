@@ -58,9 +58,6 @@ public class Account {
     private Collection<Payment> payments;
 
     @OneToMany(mappedBy = "account")
-    private Collection<AuctionSession> auctionSessions;
-
-    @OneToMany(mappedBy = "account")
     private Collection<Post> posts;
 
     @ManyToOne
