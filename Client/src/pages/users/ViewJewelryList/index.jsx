@@ -1,152 +1,220 @@
 import * as React from "react";
-import { useState } from "react";
-import line from './image/line-3.svg'
-import "./ViewJewelryList.css"
-import Bracelet1 from './image/bracelet1.jpeg'
-import Bracelet2 from './image/bracelet2.jpeg'
-import Bracelet3 from './image/bracelet3.jpeg'
-import Bracelet4 from './image/bracelet4.jpeg'
-import Bracelet5 from './image/bracelet5.jpeg'
-import Bracelet6 from './image/bracelet6.jpeg'
-import Bracelet7 from './image/bracelet7.jpeg'
-import Bracelet8 from './image/bracelet8.jpeg'
-import Bracelet9 from './image/bracelet9.jpeg'
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
-function ViewJewelryList(){
-    const [inputValue, setInputValue] = useState('');
+const defaultTheme = createTheme();
 
-    // Hàm xử lý sự kiện khi người dùng nhập
-    const handleChange = (event) => {
-      setInputValue(event.target.value);
-    };
+const Header = ({ inputValue, handleChange }) => (
+  <div className="Header">
+    <div className="UpHeader">
+      <div className="Mercury">MERCURY</div>
+      <div className="Login_CreaAccount">
+        CREATE ACCOUNT
+        <div className="LoginStyle">LOGIN</div>
+      </div>
+    </div>
+    <div className="Line">
+      <img src="line_image_src" alt="line" />
+    </div>
+    <div className="Down_Header">
+      <div className="Bar">
+        CATEGORY:
+        <div className="world_bar_style">BRACELET</div>
+      </div>
+      <input
+        className="Search"
+        type="text"
+        value={inputValue}
+        onChange={handleChange}
+        placeholder="Search"
+      />
+    </div>
+  </div>
+);
 
-    return(
-        <>
-        <div className="Header">
-            <div className="UpHeader">
-                <div className="Mercury">MERCURY</div>
-                <div className="Login_CreaAccount">CREATE ACCOUNT
-                    <div className="LoginStyle">LOGIN</div>
-                </div>
-            </div>
-            <div className="Line">
-                <img src={line}/>
-            </div>
-            <div className="Down_Header">
-                <div className="Bar">
-                    CATEGORY:
-                    <div className="world_bar_style" >BRACELET</div>
-                </div>            
-            <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
+export default function SendRequest() {
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
 
-            </div>
-        </div>
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-        <div className="BraceletList"><h3>BRACELET</h3></div>
-        <div className="Bracelet">
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet1} ></img>
-                    <div className="JewelryDate_Bracelet">21 May, 2024</div>
-                    <div className="JewelryName_Bracelet">CLove's Embrace: 1ct Blue Moissanite Solitaire Bracelet with Silver Hearts</div>
-                    <strong>89,30($)</strong>
-                </div>
-            </div>
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet2} ></img>
-                    <div className="JewelryDate_Bracelet">01 June, 2024</div>
-                    <div className="JewelryName_Bracelet">Carat Sapphire Gold Plated Silver Bracelet - Gorgeous</div>
-                    <strong>211.00($)</strong>
-                </div>
-            </div>
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet3} ></img>
-                    <div className="JewelryDate_Bracelet">01 June, 2024</div>
-                    <div className="JewelryName_Bracelet">Carat Sapphire Gold Plated Silver Bracelet - Gorgeous</div>
-                    <strong>350.00($)</strong>
-                </div>
-            </div>
-        </div>
-        <div className="BraceletList"><h3>BRACELET</h3></div>
-        <div className="Bracelet">
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet4} ></img>
-                    <div className="JewelryDate_Bracelet">01 June, 2024</div>
-                    <div className="JewelryName_Bracelet">Carat Sapphire Gold Plated Silver Bracelet - Gorgeous</div>
-                    <strong>300.00($)</strong>
-                </div>
-            </div>
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet5} ></img>
-                    <div className="JewelryDate_Bracelet">09 April, 2024</div>
-                    <div className="JewelryName_Bracelet">Natural Baltic Amber - Whole Uncut Original Nugget Bracelet</div>
-                    <strong>50.00($)</strong>
-                </div>
-            </div>
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet6} ></img>
-                    <div className="JewelryDate_Bracelet">01 August, 2024</div>
-                    <div className="JewelryName_Bracelet">Dendritic Opal / Sterling Silver Bracelet - Superb</div>
-                    <strong>765.00($)</strong>
-                </div>
-            </div>
-        </div>
-        <div className="BraceletList"><h3>BRACELET</h3></div>
-        <div className="Bracelet">
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet7} ></img>
-                    <div className="JewelryDate_Bracelet">23 April, 2024</div>
-                    <div className="JewelryName_Bracelet">Carats Natural Multi Sapphire fine quality In 925 silver Bracelet</div>
-                    <strong>34.00($)</strong>
-                </div>
-            </div>
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet8} ></img>
-                    <div className="JewelryDate_Bracelet">12 May, 2024</div>
-                    <div className="JewelryName_Bracelet">CTW LABRADORITE BRACELET IN FINE STERLING SILVER 7 1/2 INCH LENGTH</div>
-                    <strong>298.00($)</strong>
-                </div>
-            </div>
-            <div className="ViewBraceletList" >
-                <div className="Product">
-                    <img className="JewelryImg_Bracelet" src={Bracelet9} ></img>
-                    <div className="JewelryDate_Bracelet">23 June, 2024</div>
-                    <div className="JewelryName_Bracelet">Blue Lapis Lazuli Beads Barcelet</div>
-                    <strong>849.00($)</strong>
-                </div>
-            </div>
-        </div>
-        <div className="Footer">
-            <div className="Mercury">MERCURY</div>
-            <div className="Footer_Info">
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Privacy Policy</div>
-                    <div className="Footer_Style">How to buy</div>
-                    <div className="Footer_Style">Modern Slavery </div>
-                    <div className="Footer_Style">Cookie settings</div>
-                </div>
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Contacts</div>
-                    <div className="Footer_Style">Help</div>
-                    <div className="Footer_Style">About Us </div>
-                </div>
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Careers</div>
-                    <div className="Footer_Style">Terms & Conditions</div>
-                    <div className="Footer_Style">Press </div>
-                </div>
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-            </div>
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      jewelryName: data.get("jewelryName"),
+      category: data.get("category"),
+      jewelryDescription: data.get("jewelryDescription"),
+    });
+  };
 
-        </div>
-        </>
-    );
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
+      <Header inputValue={inputValue} handleChange={handleChange} />
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundImage:
+            "url(https://i.pinimg.com/564x/3c/f4/c8/3cf4c80a3cae6d34690362ba759e2af8.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          paddingTop: "56px", // Adjust this value based on the height of your header
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+          sx={{
+            padding: 4,
+            width: "100%",
+            maxWidth: 500,
+            backgroundColor: 'rgba(255, 255, 255, 0.8)', // slightly transparent background for better readability
+            borderRadius: 2,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Send Jewelry Valuation Request
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="jewelryName"
+                label="Jewelry Name"
+                name="jewelryName"
+                autoComplete="jewelryName"
+                autoFocus
+              />
+              <Select
+                defaultValue=""
+                id="category"
+                name="category"
+                fullWidth
+                required
+                displayEmpty
+                sx={{ mt: 2, mb: 2 }}
+              >
+                <MenuItem value="" disabled>
+                  Select Category
+                </MenuItem>
+                <MenuItem value="Bracelet">Bracelet</MenuItem>
+                <MenuItem value="Brooches Pins">Brooches Pins</MenuItem>
+                <MenuItem value="Cuffin">Cuffin</MenuItem>
+                <MenuItem value="Earrings">Earrings</MenuItem>
+                <MenuItem value="Loose Stone">Loose Stone</MenuItem>
+                <MenuItem value="Necklace">Necklace</MenuItem>
+                <MenuItem value="Ring">Ring</MenuItem>
+                <MenuItem value="Watches">Watches</MenuItem>
+              </Select>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="jewelryDescription"
+                label="Jewelry Description"
+                name="jewelryDescription"
+                autoComplete="jewelryDescription"
+                autoFocus
+              />
+              <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+                sx={{ mt: 2 }}
+              >
+                Send Request
+              </Button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                  component: "form",
+                  onSubmit: (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.currentTarget);
+                    const formJson = Object.fromEntries(formData.entries());
+                    const email = formJson.email;
+                    console.log(email);
+                    handleClose();
+                  },
+                }}
+              >
+                <DialogTitle>Successfully</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please enter your email address here. We will send updates occasionally.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="email"
+                    name="email"
+                    label="Email Address"
+                    type="email"
+                    fullWidth
+                    variant="standard"
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button type="submit">Submit</Button>
+                </DialogActions>
+              </Dialog>
+            </Box>
+          </Box>
+        </Grid>
+      </Box>
+    </ThemeProvider>
+  );
 }
-export default ViewJewelryList;

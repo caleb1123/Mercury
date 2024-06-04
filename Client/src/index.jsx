@@ -15,7 +15,7 @@ import ViewJewelryList from './pages/users/ViewJewelryList';
 import SendRequest from './pages/users/SendRequest';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<SignUp/>);
+root.render(<SendRequest/>);
 
 
 
