@@ -18,8 +18,8 @@ public class RequestController {
     RequestService requestService;
 
     @PostMapping("/create")
-    public ResponseEntity<Request> createRequest(@RequestBody RequestDTO dto) {
-        Request createdRequest = requestService.createRequest(dto);
+    public ResponseEntity<RequestDTO> createRequest(@RequestBody RequestDTO dto) {
+        RequestDTO createdRequest = requestService.createRequest(dto);
         return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
     }
 }

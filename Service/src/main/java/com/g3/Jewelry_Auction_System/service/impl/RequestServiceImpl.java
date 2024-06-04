@@ -17,9 +17,9 @@ public class RequestServiceImpl implements RequestService {
     RequestConverter requestConverter;
 
     @Override
-    public Request createRequest(RequestDTO requestDTO) {
+    public RequestDTO createRequest(RequestDTO requestDTO) {
         Request request = requestConverter.toEntity(requestDTO);
         requestRepository.save(request);
-        return request;
+        return requestDTO;
     }
 }

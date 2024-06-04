@@ -28,24 +28,14 @@ public class AccountController {
 
     @PutMapping("/deactivate/{userName}")
     public ResponseEntity<Account> deactivateAccount(@PathVariable String userName) {
-        try {
             accountService.deactivateAccount(userName);
-            return ResponseEntity.ok().build(); // Return 200 OK on successful deletion
-        } catch (Exception e) {
-            // Handle other potential exceptions (e.g., database issues)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
-        }
+            return ResponseEntity.ok().build(); // Return 200 OK on successful deactivation
     }
 
     @PutMapping("/update/{userName}")
     public ResponseEntity<Account> updateAccount(@RequestBody AccountDTO accountDTO) {
-        try {
             accountService.updateAccount(accountDTO);
-            return ResponseEntity.ok().build(); // Return 200 OK on successful deletion
-        } catch (Exception e) {
-            // Handle other potential exceptions (e.g., database issues)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
-        }
+            return ResponseEntity.ok().build(); // Return 200 OK on successful update
     }
 
     @GetMapping("/list")
@@ -53,8 +43,6 @@ public class AccountController {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}",authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-
         List<AccountDTO> accountList = accountService.getAccountList();
         if (accountList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
