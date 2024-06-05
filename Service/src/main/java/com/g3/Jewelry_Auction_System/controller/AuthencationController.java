@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.controller;
 import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.request.IntrospectRequest;
 import com.g3.Jewelry_Auction_System.payload.request.LogoutRequest;
+import com.g3.Jewelry_Auction_System.payload.request.RefreshTokenRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
@@ -39,5 +40,11 @@ public class AuthencationController {
     @PostMapping("/logout")
     public void logout(@RequestBody LogoutRequest logoutRequest) throws ParseException {
         authenticationService.logout(logoutRequest);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(refreshTokenRequest);
+        return ResponseEntity.ok(result);
     }
 }

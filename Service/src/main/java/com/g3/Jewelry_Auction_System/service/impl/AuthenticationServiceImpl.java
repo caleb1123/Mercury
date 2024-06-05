@@ -8,6 +8,7 @@ import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.request.IntrospectRequest;
 import com.g3.Jewelry_Auction_System.payload.request.LogoutRequest;
+import com.g3.Jewelry_Auction_System.payload.request.RefreshTokenRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
@@ -107,6 +108,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(refreshTokenRequest.getToken(), true);
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        BlackListToken invalidatedToken =
+                BlackListToken.builder().id(jit).expiryTime(expiryTime).build();
+
+        blackListTokenRepository.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user =
+                accountRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+
+        var token = generateToken(user);
+
+        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+    }
+
+
+
+
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
