@@ -19,7 +19,7 @@ public class RoleConverter {
         if (role==null) return null;
         RoleDTO dto = new RoleDTO();
         dto.setRoleId(role.getRoleId());
-        dto.setRoleName(String.valueOf(role.getRoleName()));
+        dto.setRoleName(role.getRoleName().name());
         return dto;
     }
 }

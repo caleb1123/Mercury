@@ -1,12 +1,19 @@
 package com.g3.Jewelry_Auction_System.converter;
 
+import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
+import com.g3.Jewelry_Auction_System.repository.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountConverter {
+    @Autowired
+    RoleConverter roleConverter;
+    @Autowired
+    RoleRepository roleRepository;
     public Account toEntity(AccountDTO accountDTO) {
         if (accountDTO == null){
             return null;
@@ -22,6 +29,7 @@ public class AccountConverter {
         entity.setSex(accountDTO.getSex());
         entity.setPhone(accountDTO.getPhone());
         entity.setStatus(accountDTO.getStatus());
+        entity.setRole(roleRepository.getReferenceById(accountDTO.getRoleId()));
         return entity;
     }
 
@@ -40,6 +48,7 @@ public class AccountConverter {
         dto.setSex(account.getSex());
         dto.setPhone(account.getPhone());
         dto.setStatus(account.getStatus());
+        dto.setRoleId(roleConverter.toDTO(account.getRole()).getRoleId());
         return dto;
     }
 
@@ -58,6 +67,7 @@ public class AccountConverter {
         dto.setSex(account.getSex());
         dto.setPhone(account.getPhone());
         dto.setStatus(account.getStatus());
+        dto.setRoleId(roleConverter.toDTO(account.getRole()).getRoleId());
         return dto;
     }
 }

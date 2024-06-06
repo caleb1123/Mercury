@@ -15,8 +15,8 @@ public class JewelryController {
     JewelryService jewelryService;
 
     @PostMapping("/add")
-    public ResponseEntity<Jewelry> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
-        Jewelry newJewelry = jewelryService.addJewelry(jewelryDTO);
+    public ResponseEntity<JewelryDTO> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
+        JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
 
