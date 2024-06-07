@@ -35,7 +35,7 @@ function Category() {
                 </div>
                 <div className="Down_Header">
                     <div className="Bar">
-                        AUCTIONS
+                        AUTIONS
                         <div className="world_bar_style" >SELL</div>
                         <div className="world_bar_style" >RESULT</div>
                         <div className="world_bar_style" >CATEGORY</div>

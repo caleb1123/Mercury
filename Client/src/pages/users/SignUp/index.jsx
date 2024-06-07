@@ -42,29 +42,15 @@ export default function SignUp() {
   return (
       <Container component="main" maxWidth="xs" sx={{ height: '100vh' }}>
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
+        <Box
           sx={{
-            backgroundImage: 'url(https://i.pinimg.com/564x/f0/c7/32/f0c73212ce2bf8974aca0452f88975f1.jpg)',
-            backgroundColor: "black", 
-            backgroundSize: 'cover', 
-            backgroundPosition: 'center', 
-            borderRadius: '50px',
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square></Grid>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+        >
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>

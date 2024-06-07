@@ -1,4 +1,5 @@
 .ViewJewelry{
+  margin-top: 60px;
   padding: 30px 35px 9px;
   position: relative;
   max-width: fit-content; 
@@ -33,11 +34,11 @@ body{
 .ImageFrame{
   display: flex;
   align-self: stretch;
-  flex: 1;
   background-color: #5f4a3a;
   flex-direction: column;
-  padding: 56px 23px 69px;
+  padding: 50px;
   gap: 84px;
+
 }
 .Image{
   display: flex;
@@ -47,11 +48,12 @@ right: 23px;
 top: 72px;
 
 }
-.info{
+.info_ViewJewelry{
   text-align: left;
-  flex:2;
   padding: 5px 105px 0;
-    min-width: 539px;
+  min-width: 539px;
+  width: 0;
+
 }
 .JewelryName{
   font-weight: bold;

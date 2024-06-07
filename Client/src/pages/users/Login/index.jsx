@@ -12,10 +12,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import "./Login.css";
 
 function Copyright(props) {
-  return (  
+  return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit">
@@ -49,11 +48,17 @@ export default function SignIn() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://i.pinimg.com/564x/f0/c7/32/f0c73212ce2bf8974aca0452f88975f1.jpg)',
-            backgroundColor: "black", 
-            backgroundSize: 'cover', 
-            backgroundPosition: 'center', 
-            borderRadius: '50px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            width: '100vw',
+            backgroundImage: 'url(https://i.pinimg.com/564x/3c/f4/c8/3cf4c80a3cae6d34690362ba759e2af8.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            padding: 2,
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>

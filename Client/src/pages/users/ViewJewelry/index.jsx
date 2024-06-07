@@ -39,31 +39,31 @@ const ViewJewelry = () => {
   return (
     <>
 
-<div className="Header">
-            <div className="UpHeader">
-                <div className="Mercury">MERCURY</div>
-                <div className="Login_CreaAccount">CREATE ACCOUNT
-                    <div className="LoginStyle">LOGIN</div>
-                </div>
-            </div>
-            <div className="Line">
-                <img src={line}/>
-            </div>
-            <div className="Down_Header">
-                <div className="Bar">
-                    AUCTIONS
-                    <div className="world_bar_style" >SELL</div>
-                    <div className="world_bar_style" >RESULT</div>
-                    <div className="world_bar_style" >CATEGORY</div>
-                    <div className="world_bar_style" >BLOG</div>
+      <div className="Header">
+        <div className="UpHeader">
+          <div className="Mercury">MERCURY</div>
+          <div className="Login_CreaAccount">CREATE ACCOUNT
+            <div className="LoginStyle">LOGIN</div>
+          </div>
+        </div>
+        <div className="Line">
+          <img src={line} />
+        </div>
+        <div className="Down_Header">
+          <div className="Bar">
+            AUTIONS
+            <div className="world_bar_style" >SELL</div>
+            <div className="world_bar_style" >RESULT</div>
+            <div className="world_bar_style" >CATEGORY</div>
+            <div className="world_bar_style" >BLOG</div>
 
 
-                </div>            
-            <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
-
-            </div>
+          </div>
+          <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
 
         </div>
+
+      </div>
 
       <div className="ViewJewelry">
         <div><h3 className="PageName_ViewJewelry">VIEW JEWELRY</h3></div>
@@ -73,7 +73,7 @@ const ViewJewelry = () => {
             <img className="Image" src={pic2} />
             <img className="Image" src={pic3} />
           </div>
-          <div className="info">
+          <div className="info_ViewJewelry">
             <div className="JewelryName">14k Victorian Pearl & Turquoise Bangle</div>
             <div className="WordStyle_JewelryInfo">
               <span><strong>Estimate</strong></span> : $400-$600<br />
@@ -81,12 +81,12 @@ const ViewJewelry = () => {
             </div>
 
             <button onClick={openPopup} className="PlaceBidButton">PLACE BID</button>
-              <Popup isOpen={isPopupOpen} handleClose={closePopup}>
+            <Popup isOpen={isPopupOpen} handleClose={closePopup}>
               <h2>PLACE BID</h2>
               <p>Enter the highest amount you are willing to bid. We'll bid you incrementally to keep you in the lead. </p>
-              <div className="WordStyle_JewelryInfo" >Maximum Bid ($) 
+              <div className="WordStyle_JewelryInfo" >Maximum Bid ($)
                 <span>
-                  <select  name="Bid_List">
+                  <select name="Bid_List">
                     <option>375</option>
                     <option>400</option>
                     <option>425</option>
@@ -100,16 +100,14 @@ const ViewJewelry = () => {
               </div>
               <button class="PlaceBidNextButton">NEXT</button>
 
-              </Popup>
+            </Popup>
 
             <div className="WordStyle_JewelryInfo"><span><strong>Category</strong></span> : Bracelet</div>
             <img src={line}></img>
             <div className="WordStyle_JewelryInfo"><span><strong>Description</strong></span> </div>
             <div className="WordStyle_JewelryInfo">A late 19th century Victorian Period 14k Yellow Gold bangle bracelet with Turquoise and Pearl. Hinged filigree bracelet with engraved detail and seventeen alternating prong set Pearls and Turquoise stones. Marked 14k at clasp. 10.5 grams total weight. Minor wear. 2 1/2" long. ESTIMATE $400-600</div>
             <img src={line}></img>
-            <div className="WordStyle_JewelryInfo"><span><strong>Condition</strong></span> </div>
-            <div className="WordStyle_JewelryInfo">Minor wear</div>
-            <img src={line}></img>
+
             <div className="WordStyle_JewelryInfo"><span><strong>Global Shipping</strong></span> </div>
             <div className="WordStyle_JewelryInfo">With customers in over 100 countries, we provide fully insured global shipping, expertly arranged by our team. The shipping costs, determined based on the insured value of the package and its destination, will be calculated post-auction and added to your invoice. Please note, VAT, duties, or any additional charges related to international shipping are not included in these costs and remain the responsibility of the buyer.</div>
             <img src={line}></img>
@@ -129,30 +127,30 @@ const ViewJewelry = () => {
 
       </div>
       <div className="Footer">
-            <div className="Mercury">MERCURY</div>
-            <div className="Footer_Info">
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Privacy Policy</div>
-                    <div className="Footer_Style">How to buy</div>
-                    <div className="Footer_Style">Modern Slavery </div>
-                    <div className="Footer_Style">Cookie settings</div>
-                </div>
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Contacts</div>
-                    <div className="Footer_Style">Help</div>
-                    <div className="Footer_Style">About Us </div>
-                </div>
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Careers</div>
-                    <div className="Footer_Style">Terms & Conditions</div>
-                    <div className="Footer_Style">Press </div>
-                </div>
-
-            </div>
-
-
+        <div className="Mercury">MERCURY</div>
+        <div className="Footer_Info">
+          <div className="Footer_Small" >
+            <div className="Footer_Style" >Privacy Policy</div>
+            <div className="Footer_Style">How to buy</div>
+            <div className="Footer_Style">Modern Slavery </div>
+            <div className="Footer_Style">Cookie settings</div>
+          </div>
+          <div className="Footer_Small" >
+            <div className="Footer_Style" >Contacts</div>
+            <div className="Footer_Style">Help</div>
+            <div className="Footer_Style">About Us </div>
+          </div>
+          <div className="Footer_Small" >
+            <div className="Footer_Style" >Careers</div>
+            <div className="Footer_Style">Terms & Conditions</div>
+            <div className="Footer_Style">Press </div>
+          </div>
 
         </div>
+
+
+
+      </div>
 
     </>
 
