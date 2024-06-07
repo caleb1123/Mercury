@@ -1,5 +1,6 @@
 package com.g3.Jewelry_Auction_System.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,10 +45,11 @@ public class Account {
     @Column(unique = true)
     private String phone;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
     @Column
     private Boolean status;
-
-
 
     @OneToMany(mappedBy = "account")
     private Collection<Auction> auctions;

@@ -1,4 +1,4 @@
-package converter;
+package com.g3.Jewelry_Auction_System.converter;
 
 import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.payload.DTO.RoleDTO;

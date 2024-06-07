@@ -1,4 +1,4 @@
-package converter;
+package com.g3.Jewelry_Auction_System.converter;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryCategoryDTO;
 import com.g3.Jewelry_Auction_System.entity.JewelryCategory;
@@ -12,7 +12,6 @@ public class JewelryCategoryConverter {
         JewelryCategory entity = new JewelryCategory();
         entity.setJewelryCategoryId(dto.getJewelryCategoryId());
         entity.setTypeName(dto.getTypeName());
-        entity.setJewelries(dto.getJewelries());
         return entity;
     }
 
@@ -21,7 +20,6 @@ public class JewelryCategoryConverter {
         JewelryCategoryDTO dto = new JewelryCategoryDTO();
         dto.setJewelryCategoryId(entity.getJewelryCategoryId());
         dto.setTypeName(entity.getTypeName());
-        dto.setJewelries(entity.getJewelries());
         return dto;
     }
 }
