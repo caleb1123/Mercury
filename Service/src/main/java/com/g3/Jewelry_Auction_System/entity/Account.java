@@ -45,6 +45,9 @@ public class Account {
     @Column(unique = true)
     private String phone;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
     @Column
     private Boolean status;
 

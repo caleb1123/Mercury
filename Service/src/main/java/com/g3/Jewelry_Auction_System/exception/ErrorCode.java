@@ -20,7 +20,8 @@ public enum ErrorCode {
     EMPTY_FIELD(1011, "You cannot leave required field(s) empty", HttpStatus.BAD_REQUEST),
     ITEM_NOT_FOUND(1012, "Item not found", HttpStatus.NOT_FOUND),
     PHONE_TAKEN(1013, "Phone number already in use", HttpStatus.BAD_REQUEST),
-    INVALID_TOKEN(1014, "JWT ID is null", HttpStatus.BAD_REQUEST);
+    INVALID_TOKEN(1014, "JWT ID is null", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_EXISTED(1015, "Email not existed", HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

@@ -1,40 +1,43 @@
 package com.g3.Jewelry_Auction_System.controller;
 
-import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
-import com.g3.Jewelry_Auction_System.payload.request.IntrospectRequest;
-import com.g3.Jewelry_Auction_System.payload.request.LogoutRequest;
-import com.g3.Jewelry_Auction_System.payload.request.RefreshTokenRequest;
+import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.exception.AppException;
+import com.g3.Jewelry_Auction_System.payload.request.*;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
+import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthencationController {
+
     @Autowired
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private AccountService accountService;
+
+
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-
-            AuthenticationResponse response = authenticationService.authenticate(request);
-            return ResponseEntity.ok(response);
-
+        AuthenticationResponse response = authenticationService.authenticate(request);
+        return ResponseEntity.ok(response);
     }
+
     @PostMapping("/introspect")
     public ResponseEntity<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
-            IntrospectResponse response = authenticationService.introspect(request);
-            return ResponseEntity.ok(response);
-
+        IntrospectResponse response = authenticationService.introspect(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
@@ -47,4 +50,7 @@ public class AuthencationController {
         var result = authenticationService.refreshToken(refreshTokenRequest);
         return ResponseEntity.ok(result);
     }
+
+
+
 }
