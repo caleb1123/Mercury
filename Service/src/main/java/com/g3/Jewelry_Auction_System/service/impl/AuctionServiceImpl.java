@@ -23,7 +23,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Autowired
     JewelryRepository JewelryRepository;
     @Autowired
-    private JewelryRepository jewelryRepository;
+    JewelryRepository jewelryRepository;
 
     @Override
     public AuctionDTO createAuction(AuctionDTO auctionDTO) {

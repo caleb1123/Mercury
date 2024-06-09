@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     AccountConverter accountConverter;
     @Autowired
     RoleRepository roleRepository;
-    private AuctionRepository auctionRepository;
+
 
     @Override
     public AccountDTO createAccount(AccountDTO accountDTO) {
