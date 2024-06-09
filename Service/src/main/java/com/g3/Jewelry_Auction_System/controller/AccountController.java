@@ -33,8 +33,8 @@ public class AccountController {
     }
 
     @PutMapping("/update/{userName}")
-    public ResponseEntity<Account> updateAccount(@RequestBody AccountDTO accountDTO) {
-            accountService.updateAccount(accountDTO);
+    public ResponseEntity<Account> updateAccount(@RequestBody AccountDTO accountDTO, @PathVariable String userName) {
+            accountService.updateAccount(accountDTO, userName);
             return ResponseEntity.ok().build(); // Return 200 OK on successful update
     }
 

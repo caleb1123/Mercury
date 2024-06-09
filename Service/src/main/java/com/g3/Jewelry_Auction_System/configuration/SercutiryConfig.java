@@ -27,7 +27,9 @@ public class SercutiryConfig {
             "/account/**",
             "/auth/**",
             "/jewelry/**",
-            "/request/**"
+            "/request/**",
+            "/auction/**",
+            "/bid/**"
     };
 
     @Value("${app.jwt-secret}")

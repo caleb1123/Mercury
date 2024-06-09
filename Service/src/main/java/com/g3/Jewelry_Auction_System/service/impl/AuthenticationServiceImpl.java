@@ -73,12 +73,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);
         return IntrospectResponse
                 .builder()
-                .valid(verified && expityTime.after(new Date()))
+                .valid(verified && expiryTime.after(new Date()))
                 .build();
     }
 

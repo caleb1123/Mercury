@@ -30,25 +30,30 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void updatePreliminaryPrice(RequestDTO requestDTO) {
+    public void updatePreliminaryPrice(int id, RequestDTO requestDTO) {
         Request request = requestRepository
-                .findByRequestId(requestDTO.getRequestId())
+                .findByRequestId(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
             request.setEvaluationDate(LocalDate.now());
+            request.setStatus(true);
         }
         requestRepository.save(request);
     }
 
     @Override
-    public void updateFinalPrice(RequestDTO requestDTO) {
+    public void updateFinalPrice(int id, RequestDTO requestDTO) {
+        if (requestDTO.getRequestId() != id) {
+            throw new RuntimeException("Request ID does not match request");
+        }
         Request request = requestRepository
-                .findByRequestId(requestDTO.getRequestId())
+                .findByRequestId(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
         if (request.getFinalPrice() != requestDTO.getFinalPrice()) {
             request.setFinalPrice(requestDTO.getFinalPrice());
             request.setEvaluationDate(LocalDate.now());
+            request.setStatus(true);
         }
         requestRepository.save(request);
     }

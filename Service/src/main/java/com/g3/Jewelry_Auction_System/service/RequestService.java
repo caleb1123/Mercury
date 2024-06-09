@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface RequestService {
     RequestDTO createRequest(RequestDTO requestDTO);
-    void updatePreliminaryPrice(RequestDTO requestDTO);
-    void updateFinalPrice(RequestDTO requestDTO);
+    void updatePreliminaryPrice(int id, RequestDTO requestDTO);
+    void updateFinalPrice(int id, RequestDTO requestDTO);
     void deleteRequest(int requestID);
     List<RequestDTO> getRequestList();
 }

@@ -9,16 +9,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class AuctionDTO {
     private int auctionId;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private double currentPrice;
     private Boolean status;
     private int jewelryId;
-    private int winnerId;
+
 }

@@ -23,13 +23,13 @@ public class RequestController {
     }
 
     @PutMapping("/update/preliminary/{requestId}")
-    public ResponseEntity<Request> updatePreliminaryPrice(@RequestBody RequestDTO dto) {
-        requestService.updatePreliminaryPrice(dto);
+    public ResponseEntity<Request> updatePreliminaryPrice(@PathVariable int requestId, @RequestBody RequestDTO dto) {
+        requestService.updatePreliminaryPrice(requestId, dto);
         return ResponseEntity.ok().build();
     }
     @PutMapping("/update/final/{requestId}")
-    public ResponseEntity<Request> updateFinalPrice(@RequestBody RequestDTO dto) {
-        requestService.updateFinalPrice(dto);
+    public ResponseEntity<Request> updateFinalPrice(@PathVariable int requestId, @RequestBody RequestDTO dto) {
+        requestService.updateFinalPrice(requestId, dto);
         return ResponseEntity.ok().build();
     }
     @GetMapping("/list")
@@ -40,5 +40,10 @@ public class RequestController {
         } else {
             return new ResponseEntity<>(requestList, HttpStatus.OK);
         }
+    }
+    @PutMapping("/delete/{requestId}")
+    public ResponseEntity<Request> deactivateAccount(@PathVariable int requestId) {
+        requestService.deleteRequest(requestId);
+        return ResponseEntity.ok().build(); // Return 200 OK on successful deactivation
     }
 }
