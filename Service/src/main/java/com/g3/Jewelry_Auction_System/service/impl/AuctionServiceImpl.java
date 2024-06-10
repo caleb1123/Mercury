@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,7 +30,7 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionDTO createAuction(AuctionDTO auctionDTO) {
         LocalDateTime startDate = auctionDTO.getStartDate();
         LocalDateTime endDate = auctionDTO.getEndDate();
-        Optional<Auction> existingAuction = auctionRepository
+        List<Auction> existingAuctions = auctionRepository
                 .findByJewelry(jewelryRepository.getReferenceById(auctionDTO.getJewelryId()));
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date");
@@ -37,8 +38,8 @@ public class AuctionServiceImpl implements AuctionService {
         if (LocalDateTime.now().isAfter(endDate)) {
             throw new IllegalArgumentException("End date cannot be before current date");
         }
-        if (existingAuction.isPresent() && existingAuction.get().getEndDate().isBefore(startDate)) {
-            throw new IllegalArgumentException("Auction for this jewelry has not ended yet");
+        if (existingAuctions.stream().anyMatch(Auction::getStatus)) {
+            throw new IllegalArgumentException("An auction for this jewelry is still active");
         }
         Auction auction = auctionConverter.toEntity(auctionDTO);
         auctionRepository.save(auction);

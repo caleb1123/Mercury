@@ -99,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         accountRepository.save(user);
     }
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<AccountDTO> getAccountList() {
         List<Account> accountList = accountRepository.findAll();

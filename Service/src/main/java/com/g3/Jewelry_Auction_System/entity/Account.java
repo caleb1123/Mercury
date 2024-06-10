@@ -49,9 +49,6 @@ public class Account {
     private Boolean status;
 
     @OneToMany(mappedBy = "account")
-    private Collection<Auction> auctions;
-
-    @OneToMany(mappedBy = "account")
     private Collection<Bid> bids;
 
     @OneToMany(mappedBy = "account")
