@@ -38,6 +38,9 @@ public class AuctionServiceImpl implements AuctionService {
         if (LocalDateTime.now().isAfter(endDate)) {
             throw new IllegalArgumentException("End date cannot be before current date");
         }
+        if (auctionDTO.getCurrentPrice() < 1) {
+            throw new IllegalArgumentException("Current price cannot be less than 1");
+        }
         if (existingAuctions.stream().anyMatch(Auction::getStatus)) {
             throw new IllegalArgumentException("An auction for this jewelry is still active");
         }
@@ -69,9 +72,13 @@ public class AuctionServiceImpl implements AuctionService {
         if (LocalDateTime.now().isAfter(endDate)) {
             throw new IllegalArgumentException("End date cannot be before current date");
         }
+        if (auctionDTO.getCurrentPrice() < 1) {
+            throw new IllegalArgumentException("Current price cannot be less than 1");
+        }
         auction.setStartDate(auctionDTO.getStartDate());
         auction.setEndDate(auctionDTO.getEndDate());
         auction.setCurrentPrice(auctionDTO.getCurrentPrice());
+        auction.setStatus(auctionDTO.getStatus());
         auctionRepository.save(auction);
     }
 }

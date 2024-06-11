@@ -95,6 +95,7 @@ public class AccountServiceImpl implements AccountService {
             user.setPhone(updateDTO.getPhone());
             user.setDob(updateDTO.getDob());
             user.setSex(updateDTO.getSex());
+            user.setStatus(updateDTO.getStatus());
         }
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         accountRepository.save(user);

@@ -18,6 +18,9 @@ public class BidServiceImpl implements BidService {
     BidConverter bidConverter;
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
+        if (bidDTO.getBidAmount() < 1) {
+            throw new IllegalArgumentException("Bid amount must be greater than 0");
+        }
         Bid bid = bidConverter.toEntity(bidDTO);
         bid.setBidTime(LocalDateTime.now());
         bid = bidRepository.save(bid);

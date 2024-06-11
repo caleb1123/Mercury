@@ -34,6 +34,9 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository
                 .findByRequestId(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
+        if (requestDTO.getPreliminaryPrice() < 0) {
+            throw new RuntimeException("Preliminary price cannot be negative");
+        }
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
             request.setEvaluationDate(LocalDate.now());
@@ -50,6 +53,9 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository
                 .findByRequestId(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
+        if (requestDTO.getFinalPrice() < 0) {
+            throw new RuntimeException("Final price cannot be negative");
+        }
         if (request.getFinalPrice() != requestDTO.getFinalPrice()) {
             request.setFinalPrice(requestDTO.getFinalPrice());
             request.setEvaluationDate(LocalDate.now());
