@@ -6,6 +6,9 @@ import com.g3.Jewelry_Auction_System.repository.JewelryCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class JewelryConverter {
     @Autowired
@@ -47,5 +50,13 @@ public class JewelryConverter {
         dto.setEstimate(entity.getEstimate());
         dto.setJewelryCategoryId(jewelryCategoryConverter.toDTO(entity.getJewelryCategory()).getJewelryCategoryId());
         return dto;
+    }
+
+    public List<JewelryDTO> convertToJewelryDTOList(List<Jewelry> jewelries){
+        List<JewelryDTO> jewelryDTOList = new ArrayList<>();
+        for (Jewelry j : jewelries){
+            jewelryDTOList.add(toDTO(j));
+        }
+        return jewelryDTOList;
     }
 }

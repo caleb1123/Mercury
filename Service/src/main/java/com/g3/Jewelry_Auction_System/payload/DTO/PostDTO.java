@@ -1,7 +1,5 @@
 package com.g3.Jewelry_Auction_System.payload.DTO;
 
-import com.g3.Jewelry_Auction_System.entity.Account;
-import com.g3.Jewelry_Auction_System.entity.PostCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
