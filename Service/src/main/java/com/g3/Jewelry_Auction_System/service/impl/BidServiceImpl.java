@@ -2,6 +2,8 @@ package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.converter.BidConverter;
 import com.g3.Jewelry_Auction_System.entity.Bid;
+import com.g3.Jewelry_Auction_System.exception.AppException;
+import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
 import com.g3.Jewelry_Auction_System.service.BidService;
@@ -18,6 +20,9 @@ public class BidServiceImpl implements BidService {
     BidConverter bidConverter;
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
+        if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
+            throw new AppException(ErrorCode.ID_EXISTED);
+        }
         if (bidDTO.getBidAmount() < 1) {
             throw new IllegalArgumentException("Bid amount must be greater than 0");
         }
@@ -29,7 +34,7 @@ public class BidServiceImpl implements BidService {
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
         if (bidDTO.getBidId() != id) {
-            throw new RuntimeException("Bid id does not match request");
+            throw new AppException(ErrorCode.ID_NOT_MATCHED);
         }
         Bid bid = bidRepository
                 .findById(id)

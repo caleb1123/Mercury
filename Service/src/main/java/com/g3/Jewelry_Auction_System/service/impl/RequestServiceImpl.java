@@ -24,6 +24,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDTO createRequest(RequestDTO requestDTO) {
+        if (requestRepository.findByRequestId(requestDTO.getRequestId()).isPresent()) {
+            throw new AppException(ErrorCode.ID_EXISTED);
+        }
         Request request = requestConverter.toEntity(requestDTO);
         requestRepository.save(request);
         return requestDTO;
@@ -31,6 +34,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void updatePreliminaryPrice(int id, RequestDTO requestDTO) {
+        if (requestDTO.getRequestId() != id) {
+            throw new AppException(ErrorCode.ID_NOT_MATCHED);
+        }
         Request request = requestRepository
                 .findByRequestId(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
@@ -48,7 +54,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public void updateFinalPrice(int id, RequestDTO requestDTO) {
         if (requestDTO.getRequestId() != id) {
-            throw new RuntimeException("Request ID does not match request");
+            throw new AppException(ErrorCode.ID_NOT_MATCHED);
         }
         Request request = requestRepository
                 .findByRequestId(id)
