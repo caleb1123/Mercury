@@ -1,9 +1,6 @@
 package com.g3.Jewelry_Auction_System.configuration;
 
-import com.g3.Jewelry_Auction_System.entity.ERole;
-import com.g3.Jewelry_Auction_System.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,14 +8,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +23,9 @@ public class SercutiryConfig {
             "/jewelry/**",
             "/request/**",
             "/auction/**",
-            "/bid/**"
+            "/bid/**",
+            "/posts/**",
+            "/postCategory/**"
     };
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
@@ -41,6 +36,7 @@ public class SercutiryConfig {
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS) .permitAll()
                 .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
                 .requestMatchers(HttpMethod.PUT,PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.DELETE,PUBLIC_ENDPOINTS).permitAll()
                 .anyRequest()
                 .authenticated());
 

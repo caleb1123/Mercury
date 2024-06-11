@@ -11,11 +11,18 @@ import '@fontsource/roboto/700.css';
 import SignIn from './pages/users/Login';
 import SignUp from './pages/users/SignUp';
 import ResetPassword from './pages/users/ResetPassword';
+import ViewJewelryList from './pages/users/ViewJewelryList';
+import SendRequest from './pages/users/SendRequest';
+import ViewAuction from './pages/users/ViewAuction';
+import App from './App';
 
 
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  )
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<HomePage/>);
 
 
 
