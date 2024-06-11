@@ -7,6 +7,7 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
+import com.g3.Jewelry_Auction_System.payload.request.UpdatePasswordRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
@@ -16,13 +17,16 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -32,8 +36,8 @@ public class AccountServiceImpl implements AccountService {
     AccountConverter accountConverter;
     @Autowired
     RoleRepository roleRepository;
-
-
+    private AuctionRepository auctionRepository;
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public AccountDTO createAccount(AccountDTO accountDTO) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -123,4 +127,8 @@ public class AccountServiceImpl implements AccountService {
         AccountResponse accountResponse = accountConverter.toResponse(byUserName);
         return accountResponse;
     }
+
+
+
+
 }
