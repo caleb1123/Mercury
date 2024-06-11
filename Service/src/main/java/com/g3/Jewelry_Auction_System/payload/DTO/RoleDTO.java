@@ -12,5 +12,4 @@ import java.util.Collection;
 public class RoleDTO {
     private int roleId;
     private String roleName;
-    private Collection<Account> accounts;
 }

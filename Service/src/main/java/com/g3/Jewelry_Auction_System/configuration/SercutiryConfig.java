@@ -28,7 +28,9 @@ public class SercutiryConfig {
             "/account/**",
             "/auth/**",
             "/jewelry/**",
-            "/request/**"
+            "/request/**",
+            "/auction/**",
+            "/bid/**"
     };
     @Autowired
     private CustomJwtDecoder customJwtDecoder;

@@ -11,6 +11,5 @@ import java.util.Collection;
 @Data
 public class JewelryCategoryDTO {
     private int jewelryCategoryId;
-    private String typeName;
-
+    private String categoryName;
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface AccountService {
     AccountDTO createAccount(AccountDTO accountDTO);
     void deactivateAccount(String userName);
-    void updateAccount(AccountDTO accountDTO);
+    void updateAccount(AccountDTO accountDTO, String username);
     List<AccountDTO> getAccountList();
     AccountResponse getMyInfor();
 

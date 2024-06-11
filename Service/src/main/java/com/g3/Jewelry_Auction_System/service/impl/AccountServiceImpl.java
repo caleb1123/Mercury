@@ -13,6 +13,7 @@ import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,7 +68,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateAccount(AccountDTO updateDTO) {
+    public void updateAccount(AccountDTO updateDTO, String username) {
+        if (!updateDTO.getUserName().equals(username)) {
+            throw new RuntimeException("Username does not match request");
+        }
         Optional<Account> existingUserEmail = accountRepository.findByEmail(updateDTO.getEmail());
         Optional<Account> existingUserPhone = accountRepository.findByPhone(updateDTO.getPhone());
         Account user = accountRepository

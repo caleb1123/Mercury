@@ -16,6 +16,6 @@ public class PaymentDTO {
     private double amount;
     private String paymentMethod;
     private String address;
-    private Auction auction;
-    private Account account;
+    private int auctionId;
+    private int accountId;
 }

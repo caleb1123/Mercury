@@ -12,5 +12,5 @@ import java.util.Collection;
 public class PostCategoryDTO {
     private int categoryId;
     private String categoryName;
-    private Collection<Post> posts;
+
 }
