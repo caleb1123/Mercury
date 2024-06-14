@@ -81,4 +81,10 @@ public class AccountController {
 
         return "OK";
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<AccountResponse>> searchAccountByName(@RequestParam String name) {
+        List<AccountResponse> accounts = accountService.searchAccountByName(name);
+        return ResponseEntity.ok(accounts);
+    }
 }

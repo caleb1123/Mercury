@@ -19,6 +19,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query(value = "Select * from Account", nativeQuery = true)
     List<Account> getAllAccounts();
 
+    @Query(value = "SELECT * FROM account WHERE full_name LIKE %:name%", nativeQuery = true)
+    List<Account> searchAccountByName( String name);
 
 
 

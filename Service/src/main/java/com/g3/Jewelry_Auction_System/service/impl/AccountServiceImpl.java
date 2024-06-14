@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -145,8 +146,24 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AccountResponse> searchAccountByName(String name) {
-        return null;
+        List<Account> accounts = accountRepository.searchAccountByName(name);
+        return accounts.stream()
+                .map(this::convertToAccountResponse)
+                .collect(Collectors.toList());
     }
 
-
+    private AccountResponse convertToAccountResponse(Account account) {
+        return AccountResponse.builder()
+                .accountId(account.getAccountId())
+                .fullName(account.getFullName())
+                .userName(account.getUserName())
+                .address(account.getAddress())
+                .dob(account.getDob()) // Assuming dob is a LocalDate in Account entity
+                .email(account.getEmail())
+                .sex(account.getSex())
+                .phone(account.getPhone())
+                .status(account.getStatus())
+                .roleId(account.getRole().getRoleId())
+                .build();
+    }
 }
