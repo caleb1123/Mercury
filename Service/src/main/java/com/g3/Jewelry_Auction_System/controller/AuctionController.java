@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -58,4 +59,12 @@ public class AuctionController {
         }
     }
     @GetMapping("/list/byDate")
+    public ResponseEntity<List<AuctionDTO>> getAuctionByDate(@RequestParam LocalDateTime date1, LocalDateTime date2) {
+        List<AuctionDTO> auctionList = auctionService.getAuctionByDate(date1, date2);
+        if (auctionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(auctionList, HttpStatus.OK);
+        }
+    }
 }

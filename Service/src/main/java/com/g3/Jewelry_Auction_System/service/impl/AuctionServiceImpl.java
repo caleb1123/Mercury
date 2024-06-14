@@ -6,6 +6,7 @@ import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
+import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import com.g3.Jewelry_Auction_System.service.AuctionService;
@@ -132,5 +133,9 @@ public class AuctionServiceImpl implements AuctionService {
             );
         }
         return auctionDTOList;
+    }
+    @Override
+    public WinnerResponse getWinner(int auctionId) {
+
     }
 }
