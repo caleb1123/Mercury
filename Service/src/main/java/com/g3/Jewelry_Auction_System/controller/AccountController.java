@@ -66,23 +66,6 @@ public class AccountController {
         return ResponseEntity.ok(accountResponse);
     }
 
-    @PostMapping("/ok")
-    public String ok(@RequestBody AuthenticationRequest request) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        var account = accountRepository.findByUserName(request.getUserName()).orElseThrow(
-                () -> new AppException(ErrorCode.USERNAME_INVALID)
-        );
-
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), account.getPassword());
-        if (!authenticated) {
-            throw new AppException(ErrorCode.PASSWORD_NOT_CORRECT);
-        }
-
-        return "OK";
-    }
-
     @GetMapping("/search")
     public ResponseEntity<List<AccountResponse>> searchAccountByName(@RequestParam String name) {
         List<AccountResponse> accounts = accountService.searchAccountByName(name);
