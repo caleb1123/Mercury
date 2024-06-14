@@ -23,12 +23,11 @@ public class PostController {
 
     @PutMapping("/update/{postId}")
     public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable(value = "postId") int postId) {
-        try {
-            postService.updatePost(postDTO, postId);
-            return ResponseEntity.ok().build();
-        } catch(RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+            PostDTO postDTO1 = postService.updatePost(postDTO, postId);
+            if (postDTO1 != null) {
+                return new ResponseEntity<>(postDTO1, HttpStatus.OK);
+            }
+            else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/delete/{postId}")

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PostService {
     PostDTO createPost(PostDTO postDTO);
-    void updatePost(PostDTO postDTO, int id);
+    PostDTO updatePost(PostDTO postDTO, int id);
     void deletePost(int id);
     List<PostDTO> getPostByNameLike(String title);
 }
