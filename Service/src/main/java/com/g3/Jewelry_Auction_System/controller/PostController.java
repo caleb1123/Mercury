@@ -5,8 +5,10 @@ import com.g3.Jewelry_Auction_System.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("posts")
 public class PostController {
@@ -37,6 +39,15 @@ public class PostController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/search/{input}")
+    public List<PostDTO> searchPost(@PathVariable(value = "input") String input){
+        List<PostDTO> postDTOList = postService.getPostByNameLike(input);
+        if(postDTOList.isEmpty()){
+            ResponseEntity.notFound().build();
+        }
+        return postDTOList;
     }
 
 }

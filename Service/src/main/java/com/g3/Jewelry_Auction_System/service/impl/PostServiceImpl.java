@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO createPost(PostDTO postDTO) {
         Post post = postConverter.toEntity(postDTO);
+        post.setPostDate(LocalDate.now());
         postRepository.save(post);
         return postDTO;
     }
@@ -58,5 +60,10 @@ public class PostServiceImpl implements PostService {
         } else {
             throw new RuntimeException("Post not found");
         }
+    }
+
+    @Override
+    public List<PostDTO> getPostByNameLike(String title) {
+        return postConverter.convertToDTOList(postRepository.findByTitle(title));
     }
 }
