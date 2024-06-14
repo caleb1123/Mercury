@@ -11,6 +11,7 @@ public class JewelryCategoryConverter {
         if (dto == null) return null;
         JewelryCategory entity = new JewelryCategory();
         entity.setJewelryCategoryId(dto.getJewelryCategoryId());
+        entity.setImage(dto.getImage());
         entity.setCategoryName(EJewelCategory.valueOf(dto.getCategoryName()));
         return entity;
     }
@@ -19,6 +20,7 @@ public class JewelryCategoryConverter {
         if (entity == null) return null;
         JewelryCategoryDTO dto = new JewelryCategoryDTO();
         dto.setJewelryCategoryId(entity.getJewelryCategoryId());
+        dto.setImage(entity.getImage());
         dto.setCategoryName(entity.getCategoryName().name());
         return dto;
     }

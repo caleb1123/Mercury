@@ -12,4 +12,5 @@ import java.util.Collection;
 public class JewelryCategoryDTO {
     private int jewelryCategoryId;
     private String categoryName;
+    private String image;
 }
