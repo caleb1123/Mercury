@@ -13,4 +13,5 @@ public interface AccountService {
     List<AccountDTO> getAccountList();
     AccountResponse getMyInfor();
 
+    List<AccountResponse> searchAccountByName(String name);
 }
