@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -52,5 +54,14 @@ public class BidServiceImpl implements BidService {
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Bid not found"));
 
+    }
+    @Override
+    public List<BidDTO> getAllBid() {
+        List<Bid> bids = bidRepository.findAll();
+        List<BidDTO> bidDTOList = new ArrayList<>();
+        for (Bid bid : bids) {
+            bidDTOList.add(bidConverter.toDTO(bid));
+        }
+        return bidDTOList;
     }
 }
