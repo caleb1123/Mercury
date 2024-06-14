@@ -6,6 +6,7 @@ import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
+import com.g3.Jewelry_Auction_System.payload.response.AccountSearchByRoleResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +86,12 @@ public class AccountController {
     @GetMapping("/search")
     public ResponseEntity<List<AccountResponse>> searchAccountByName(@RequestParam String name) {
         List<AccountResponse> accounts = accountService.searchAccountByName(name);
+        return ResponseEntity.ok(accounts);
+    }
+
+    @GetMapping("/searchByRole")
+    public ResponseEntity<List<AccountSearchByRoleResponse>> searchAccountByRoleName(@RequestParam String roleName) {
+        List<AccountSearchByRoleResponse> accounts = accountService.searchAccountByRoleName(roleName);
         return ResponseEntity.ok(accounts);
     }
 }
