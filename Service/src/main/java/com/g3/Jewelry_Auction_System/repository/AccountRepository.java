@@ -19,5 +19,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query(value = "Select * from Account", nativeQuery = true)
     List<Account> getAllAccounts();
 
-    Optional<Account> findAccountByResetPasswordToken(String token);
+
+
+
+
 }

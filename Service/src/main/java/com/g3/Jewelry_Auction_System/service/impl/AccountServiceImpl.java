@@ -143,7 +143,10 @@ public class AccountServiceImpl implements AccountService {
         return accountResponse;
     }
 
-
+    @Override
+    public List<AccountResponse> searchAccountByName(String name) {
+        return null;
+    }
 
 
 }
