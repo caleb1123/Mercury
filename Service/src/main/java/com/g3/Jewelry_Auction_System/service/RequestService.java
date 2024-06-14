@@ -11,4 +11,5 @@ public interface RequestService {
     void updateFinalPrice(int id, RequestDTO requestDTO);
     void deleteRequest(int requestID);
     List<RequestDTO> getRequestList();
+    List<RequestDTO> getRequestByStatus(boolean status);
 }

@@ -10,7 +10,7 @@ public class PostCategoryConverter {
         if (dto == null) return null;
         PostCategory entity = new PostCategory();
         entity.setCategoryId(dto.getCategoryId());
-        entity.setCategoryId(dto.getCategoryId());
+        entity.setCategoryName(dto.getCategoryName());
         return entity;
     }
 
@@ -18,7 +18,7 @@ public class PostCategoryConverter {
         if (entity == null) return null;
         PostCategoryDTO dto = new PostCategoryDTO();
         dto.setCategoryId(entity.getCategoryId());
-        dto.setCategoryId(entity.getCategoryId());
+        dto.setCategoryName(entity.getCategoryName());
         return dto;
     }
 }

@@ -37,11 +37,18 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     RoleRepository roleRepository;
     private AuctionRepository auctionRepository;
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @Override
     public AccountDTO createAccount(AccountDTO accountDTO) {
+        Optional<Account> existingUserEmail = accountRepository.findByEmail(accountDTO.getEmail());
+        Optional<Account> existingUserPhone = accountRepository.findByPhone(accountDTO.getPhone());
+        if (existingUserEmail.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_TAKEN);
+        }
+        if (existingUserPhone.isPresent()) {
+            throw new AppException(ErrorCode.PHONE_TAKEN);
+        }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
         accountDTO.setPassword(encodedPassword);
@@ -85,20 +92,28 @@ public class AccountServiceImpl implements AccountService {
         if (existingUserPhone.isPresent() && user.getAccountId() != existingUserPhone.get().getAccountId()) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
-        if (updateDTO.getPassword().isEmpty()
-                || updateDTO.getEmail().isEmpty()
-                || updateDTO.getAddress().isEmpty()
-                || updateDTO.getFullName().isEmpty()
-                || updateDTO.getPhone().isEmpty()) {
-            throw new AppException(ErrorCode.EMPTY_FIELD);
-        } else {
+        if (!updateDTO.getPassword().isEmpty()) {
             user.setPassword(encodedPassword);
+        }
+        if (!updateDTO.getEmail().isEmpty()) {
             user.setEmail(updateDTO.getEmail());
+        }
+        if (!updateDTO.getAddress().isEmpty()) {
             user.setAddress(updateDTO.getAddress());
+        }
+        if (!updateDTO.getFullName().isEmpty()){
             user.setFullName(updateDTO.getFullName());
+        }
+        if (!updateDTO.getPhone().isEmpty()) {
             user.setPhone(updateDTO.getPhone());
-            user.setDob(updateDTO.getDob());
+        }
+        if (updateDTO.getSex() != null) {
             user.setSex(updateDTO.getSex());
+        }
+        if (updateDTO.getDob() != null) {
+            user.setDob(updateDTO.getDob());
+        }
+        if (updateDTO.getStatus() != null) {
             user.setStatus(updateDTO.getStatus());
         }
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty

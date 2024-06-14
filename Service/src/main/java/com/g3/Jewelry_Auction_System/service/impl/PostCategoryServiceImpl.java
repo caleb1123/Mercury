@@ -39,14 +39,4 @@ public class PostCategoryServiceImpl implements PostCategoryService {
             throw new RuntimeException("Post not found");
         }
     }
-
-    @Override
-    public void deletePostCategory(int id) {
-        Optional<PostCategory> optionalPostCategory = postCategoryRepository.findById(id);
-        if (optionalPostCategory.isPresent()) {
-            postCategoryRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("postCategory not found");
-        }
-    }
 }

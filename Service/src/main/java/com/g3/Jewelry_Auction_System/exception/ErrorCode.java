@@ -22,9 +22,10 @@ public enum ErrorCode {
     PHONE_TAKEN(1013, "Phone number already in use", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(1014, "JWT ID is null", HttpStatus.BAD_REQUEST),
     EMAIL_NOT_EXISTED(1015, "Email not existed", HttpStatus.NOT_FOUND),
-    ID_EXISTED(1016, "Id already exists", HttpStatus.NOT_FOUND),
-    ID_NOT_MATCHED(1017, "Id does not match request", HttpStatus.NOT_FOUND),
-    POST_CATEGORY_NOT_FOUND(1018, "Post category not found", HttpStatus.NOT_FOUND);
+    ID_EXISTED(1016, "Id already exists", HttpStatus.BAD_REQUEST),
+    ID_NOT_MATCHED(1017, "Id does not match request", HttpStatus.BAD_REQUEST),
+    POST_CATEGORY_NOT_FOUND(1018, "Post category not found", HttpStatus.NOT_FOUND),
+    REQUEST_EXISTED(1019, "Request for this jewelry already exists", HttpStatus.BAD_REQUEST);
 
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

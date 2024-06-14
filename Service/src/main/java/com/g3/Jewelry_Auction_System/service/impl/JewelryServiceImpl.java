@@ -53,7 +53,10 @@ public class JewelryServiceImpl implements JewelryService {
             throw new AppException(ErrorCode.EMPTY_FIELD);
         }else if (optionalJewelry.isPresent()) {
             Jewelry jewelry = optionalJewelry.get();
-            jewelry.setJewelryName(jewelryDTO.getJewelryName());
+            if(jewelryDTO.getJewelryName() != null){
+                jewelry.setJewelryName(jewelryDTO.getJewelryName());
+            }
+
             jewelry.setDesigner(jewelryDTO.getDesigner());
             jewelry.setGemstone(jewelryDTO.getGemstone());
             jewelry.setImage(jewelryDTO.getImage());
@@ -63,6 +66,7 @@ public class JewelryServiceImpl implements JewelryService {
             jewelry.setStartingPrice(jewelryDTO.getStartingPrice());
             jewelry.setStatus(jewelryDTO.getStatus());
             jewelry.setJewelryCategory(jewelryCategoryRepository.getReferenceById(jewelryDTO.getJewelryCategoryId()));
+
             jewelryRepository.save(jewelry);
         } else{
             throw new RuntimeException("Jewelry not found");

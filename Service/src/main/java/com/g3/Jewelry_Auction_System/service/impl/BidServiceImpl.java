@@ -26,10 +26,10 @@ public class BidServiceImpl implements BidService {
         if (bidDTO.getBidAmount() < 1) {
             throw new IllegalArgumentException("Bid amount must be greater than 0");
         }
+        bidDTO.setBidTime(LocalDateTime.now());
         Bid bid = bidConverter.toEntity(bidDTO);
-        bid.setBidTime(LocalDateTime.now());
-        bid = bidRepository.save(bid);
-        return bidConverter.toDTO(bid);
+        bidRepository.save(bid);
+        return bidDTO;
     }
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
@@ -40,7 +40,7 @@ public class BidServiceImpl implements BidService {
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Bid not found"));
         if (bidDTO.getBidAmount() >= bid.getBidAmount()) {
-            throw new RuntimeException("New bid must be greater than previous bid");
+            throw new IllegalArgumentException("New bid must be greater than previous bid");
         }
         bid.setBidAmount(bidDTO.getBidAmount());
         bid.setBidTime(LocalDateTime.now());

@@ -23,6 +23,11 @@ public class JewelryCategory {
     @Column(unique = true)
     private EJewelCategory categoryName;
 
+    @Column
+    private String image;
+
     @OneToMany(mappedBy = "jewelryCategory")
     private Collection<Jewelry> jewelries;
+
+
 }

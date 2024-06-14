@@ -10,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@PreAuthorize("hasRole('MANAGER')")
+//@PreAuthorize("hasRole('MANAGER')")
 @RestController
 @RequestMapping("/postCategory")
 public class PostCategoryController {
     @Autowired
     private PostCategoryService postCategoryService;
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<PostCategoryDTO> createPostCategory(@RequestBody PostCategoryDTO postCategoryDTO) {
         PostCategoryDTO createdPostCategoryDTO = postCategoryService.createPostCategory(postCategoryDTO);
         return new ResponseEntity<>(createdPostCategoryDTO, HttpStatus.CREATED);
@@ -36,17 +36,4 @@ public class PostCategoryController {
             }
         }
     }
-
-    @DeleteMapping("/delete/{categoryId}")
-    public ResponseEntity<Void> deletePostCategory(@PathVariable(value = "categoryId") int categoryId) {
-        try {
-            postCategoryService.deletePostCategory(categoryId);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-
-
 }

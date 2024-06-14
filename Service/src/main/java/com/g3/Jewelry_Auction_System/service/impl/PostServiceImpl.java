@@ -27,8 +27,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO createPost(PostDTO postDTO) {
         Post post = postConverter.toEntity(postDTO);
+        post.setPostDate(LocalDate.now());
         postRepository.save(post);
-        return postDTO;
+        return postConverter.toDTO(post);
     }
 
     @Override
