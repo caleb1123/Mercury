@@ -57,5 +57,5 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
-    @GetMapping("/list/byDate")
+
 }
