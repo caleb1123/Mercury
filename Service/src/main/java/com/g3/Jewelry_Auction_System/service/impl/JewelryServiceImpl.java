@@ -5,6 +5,7 @@ import com.g3.Jewelry_Auction_System.converter.JewelryConverter;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
+import com.g3.Jewelry_Auction_System.payload.DTO.JewelryCategoryDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import com.g3.Jewelry_Auction_System.repository.JewelryCategoryRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
@@ -75,5 +76,9 @@ public class JewelryServiceImpl implements JewelryService {
         return jewelryConverter.convertToJewelryDTOList(jewelryList);
     }
 
+    @Override
+    public List<JewelryDTO> searchName(String name) {
+        return jewelryConverter.convertToJewelryDTOList(jewelryRepository.getJewelriesByName(name));
+    }
 }
 

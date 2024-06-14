@@ -53,4 +53,14 @@ public class JewelryController {
         return jewelryDTOList;
     }
 
+    @GetMapping("/search/{name}")
+    public List<JewelryDTO> searchJewelriesByName(@PathVariable String name){
+        List<JewelryDTO> result = jewelryService.searchName(name);
+        if (result.isEmpty()){
+            ResponseEntity.notFound().build();
+        }
+        return result;
+    }
+
+
 }
