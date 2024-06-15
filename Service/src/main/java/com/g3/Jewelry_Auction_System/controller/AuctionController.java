@@ -2,6 +2,8 @@ package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,5 +70,14 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
-
+    @GetMapping("/{auctionId}/highestBid")
+    public ResponseEntity<BidDTO> getHighestBid(@PathVariable int auctionId) {
+        BidDTO bid = auctionService.getHighestBid(auctionId);
+        return ResponseEntity.ok(bid);
+    }
+    @GetMapping("/{auctionId}/winner")
+    public ResponseEntity<WinnerResponse> getWinner(@PathVariable int auctionId) {
+        WinnerResponse winner = auctionService.getWinner(auctionId);
+        return ResponseEntity.ok(winner);
+    }
 }

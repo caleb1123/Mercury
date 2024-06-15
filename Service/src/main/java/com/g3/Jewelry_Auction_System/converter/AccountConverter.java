@@ -4,6 +4,7 @@ import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
+import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -68,6 +69,15 @@ public class AccountConverter {
         dto.setPhone(account.getPhone());
         dto.setStatus(account.getStatus());
         dto.setRoleId(roleConverter.toDTO(account.getRole()).getRoleId());
+        return dto;
+    }
+    public WinnerResponse toWinnerResponse(Account account) {
+        if (account == null) {
+            return null;
+        }
+        WinnerResponse dto = new WinnerResponse();
+        dto.setWinnerId(account.getAccountId());
+        dto.setUsername(account.getUserName());
         return dto;
     }
 }
