@@ -1,6 +1,8 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.converter.JewelryCategoryConverter;
+import com.g3.Jewelry_Auction_System.exception.AppException;
+import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryCategoryDTO;
 import com.g3.Jewelry_Auction_System.repository.JewelryCategoryRepository;
 import com.g3.Jewelry_Auction_System.service.JewelryCategoryService;
@@ -19,6 +21,10 @@ public class JewelryCategoryServiceImpl implements JewelryCategoryService {
 
     @Override
     public List<JewelryCategoryDTO> searchJewelryCategory(String input) {
-        return jewelryCategoryConverter.convertToDTOList(jewelryCategoryRepository.getJewelriesByCategory(input));
+        List<JewelryCategoryDTO> list = jewelryCategoryConverter.convertToDTOList(jewelryCategoryRepository.getJewelriesByCategory(input));
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return list;
     }
 }

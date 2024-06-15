@@ -36,12 +36,11 @@ public class JewelryController {
 
     @PutMapping("/update/{jewelryId}")
     public ResponseEntity<JewelryDTO> updateJewelry(@RequestBody JewelryDTO jewelryDTO, @PathVariable(value = "jewelryId") int id) {
-        try {
-            jewelryService.updateJewelry(jewelryDTO, id);
-            return ResponseEntity.ok().build();
-        } catch(RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        JewelryDTO jewelryDTO1 = jewelryService.updateJewelry(jewelryDTO, id);
+        if (jewelryDTO1 != null) {
+            return new ResponseEntity<>(jewelryDTO1, HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getAll")
@@ -54,12 +53,12 @@ public class JewelryController {
     }
 
     @GetMapping("/search/{name}")
-    public List<JewelryDTO> searchJewelriesByName(@PathVariable String name){
+    public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
         List<JewelryDTO> result = jewelryService.searchName(name);
         if (result.isEmpty()){
-            ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

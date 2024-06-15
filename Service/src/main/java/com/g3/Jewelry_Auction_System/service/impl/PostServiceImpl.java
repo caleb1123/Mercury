@@ -64,6 +64,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getPostByNameLike(String title) {
-        return postConverter.convertToDTOList(postRepository.findByTitle(title));
+        List<PostDTO> list = postConverter.convertToDTOList(postRepository.findByTitle(title));
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return list;
     }
 }

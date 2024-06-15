@@ -9,7 +9,7 @@ import java.util.List;
 public interface JewelryService {
     void delistJewelry(int jewelryId);
     JewelryDTO addJewelry(JewelryDTO jewelryDTO);
-    void updateJewelry(JewelryDTO jewelryDTO, int id);
+    JewelryDTO updateJewelry(JewelryDTO jewelryDTO, int id);
     List<JewelryDTO> getAllJewelry();
     List<JewelryDTO> searchName(String jewelryName);
 }
