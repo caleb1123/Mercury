@@ -1,14 +1,20 @@
 package com.g3.Jewelry_Auction_System.controller;
 
+import com.g3.Jewelry_Auction_System.exception.AppException;
+import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
+import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +25,8 @@ import java.util.List;
 public class AccountController {
     @Autowired
     AccountService accountService;
+    @Autowired
+    AccountRepository accountRepository;
 
     @PostMapping("/create")
     public ResponseEntity<AccountDTO> createAccount(@RequestBody AccountDTO accountDTO) {
@@ -55,5 +63,22 @@ public class AccountController {
     public ResponseEntity<AccountResponse> getMyInfo() {
         AccountResponse accountResponse = accountService.getMyInfor();
         return ResponseEntity.ok(accountResponse);
+    }
+
+    @PostMapping("/ok")
+    public String ok(@RequestBody AuthenticationRequest request) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        var account = accountRepository.findByUserName(request.getUserName()).orElseThrow(
+                () -> new AppException(ErrorCode.USERNAME_INVALID)
+        );
+
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), account.getPassword());
+        if (!authenticated) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_CORRECT);
+        }
+
+        return "OK";
     }
 }

@@ -1,0 +1,70 @@
+.ViewAuction{
+    margin-top: 120px;
+    font-size: 24px;
+    color: white;
+    margin-left: 150px;
+}
+.PageName_ViewAuction{
+    font-weight: bold;
+    font-size: 35px;
+}
+.AuctionName{
+    margin-top: 20px;
+    font-size: 30px;
+    font-style: italic;
+}
+.Auction_ViewAuction{
+    display: flex;
+}
+.auction_pic_frame{
+    background-color: rgb(156, 145, 145);
+    margin-top: 20px;
+    padding: 30px;
+    border: 2px solid white;
+}
+.AuPic{
+    width: 500px;
+    height: 400px;
+}
+.info_WordStyle{
+    margin-top: 20px;
+    width: 500px;
+}
+.BidHistory{
+    padding-right: 300px;
+    margin-left: 150px;
+    padding-left: 20px;
+    border: 2px solid white;
+    height: fit-content;
+}
+.BidDetals{
+    margin-bottom: 40px;
+}
+.BidOwner{
+    font-size: 18px;
+    color: aqua;
+}
+.BidTime{
+    font-style: italic;
+    font-size: 18px;
+
+}
+.BidPlaced{
+    color: rgb(8, 184, 8);
+    font-weight: bold;
+}
+.Current_Info{
+    background-color: rgb(28, 28, 27);
+    width: 1200px;
+    height: 100px;
+}
+.info_data{
+    display: flex;
+    font-size: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-right: 300px;
+}
+.info_data_style{
+    margin-left: 200px;
+}

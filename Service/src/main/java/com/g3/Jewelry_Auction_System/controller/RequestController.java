@@ -46,4 +46,13 @@ public class RequestController {
         requestService.deleteRequest(requestId);
         return ResponseEntity.ok().build(); // Return 200 OK on successful deactivation
     }
+    @GetMapping("/list/{status}")
+    public ResponseEntity<List<RequestDTO>> getRequestByStatus(@PathVariable boolean status) {
+        List<RequestDTO> requestList = requestService.getRequestByStatus(status);
+        if (requestList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(requestList, HttpStatus.OK);
+        }
+    }
 }

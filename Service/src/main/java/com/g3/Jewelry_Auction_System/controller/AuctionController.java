@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
@@ -28,4 +31,42 @@ public class AuctionController {
         auctionService.updateAuction(auctionDTO, auctionId);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/list")
+    public ResponseEntity<List<AuctionDTO>> getAuctionList() {
+        List<AuctionDTO> auctionList = auctionService.getAuctionList();
+        if (auctionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(auctionList, HttpStatus.OK);
+        }
+    }
+    @GetMapping("/list/{status}")
+    public ResponseEntity<List<AuctionDTO>> getAuctionByStatus(@PathVariable boolean status) {
+        List<AuctionDTO> auctionList = auctionService.getAuctionByStatus(status);
+        if (auctionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(auctionList, HttpStatus.OK);
+        }
+    }
+    @GetMapping("/list/live")
+    public ResponseEntity<List<AuctionDTO>> getLiveAuctionList() {
+        List<AuctionDTO> auctionList = auctionService.getLiveAuctionList();
+        if (auctionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(auctionList, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/list/byDate")
+    public ResponseEntity<List<AuctionDTO>> getAuctionByDate(@RequestParam LocalDateTime date1, LocalDateTime date2) {
+        List<AuctionDTO> auctionList = auctionService.getAuctionByDate(date1, date2);
+        if (auctionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(auctionList, HttpStatus.OK);
+        }
+    }
+
 }

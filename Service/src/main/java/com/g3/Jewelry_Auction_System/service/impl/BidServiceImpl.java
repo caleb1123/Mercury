@@ -2,6 +2,8 @@ package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.converter.BidConverter;
 import com.g3.Jewelry_Auction_System.entity.Bid;
+import com.g3.Jewelry_Auction_System.exception.AppException;
+import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
 import com.g3.Jewelry_Auction_System.service.BidService;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -18,21 +22,27 @@ public class BidServiceImpl implements BidService {
     BidConverter bidConverter;
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
+        if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
+            throw new AppException(ErrorCode.ID_EXISTED);
+        }
+        if (bidDTO.getBidAmount() < 1) {
+            throw new IllegalArgumentException("Bid amount must be greater than 0");
+        }
+        bidDTO.setBidTime(LocalDateTime.now());
         Bid bid = bidConverter.toEntity(bidDTO);
-        bid.setBidTime(LocalDateTime.now());
-        bid = bidRepository.save(bid);
-        return bidConverter.toDTO(bid);
+        bidRepository.save(bid);
+        return bidDTO;
     }
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
         if (bidDTO.getBidId() != id) {
-            throw new RuntimeException("Bid id does not match request");
+            throw new AppException(ErrorCode.ID_NOT_MATCHED);
         }
         Bid bid = bidRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Bid not found"));
         if (bidDTO.getBidAmount() >= bid.getBidAmount()) {
-            throw new RuntimeException("New bid must be greater than previous bid");
+            throw new IllegalArgumentException("New bid must be greater than previous bid");
         }
         bid.setBidAmount(bidDTO.getBidAmount());
         bid.setBidTime(LocalDateTime.now());
@@ -44,5 +54,14 @@ public class BidServiceImpl implements BidService {
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Bid not found"));
 
+    }
+    @Override
+    public List<BidDTO> getAllBid() {
+        List<Bid> bids = bidRepository.findAll();
+        List<BidDTO> bidDTOList = new ArrayList<>();
+        for (Bid bid : bids) {
+            bidDTOList.add(bidConverter.toDTO(bid));
+        }
+        return bidDTOList;
     }
 }
