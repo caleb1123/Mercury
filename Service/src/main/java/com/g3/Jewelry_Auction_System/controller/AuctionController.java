@@ -60,7 +60,6 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
-
     @GetMapping("/list/byDate")
     public ResponseEntity<List<AuctionDTO>> getAuctionByDate(@RequestParam LocalDateTime date1, LocalDateTime date2) {
         List<AuctionDTO> auctionList = auctionService.getAuctionByDate(date1, date2);
