@@ -25,7 +25,7 @@ function Sidebar() {
         },
       });
 
-      setAccounts(response.data);  // Đặt dữ liệu vào state accounts
+      setAccounts(response.data);  
     } catch (error) {
       console.error('Error fetching accounts:', error);
     }
