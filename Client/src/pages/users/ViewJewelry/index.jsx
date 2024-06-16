@@ -22,6 +22,9 @@ const Popup = ({ isOpen, handleClose, children }) => {
 
 const ViewJewelry = () => {
   const [inputValue, setInputValue] = useState('');
+  const handleClick = () => {
+    window.location.href = '/ViewAuction';
+  };
 
   // Hàm xử lý sự kiện khi người dùng nhập
   const handleChange = (event) => {
@@ -98,7 +101,7 @@ const ViewJewelry = () => {
                   </select>
                 </span>
               </div>
-              <button class="PlaceBidNextButton">NEXT</button>
+              <button onClick={handleClick} class="PlaceBidNextButton">NEXT</button>
 
             </Popup>
 

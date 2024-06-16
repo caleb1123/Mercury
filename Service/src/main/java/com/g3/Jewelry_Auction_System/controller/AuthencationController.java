@@ -27,7 +27,7 @@ public class AuthencationController {
     private AccountService accountService;
 
 
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse response = authenticationService.authenticate(request);

@@ -6,7 +6,10 @@ import SignIn from './pages/users/Login';
 import SignUp from './pages/users/SignUp';
 import SendRequest from './pages/users/SendRequest';
 import ViewJewelryList from './pages/users/ViewJewelryList';
-import Admin from './pages/users/admin';
+import Admin from './pages/admin';
+import ViewJewelry from './pages/users/ViewJewelry';
+import ViewAuction from './pages/users/ViewAuction';
+import StaffPage from './pages/staff/staff';
 
 
 
@@ -22,7 +25,9 @@ function App() {
         <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
         <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
         <Route path="/Admin" element={<Admin/>}/>
-
+        <Route path="/ViewJewelry" element={<ViewJewelry/>} />
+        <Route path="/ViewAuction" element={<ViewAuction/>} />
+        <Route path="/StaffPage" element={<StaffPage/>} />
 
 
 
