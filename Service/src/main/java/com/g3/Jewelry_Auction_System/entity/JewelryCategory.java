@@ -19,9 +19,15 @@ public class JewelryCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int jewelryCategoryId;
 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true)
-    private String typeName;
+    private EJewelCategory categoryName;
+
+    @Column
+    private String image;
 
     @OneToMany(mappedBy = "jewelryCategory")
     private Collection<Jewelry> jewelries;
+
+
 }

@@ -13,9 +13,11 @@ import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -34,11 +37,18 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     RoleRepository roleRepository;
     private AuctionRepository auctionRepository;
-
+    //@PreAuthorize("hasRole('ADMIN')")
     @Override
     public AccountDTO createAccount(AccountDTO accountDTO) {
+        Optional<Account> existingUserEmail = accountRepository.findByEmail(accountDTO.getEmail());
+        Optional<Account> existingUserPhone = accountRepository.findByPhone(accountDTO.getPhone());
+        if (existingUserEmail.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_TAKEN);
+        }
+        if (existingUserPhone.isPresent()) {
+            throw new AppException(ErrorCode.PHONE_TAKEN);
+        }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
         accountDTO.setPassword(encodedPassword);
@@ -65,7 +75,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateAccount(AccountDTO updateDTO) {
+    public void updateAccount(AccountDTO updateDTO, String username) {
+        if (!updateDTO.getUserName().equals(username)) {
+            throw new RuntimeException("Username does not match request");
+        }
         Optional<Account> existingUserEmail = accountRepository.findByEmail(updateDTO.getEmail());
         Optional<Account> existingUserPhone = accountRepository.findByPhone(updateDTO.getPhone());
         Account user = accountRepository
@@ -79,20 +92,29 @@ public class AccountServiceImpl implements AccountService {
         if (existingUserPhone.isPresent() && user.getAccountId() != existingUserPhone.get().getAccountId()) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
-        if (updateDTO.getPassword().isEmpty()
-                || updateDTO.getEmail().isEmpty()
-                || updateDTO.getAddress().isEmpty()
-                || updateDTO.getFullName().isEmpty()
-                || updateDTO.getPhone().isEmpty()) {
-            throw new AppException(ErrorCode.EMPTY_FIELD);
-        } else {
+        if (!updateDTO.getPassword().isEmpty()) {
             user.setPassword(encodedPassword);
+        }
+        if (!updateDTO.getEmail().isEmpty()) {
             user.setEmail(updateDTO.getEmail());
+        }
+        if (!updateDTO.getAddress().isEmpty()) {
             user.setAddress(updateDTO.getAddress());
+        }
+        if (!updateDTO.getFullName().isEmpty()){
             user.setFullName(updateDTO.getFullName());
+        }
+        if (!updateDTO.getPhone().isEmpty()) {
             user.setPhone(updateDTO.getPhone());
-            user.setDob(updateDTO.getDob());
+        }
+        if (updateDTO.getSex() != null) {
             user.setSex(updateDTO.getSex());
+        }
+        if (updateDTO.getDob() != null) {
+            user.setDob(updateDTO.getDob());
+        }
+        if (updateDTO.getStatus() != null) {
+            user.setStatus(updateDTO.getStatus());
         }
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         accountRepository.save(user);
@@ -121,7 +143,10 @@ public class AccountServiceImpl implements AccountService {
         return accountResponse;
     }
 
-
+    @Override
+    public List<AccountResponse> searchAccountByName(String name) {
+        return null;
+    }
 
 
 }

@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.BlackListToken;
+import com.g3.Jewelry_Auction_System.entity.OTPToken;
 import com.g3.Jewelry_Auction_System.entity.Role;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
@@ -10,12 +11,14 @@ import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.BlackListTokenRepository;
+import com.g3.Jewelry_Auction_System.repository.OTPTokenRepository;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.mail.MessagingException;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     AccountRepository accountRepository;
     @Autowired
     BlackListTokenRepository blackListTokenRepository;
+    @Autowired
+    EmailService emailService;
+    @Autowired
+    OTPTokenRepository otpTokenRepository;
 
 
     @Value("${app.jwt-secret}")
@@ -126,8 +133,46 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return AuthenticationResponse.builder().token(token).authenticated(true).build();
     }
+    @Transactional
+    @Override
+    public void generateAndSendOtp(String email) throws MessagingException {
+        var account = accountRepository.findByEmail(email).orElseThrow(
+                () -> new AppException(ErrorCode.EMAIL_NOT_EXISTED)
+        );
+
+        String otp = String.valueOf(100000 + new Random().nextInt(900000)); // Generate a 6-digit OTP
+        OTPToken otpToken = new OTPToken(); // OTP expires in 15 minutes
+        otpToken.setEmail(email);
+        otpToken.setOtp(otp);
+        otpToken.setExpiryDate(Instant.now().plus(15,ChronoUnit.MINUTES));
+
+        otpTokenRepository.save(otpToken);
 
 
+        String subject = "Your OTP Code";
+        String body = "Your OTP code is " + otp;
+        emailService.sendResetPasswordEmail(email,otp,account.getFullName());
+    }
+
+    @Override
+    public void resetPasswordWithOtp(String email, String otp, String newPassword) {
+        OTPToken otpToken = otpTokenRepository.findByEmailAndOtp(email, otp);
+        if (otpToken == null || otpToken.isExpired()) {
+            throw new IllegalArgumentException("Invalid or expired OTP");
+        }
+
+        var account = accountRepository.findByEmail(email).orElseThrow(
+                () -> new AppException(ErrorCode.EMAIL_NOT_EXISTED)
+        );
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        String encodedPassword = passwordEncoder.encode(account.getPassword());
+        account.setPassword(encodedPassword);
+        accountRepository.save(account);
+
+        otpTokenRepository.delete(otpToken);
+    }
 
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {

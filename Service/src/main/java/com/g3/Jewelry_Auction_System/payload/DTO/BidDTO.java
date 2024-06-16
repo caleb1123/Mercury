@@ -14,6 +14,6 @@ public class BidDTO {
     private int bidId;
     private double bidAmount;
     private LocalDateTime bidTime;
-    private Auction auction;
-    private Account account;
+    private int auctionId;
+    private int accountId;
 }

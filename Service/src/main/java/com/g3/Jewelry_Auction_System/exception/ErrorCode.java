@@ -21,7 +21,17 @@ public enum ErrorCode {
     ITEM_NOT_FOUND(1012, "Item not found", HttpStatus.NOT_FOUND),
     PHONE_TAKEN(1013, "Phone number already in use", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(1014, "JWT ID is null", HttpStatus.BAD_REQUEST),
-    EMAIL_NOT_EXISTED(1015, "Email not existed", HttpStatus.NOT_FOUND);
+    EMAIL_NOT_EXISTED(1015, "Email not existed", HttpStatus.NOT_FOUND),
+    ID_EXISTED(1016, "Id already exists", HttpStatus.BAD_REQUEST),
+    ID_NOT_MATCHED(1017, "Id does not match request", HttpStatus.BAD_REQUEST),
+    POST_CATEGORY_NOT_FOUND(1018, "Post category not found", HttpStatus.NOT_FOUND),
+    BID_NOT_FOUND(1019, "Bid not found", HttpStatus.NOT_FOUND),
+    AUCTION_NOT_FOUND(1020, "Auction not found", HttpStatus.NOT_FOUND),
+    AUCTION_NOT_CLOSED(1021, "Auction has not closed yet", HttpStatus.BAD_REQUEST),
+    AUCTION_CLOSED(1022, "Auction has closed", HttpStatus.BAD_REQUEST),
+    INVALID_BID(1023, "Bid must be higher than previous one or the current highest bid", HttpStatus.BAD_REQUEST),
+    REQUEST_EXISTED(1024, "Request for this jewelry already exists", HttpStatus.BAD_REQUEST);
+
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -21,10 +22,10 @@ public class Auction {
     private int auctionId;
 
     @Column
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Column
     private double currentPrice;
@@ -35,10 +36,6 @@ public class Auction {
     @ManyToOne
     @JoinColumn(name = "jewelryId")
     private Jewelry jewelry;
-
-    @ManyToOne
-    @JoinColumn(name = "winnerId")
-    private Account account;
 
     @OneToMany
     @JoinColumn(name = "auction")

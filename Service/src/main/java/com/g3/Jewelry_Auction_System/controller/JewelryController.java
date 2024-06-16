@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/jewelry")
 public class JewelryController {
@@ -15,8 +17,8 @@ public class JewelryController {
     JewelryService jewelryService;
 
     @PostMapping("/add")
-    public ResponseEntity<Jewelry> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
-        Jewelry newJewelry = jewelryService.addJewelry(jewelryDTO);
+    public ResponseEntity<JewelryDTO> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
+        JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
 
@@ -31,5 +33,33 @@ public class JewelryController {
         }
 
     }
+
+    @PutMapping("/update/{jewelryId}")
+    public ResponseEntity<JewelryDTO> updateJewelry(@RequestBody JewelryDTO jewelryDTO, @PathVariable(value = "jewelryId") int id) {
+        JewelryDTO jewelryDTO1 = jewelryService.updateJewelry(jewelryDTO, id);
+        if (jewelryDTO1 != null) {
+            return new ResponseEntity<>(jewelryDTO1, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/getAll")
+    public List<JewelryDTO> getAllJewelries(){
+        List<JewelryDTO> jewelryDTOList = jewelryService.getAllJewelry();
+        if (jewelryDTOList.isEmpty()){
+            ResponseEntity.notFound().build();
+        }
+        return jewelryDTOList;
+    }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
+        List<JewelryDTO> result = jewelryService.searchName(name);
+        if (result.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
 }
