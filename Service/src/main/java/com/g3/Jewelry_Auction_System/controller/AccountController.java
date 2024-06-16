@@ -48,6 +48,7 @@ public class AccountController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list")
     public ResponseEntity<List<AccountDTO>> getAccountList() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();

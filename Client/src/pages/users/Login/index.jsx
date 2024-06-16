@@ -14,6 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 function Copyright(props) {
   return (
@@ -49,12 +50,17 @@ export default function SignIn() {
       });
 
       if (response.status === 200) {
-        window.location.href = '/';
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        const decodedToken = jwtDecode(token);  // Decode the token
+
+        if (decodedToken.scope === 'ADMIN') {
+          window.location.href = '/Admin';
+        } else {
+          window.location.href = '/';
+        }
+
         setMessage('Login successfully');
-        localStorage.setItem('token', response.data.token);
-        var showtoken = localStorage.getItem('token');
-        // Redirect to another page if needed
-        // window.location.href = '/dashboard';
       } else {
         setMessage('Error');
       }
