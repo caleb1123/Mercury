@@ -1,8 +1,13 @@
 package com.g3.Jewelry_Auction_System.converter;
 
+import com.g3.Jewelry_Auction_System.entity.Post;
 import com.g3.Jewelry_Auction_System.payload.DTO.PostCategoryDTO;
 import com.g3.Jewelry_Auction_System.entity.PostCategory;
+import com.g3.Jewelry_Auction_System.payload.DTO.PostDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class PostCategoryConverter {
@@ -20,5 +25,13 @@ public class PostCategoryConverter {
         dto.setCategoryId(entity.getCategoryId());
         dto.setCategoryName(entity.getCategoryName());
         return dto;
+    }
+
+    public List<PostCategoryDTO> convertToDTOList(List<PostCategory> postCs){
+        List<PostCategoryDTO> postCategoryDTOList = new ArrayList<>();
+        for (PostCategory postC : postCs){
+            postCategoryDTOList.add(toDTO(postC));
+        }
+        return postCategoryDTOList;
     }
 }

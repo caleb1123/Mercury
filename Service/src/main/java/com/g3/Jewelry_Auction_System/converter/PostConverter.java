@@ -8,6 +8,9 @@ import com.g3.Jewelry_Auction_System.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class PostConverter {
     @Autowired
@@ -42,5 +45,13 @@ public class PostConverter {
         dto.setCategoryId(postCategoryConverter.toDTO(post.getPostCategory()).getCategoryId());
         dto.setAccountId(accountConverter.toDTO(post.getAccount()).getAccountId());
         return dto;
+    }
+
+    public List<PostDTO> convertToDTOList(List<Post> posts){
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : posts){
+            postDTOList.add(toDTO(post));
+        }
+        return postDTOList;
     }
 }
