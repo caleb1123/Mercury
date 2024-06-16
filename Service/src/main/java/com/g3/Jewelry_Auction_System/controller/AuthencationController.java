@@ -7,13 +7,10 @@ import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
-import com.g3.Jewelry_Auction_System.service.impl.EmailService;
 import com.nimbusds.jose.JOSEException;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -29,11 +26,7 @@ public class AuthencationController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private EmailService emailService;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
@@ -58,26 +51,6 @@ public class AuthencationController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/send-email")
-    public String sendEmail(@RequestBody EmailRequest request) {
-      SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-      simpleMailMessage.setTo(request.getTo());
-      simpleMailMessage.setSubject(request.getSubject());
-      simpleMailMessage.setText(request.getBody());
-        javaMailSender.send(simpleMailMessage);
-        return "Email sent successfully";
-    }
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody OTPRequest request) throws MessagingException {
-        authenticationService.generateAndSendOtp(request.getEmail());
-        return ResponseEntity.ok("OTP sent to your email.");
-    }
-
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-        authenticationService.resetPasswordWithOtp(request.getEmail(), request.getOtp(), request.getNewPassword());
-        return ResponseEntity.ok("Password reset successfully.");
-    }
 
 }
