@@ -48,13 +48,14 @@ public class AccountServiceImpl implements AccountService {
         if (existingUserPhone.isPresent()) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
+        Account createAccount = accountConverter.toEntity(createAccountRequest);
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = passwordEncoder.encode(createAccountRequest.getPassword());
-        createAccountRequest.setPassword(encodedPassword);
+        createAccount.setPassword("12345678");
+        String encodedPassword = passwordEncoder.encode(createAccount.getPassword());
+        createAccount.setPassword(encodedPassword);
 
-        Account createAccount = accountConverter.toEntity(createAccountRequest);
+
 
         Role userRole = roleRepository.findById(createAccountRequest.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));

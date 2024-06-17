@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreateAccountRequest {
     private String userName;
-    private String password;
     private String email;
     private String phone;
     private int roleId;

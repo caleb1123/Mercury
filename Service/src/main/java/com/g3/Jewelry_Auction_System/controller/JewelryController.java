@@ -42,7 +42,8 @@ public class JewelryController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getAll")
     public List<JewelryDTO> getAllJewelries(){
         List<JewelryDTO> jewelryDTOList = jewelryService.getAllJewelry();

@@ -13,6 +13,7 @@ import StaffPage from './pages/staff/staff';
 
 
 
+
 function App() {
   return (
     <Router>
@@ -23,9 +24,8 @@ function App() {
         <Route path="/SignUp" element={<SignUp/>} />
         <Route path="/SendRequest" element={<SendRequest/>} />
         <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
-        <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
         <Route path="/Admin" element={<Admin/>}/>
-        <Route path="/ViewJewelry" element={<ViewJewelry/>} />
+        <Route path="/ViewJewelry/:id" element={<ViewJewelry/>} />
         <Route path="/ViewAuction" element={<ViewAuction/>} />
         <Route path="/StaffPage" element={<StaffPage/>} />
 

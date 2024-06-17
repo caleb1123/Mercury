@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { useState } from "react";
 import "./ViewJewelry.css";
+import { NavLink } from "react-router-dom";
 import pic1 from './image/image-2@2x.png'
 import pic2 from './image/image-3@2x.png'
 import pic3 from './image/image-4@2x.png'
@@ -41,31 +42,28 @@ const ViewJewelry = () => {
   };
   return (
     <>
-
       <div className="Header">
         <div className="UpHeader">
-          <div className="Mercury">MERCURY</div>
-          <div className="Login_CreaAccount">CREATE ACCOUNT
-            <div className="LoginStyle">LOGIN</div>
+          <NavLink to="/" className="Mercury">MERCURY</NavLink>
+
+          <div className="Login_CreaAccount">
+            <NavLink to="./SignUp" className="NavLink_Style">CREATE ACCOUNT</NavLink>
+            <NavLink to="./Login" className="LoginStyle">LOGIN</NavLink>
           </div>
         </div>
         <div className="Line">
-          <img src={line} />
+          <img src={line} alt="line" />
         </div>
         <div className="Down_Header">
-          <div className="Bar">
-            AUTIONS
-            <div className="world_bar_style" >SELL</div>
-            <div className="world_bar_style" >RESULT</div>
-            <div className="world_bar_style" >CATEGORY</div>
-            <div className="world_bar_style" >BLOG</div>
-
-
+          <div className="Bar_Home">
+            AUCTIONS
+            <NavLink to="./SendRequest" className="world_bar_style">SELL</NavLink>
+            <div className="world_bar_style">RESULT</div>
+            <NavLink to="./Category" className="world_bar_style">CATEGORY</NavLink>
+            <div className="world_bar_style">BLOG</div>
           </div>
           <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
-
         </div>
-
       </div>
 
       <div className="ViewJewelry">
