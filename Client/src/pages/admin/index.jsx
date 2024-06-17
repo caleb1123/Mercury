@@ -40,6 +40,7 @@ function Sidebar() {
 
       const data = response.data;
       setAccounts(data);
+      console.log(data);  
     } catch (error) {
       console.error('Error fetching accounts:', error);
     }
@@ -144,17 +145,17 @@ function Sidebar() {
                 <TableBody>
                   {filteredAccounts.map((account) => (
                     <TableRow key={account.account_id}>
-                      <TableCell>{account.account_id || '-'}</TableCell>
+                      <TableCell>{account.accountId || '-'}</TableCell>
                       <TableCell>{account.address || '-'}</TableCell>
                       <TableCell>{account.dob || '-'}</TableCell>
                       <TableCell>{account.email || '-'}</TableCell>
-                      <TableCell>{account.full_name || '-'}</TableCell>
+                      <TableCell>{account.fullName || '-'}</TableCell>
                       <TableCell>{account.phone || '-'}</TableCell>
                       <TableCell>{account.sex ? 'Female' : 'Male'}</TableCell>
                       <TableCell>{account.status ? 'Enable' : 'Disable'}</TableCell>
                       <TableCell>
                         {(() => {
-                          switch (account.role_id) {
+                          switch (account.roleId) {
                             case 1: return 'ADMIN';
                             case 2: return 'MANAGER';
                             case 3: return 'STAFF';
