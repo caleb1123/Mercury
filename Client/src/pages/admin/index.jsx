@@ -11,11 +11,14 @@ function Sidebar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
 
-  const handleListItemClick = (index) => {
-    setSelectedIndex(index);
-    if (index === 0) {
+  useEffect(() => {
+    if (selectedIndex === 0) {
       fetchAccounts();
     }
+  }, [selectedIndex]);
+
+  const handleListItemClick = (index) => {
+    setSelectedIndex(index);
     if (index === 1) {
       window.location.href = '/'; // Chuyển về trang chủ, bạn có thể điều chỉnh đường dẫn tùy ý
     }
@@ -135,6 +138,7 @@ function Sidebar() {
                     <TableCell>Sex</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Role ID</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -159,8 +163,17 @@ function Sidebar() {
                           }
                         })()}
                       </TableCell>
-                      <TableCell>Edit</TableCell>
-
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => {
+                            window.location.href = `/edit-account/${account.account_id}`;
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
