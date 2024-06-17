@@ -1,11 +1,17 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
+import com.g3.Jewelry_Auction_System.converter.AccountConverter;
 import com.g3.Jewelry_Auction_System.converter.AuctionConverter;
+import com.g3.Jewelry_Auction_System.converter.BidConverter;
+import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 
+import com.g3.Jewelry_Auction_System.entity.Bid;
+import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
@@ -16,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -28,6 +36,10 @@ public class AuctionServiceImpl implements AuctionService {
     JewelryRepository JewelryRepository;
     @Autowired
     JewelryRepository jewelryRepository;
+    @Autowired
+    AccountConverter accountConverter;
+    @Autowired
+    BidConverter bidConverter;
 
     @Override
     public AuctionDTO createAuction(AuctionDTO auctionDTO) {
@@ -135,7 +147,38 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionDTOList;
     }
     @Override
+    public BidDTO getHighestBid(int auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(
+                ()-> new AppException(ErrorCode.AUCTION_NOT_FOUND)
+        );
+        Bid bid = auction.getBids().stream()
+                .max(Comparator.comparing(Bid::getBidAmount)).orElseThrow(
+                        () -> new AppException(ErrorCode.BID_NOT_FOUND)
+                );
+        return bidConverter.toDTO(bid);
+    }
+    @Override
     public WinnerResponse getWinner(int auctionId) {
-        return null;
+        WinnerResponse winner = new WinnerResponse();
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(
+                ()-> new AppException(ErrorCode.AUCTION_NOT_FOUND)
+        );
+        if (auction.getEndDate().isBefore(LocalDateTime.now())) {
+            Jewelry jewelry = auction.getJewelry();
+            Bid bid = auction.getBids().stream()
+                    .max(Comparator.comparing(Bid::getBidAmount)).orElseThrow(
+                            () -> new AppException(ErrorCode.BID_NOT_FOUND)
+                    );
+            Account account = bid.getAccount();
+            winner.setWinnerId(account.getAccountId());
+            winner.setUsername(account.getUserName());
+            winner.setBidAmount(bid.getBidAmount());
+            winner.setJewelryId(jewelry.getJewelryId());
+            winner.setJewelryName(jewelry.getJewelryName());
+            winner.setAuctionId(auction.getAuctionId());
+            return winner;
+        } else {
+            throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
+        }
     }
 }

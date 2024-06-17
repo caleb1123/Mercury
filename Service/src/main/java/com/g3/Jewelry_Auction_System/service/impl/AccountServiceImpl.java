@@ -7,26 +7,26 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
-import com.g3.Jewelry_Auction_System.payload.request.UpdatePasswordRequest;
+import com.g3.Jewelry_Auction_System.payload.request.CreateAccountRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
+import com.g3.Jewelry_Auction_System.payload.response.AccountSearchByRoleResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -39,26 +39,28 @@ public class AccountServiceImpl implements AccountService {
     private AuctionRepository auctionRepository;
     //@PreAuthorize("hasRole('ADMIN')")
     @Override
-    public AccountDTO createAccount(AccountDTO accountDTO) {
-        Optional<Account> existingUserEmail = accountRepository.findByEmail(accountDTO.getEmail());
-        Optional<Account> existingUserPhone = accountRepository.findByPhone(accountDTO.getPhone());
+    public AccountDTO createAccount(CreateAccountRequest createAccountRequest) {
+        Optional<Account> existingUserEmail = accountRepository.findByEmail(createAccountRequest.getEmail());
+        Optional<Account> existingUserPhone = accountRepository.findByPhone(createAccountRequest.getPhone());
         if (existingUserEmail.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
         if (existingUserPhone.isPresent()) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
-        accountDTO.setPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(createAccountRequest.getPassword());
+        createAccountRequest.setPassword(encodedPassword);
 
-        Account createAccount = accountConverter.toEntity(accountDTO);
+        Account createAccount = accountConverter.toEntity(createAccountRequest);
 
-        Role userRole = roleRepository.findRoleByRoleName(ERole.USER)
+        Role userRole = roleRepository.findById(createAccountRequest.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
         createAccount.setRole(userRole);
+        createAccount.setStatus(false);
 
         accountRepository.save(createAccount);
 
@@ -145,8 +147,45 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AccountResponse> searchAccountByName(String name) {
-        return null;
+        List<Account> accounts = accountRepository.searchAccountByName(name);
+        return accounts.stream()
+                .map(this::convertToAccountResponse)
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<AccountSearchByRoleResponse> searchAccountByRoleName(String roleName) {
+        List<Object[]> accounts = accountRepository.searchAccountByRoleName(roleName);
+        return accounts.stream()
+                .map(this::convertToAccountSearchByRoleResponse)
+                .collect(Collectors.toList());
+    }
+
+    private AccountResponse convertToAccountResponse(Account account) {
+        return AccountResponse.builder()
+                .accountId(account.getAccountId())
+                .fullName(account.getFullName())
+                .userName(account.getUserName())
+                .address(account.getAddress())
+                .dob(account.getDob()) // Assuming dob is a LocalDate in Account entity
+                .email(account.getEmail())
+                .sex(account.getSex())
+                .phone(account.getPhone())
+                .status(account.getStatus())
+                .roleId(account.getRole().getRoleId())
+                .build();
+    }
+    private AccountSearchByRoleResponse convertToAccountSearchByRoleResponse(Object[] account) {
+        return AccountSearchByRoleResponse.builder()
+                .accountId((Integer) account[0])
+                .address((String) account[1])
+                .email((String) account[2])
+                .fullName((String) account[3])
+                .phone((String) account[4])
+                .sex((Boolean) account[5])
+                .status((Boolean) account[6])
+                .roleId((Integer) account[7])
+                .build();
+    }
 
 }

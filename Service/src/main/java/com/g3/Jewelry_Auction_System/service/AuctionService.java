@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.service;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 
 import java.time.LocalDateTime;
@@ -15,4 +16,5 @@ public interface AuctionService {
     List<AuctionDTO> getLiveAuctionList();
     List<AuctionDTO> getAuctionByDate(LocalDateTime date1, LocalDateTime date2);
     WinnerResponse getWinner(int auctionId);
+    BidDTO getHighestBid(int auctionId);
 }
