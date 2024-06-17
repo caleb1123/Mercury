@@ -17,4 +17,5 @@ public interface AuctionService {
     List<AuctionDTO> getUpcomingAuctionList();
     WinnerResponse getWinner(int auctionId);
     BidDTO getHighestBid(int auctionId);
+
 }

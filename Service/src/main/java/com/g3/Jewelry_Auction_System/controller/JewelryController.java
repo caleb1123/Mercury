@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
+import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import com.g3.Jewelry_Auction_System.service.JewelryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,10 @@ public class JewelryController {
     public ResponseEntity<JewelryDTO> getJewelryDetail(@PathVariable int id){
         JewelryDTO jewelryDetail = jewelryService.getJewelryDetail(id);
         return new ResponseEntity<>(jewelryDetail, HttpStatus.OK);
-
+    }
+    @GetMapping("/{jewelryId}/auction")
+    public ResponseEntity<AuctionDTO> getAuctionByJewelry(@PathVariable int jewelryId) {
+        AuctionDTO auction = jewelryService.getAuctionByJewelry(jewelryId);
+        return new ResponseEntity<>(auction, HttpStatus.OK);
     }
 }

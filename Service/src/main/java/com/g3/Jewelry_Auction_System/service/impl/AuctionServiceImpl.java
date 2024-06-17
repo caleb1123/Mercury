@@ -179,4 +179,5 @@ public class AuctionServiceImpl implements AuctionService {
             throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
         }
     }
+
 }
