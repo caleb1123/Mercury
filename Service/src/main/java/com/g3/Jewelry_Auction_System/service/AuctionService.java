@@ -14,7 +14,7 @@ public interface AuctionService {
     List<AuctionDTO> getAuctionList();
     List<AuctionDTO> getAuctionByStatus(boolean status);
     List<AuctionDTO> getLiveAuctionList();
-    List<AuctionDTO> getAuctionByDate(LocalDateTime date1, LocalDateTime date2);
+    List<AuctionDTO> getUpcomingAuctionList();
     WinnerResponse getWinner(int auctionId);
     BidDTO getHighestBid(int auctionId);
 }
