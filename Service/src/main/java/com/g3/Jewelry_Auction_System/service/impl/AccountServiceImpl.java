@@ -60,6 +60,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
         createAccount.setRole(userRole);
+        createAccount.setStatus(false);
 
         accountRepository.save(createAccount);
 
