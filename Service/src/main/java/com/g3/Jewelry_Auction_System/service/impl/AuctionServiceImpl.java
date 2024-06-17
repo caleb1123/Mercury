@@ -14,6 +14,7 @@ import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
+import com.g3.Jewelry_Auction_System.repository.BidRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import com.g3.Jewelry_Auction_System.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -40,6 +38,8 @@ public class AuctionServiceImpl implements AuctionService {
     AccountConverter accountConverter;
     @Autowired
     BidConverter bidConverter;
+    @Autowired
+    BidRepository bidRepository;
 
     @Override
     public AuctionDTO createAuction(AuctionDTO auctionDTO) {
@@ -82,24 +82,22 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Auction not found"));
-        LocalDateTime startDate = auctionDTO.getStartDate();
-        LocalDateTime endDate = auctionDTO.getEndDate();
-        if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("Start date cannot be after end date");
-        }
-        if (LocalDateTime.now().isAfter(endDate)) {
-            throw new IllegalArgumentException("End date cannot be before current date");
-        }
-        if (auctionDTO.getCurrentPrice() < 1) {
-            throw new IllegalArgumentException("Current price cannot be less than 1");
-        }
+
         if (auctionDTO.getStartDate() != null) {
-            auction.setStartDate(auctionDTO.getStartDate());
+            if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
+                throw new IllegalArgumentException("Start date cannot be after end date");
+            } else {
+                auction.setStartDate(auctionDTO.getStartDate());
+            }
         }
         if (auctionDTO.getEndDate() != null) {
-            auction.setEndDate(auctionDTO.getEndDate());
+            if (LocalDateTime.now().isAfter(auctionDTO.getEndDate())) {
+                throw new IllegalArgumentException("End date cannot be before current date");
+            } else {
+                auction.setEndDate(auctionDTO.getEndDate());
+            }
         }
-        if (auctionDTO.getCurrentPrice() != auction.getCurrentPrice()) {
+        if (auctionDTO.getCurrentPrice() > auction.getCurrentPrice()) {
             auction.setCurrentPrice(auctionDTO.getCurrentPrice());
         }
         if (auctionDTO.getStatus() != null) {
@@ -151,11 +149,10 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(
                 ()-> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
-        Bid bid = auction.getBids().stream()
-                .max(Comparator.comparing(Bid::getBidAmount)).orElseThrow(
-                        () -> new AppException(ErrorCode.BID_NOT_FOUND)
-                );
-        return bidConverter.toDTO(bid);
+        Bid highestBid = bidRepository
+                .getHighestBidAmount(auctionId)
+                .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
+        return bidConverter.toDTO(highestBid);
     }
     @Override
     public WinnerResponse getWinner(int auctionId) {
@@ -165,8 +162,7 @@ public class AuctionServiceImpl implements AuctionService {
         );
         if (auction.getEndDate().isBefore(LocalDateTime.now())) {
             Jewelry jewelry = auction.getJewelry();
-            Bid bid = auction.getBids().stream()
-                    .max(Comparator.comparing(Bid::getBidAmount)).orElseThrow(
+            Bid bid = bidRepository.getHighestBidAmount(auctionId).orElseThrow(
                             () -> new AppException(ErrorCode.BID_NOT_FOUND)
                     );
             Account account = bid.getAccount();
