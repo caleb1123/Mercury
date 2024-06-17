@@ -63,4 +63,11 @@ public class JewelryController {
     }
 
 
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/{id}")
+    public ResponseEntity<JewelryDTO> getJewelryDetail(@PathVariable int id){
+        JewelryDTO jewelryDetail = jewelryService.getJewelryDetail(id);
+        return new ResponseEntity<>(jewelryDetail, HttpStatus.OK);
+
+    }
 }

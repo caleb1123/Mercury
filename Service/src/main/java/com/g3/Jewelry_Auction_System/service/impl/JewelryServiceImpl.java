@@ -74,5 +74,15 @@ public class JewelryServiceImpl implements JewelryService {
         }
         return list;
     }
+
+    @Override
+    public JewelryDTO getJewelryDetail(int jewelryId) {
+        return jewelryConverter.toDTO(
+                jewelryRepository.findByJewelryId(jewelryId).orElseThrow(
+                        () -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED)
+                )
+        );
+    }
+
 }
 

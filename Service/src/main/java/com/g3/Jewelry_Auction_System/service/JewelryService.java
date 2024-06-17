@@ -12,4 +12,5 @@ public interface JewelryService {
     JewelryDTO updateJewelry(JewelryDTO jewelryDTO, int id);
     List<JewelryDTO> getAllJewelry();
     List<JewelryDTO> searchName(String jewelryName);
+    JewelryDTO getJewelryDetail(int jewelryId);
 }

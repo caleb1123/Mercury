@@ -32,7 +32,7 @@ public class Jewelry {
     private String image;
 
 
-    @Column
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
     @Column
