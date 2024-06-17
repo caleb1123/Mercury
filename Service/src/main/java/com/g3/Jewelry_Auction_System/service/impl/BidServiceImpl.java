@@ -1,11 +1,15 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
+import com.g3.Jewelry_Auction_System.converter.AccountConverter;
 import com.g3.Jewelry_Auction_System.converter.BidConverter;
+import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.entity.Bid;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
+import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
 import com.g3.Jewelry_Auction_System.service.BidService;
@@ -25,6 +29,8 @@ public class BidServiceImpl implements BidService {
     BidConverter bidConverter;
     @Autowired
     AuctionRepository auctionRepository;
+    @Autowired
+    AccountConverter accountConverter;
 
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
@@ -103,5 +109,13 @@ public class BidServiceImpl implements BidService {
             bidDTOList.add(bidConverter.toDTO(bid));
         }
         return bidDTOList;
+    }
+    @Override
+    public AccountDTO getAccountByBid(int bidId) {
+        Bid bid = bidRepository
+                .findById(bidId)
+                .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
+        Account account = bid.getAccount();
+        return accountConverter.toDTO(account);
     }
 }
