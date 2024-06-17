@@ -1,6 +1,5 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
-import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.entity.Role;
 import com.g3.Jewelry_Auction_System.entity.*;
 import com.g3.Jewelry_Auction_System.exception.AppException;
@@ -8,6 +7,7 @@ import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
 import com.g3.Jewelry_Auction_System.payload.request.CreateAccountRequest;
+import com.g3.Jewelry_Auction_System.payload.request.SignUpRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.AccountSearchByRoleResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
@@ -21,9 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     RoleRepository roleRepository;
     private AuctionRepository auctionRepository;
+
     //@PreAuthorize("hasRole('ADMIN')")
     @Override
     public AccountDTO createAccount(CreateAccountRequest createAccountRequest) {
@@ -103,7 +102,7 @@ public class AccountServiceImpl implements AccountService {
         if (!updateDTO.getAddress().isEmpty()) {
             user.setAddress(updateDTO.getAddress());
         }
-        if (!updateDTO.getFullName().isEmpty()){
+        if (!updateDTO.getFullName().isEmpty()) {
             user.setFullName(updateDTO.getFullName());
         }
         if (!updateDTO.getPhone().isEmpty()) {
@@ -121,6 +120,7 @@ public class AccountServiceImpl implements AccountService {
         //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         accountRepository.save(user);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<AccountDTO> getAccountList() {
@@ -175,6 +175,7 @@ public class AccountServiceImpl implements AccountService {
                 .roleId(account.getRole().getRoleId())
                 .build();
     }
+
     private AccountSearchByRoleResponse convertToAccountSearchByRoleResponse(Object[] account) {
         return AccountSearchByRoleResponse.builder()
                 .accountId((Integer) account[0])
@@ -188,4 +189,32 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
+    @Override
+    public AccountDTO createAccountByUser(SignUpRequest signUpRequest) {
+        Optional<Account> existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail());
+        Optional<Account> existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone());
+        if (existingUserEmail.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_TAKEN);
+        }
+        if (existingUserPhone.isPresent()) {
+            throw new AppException(ErrorCode.PHONE_TAKEN);
+        }
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
+        signUpRequest.setPassword(encodedPassword);
+
+        Account createAccount = accountConverter.toEntity(signUpRequest);
+
+        Role userRole = roleRepository.findById(4)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+        createAccount.setRole(userRole);
+        createAccount.setStatus(true);
+
+        accountRepository.save(createAccount);
+
+        return accountConverter.toDTO(createAccount);
+    }
 }
