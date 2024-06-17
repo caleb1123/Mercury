@@ -15,4 +15,6 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Integer> {
 
     @Query(value = "Select * from jewelry where jewelry_name like '%'+:name+'%'", nativeQuery = true)
     List<Jewelry> getJewelriesByName(@Param("name") String name);
+
+
 }

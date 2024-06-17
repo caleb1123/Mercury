@@ -21,4 +21,6 @@ public interface AuthenticationService {
     void generateAndSendOtp(String email) throws MessagingException;
 
     void resetPasswordWithOtp(String email, String otp, String newPassword);
+
+
 }
