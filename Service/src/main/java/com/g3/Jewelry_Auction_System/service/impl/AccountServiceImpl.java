@@ -7,6 +7,7 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
+import com.g3.Jewelry_Auction_System.payload.request.CreateAccountRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.AccountSearchByRoleResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
@@ -38,23 +39,24 @@ public class AccountServiceImpl implements AccountService {
     private AuctionRepository auctionRepository;
     //@PreAuthorize("hasRole('ADMIN')")
     @Override
-    public AccountDTO createAccount(AccountDTO accountDTO) {
-        Optional<Account> existingUserEmail = accountRepository.findByEmail(accountDTO.getEmail());
-        Optional<Account> existingUserPhone = accountRepository.findByPhone(accountDTO.getPhone());
+    public AccountDTO createAccount(CreateAccountRequest createAccountRequest) {
+        Optional<Account> existingUserEmail = accountRepository.findByEmail(createAccountRequest.getEmail());
+        Optional<Account> existingUserPhone = accountRepository.findByPhone(createAccountRequest.getPhone());
         if (existingUserEmail.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
         if (existingUserPhone.isPresent()) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
-        accountDTO.setPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(createAccountRequest.getPassword());
+        createAccountRequest.setPassword(encodedPassword);
 
-        Account createAccount = accountConverter.toEntity(accountDTO);
+        Account createAccount = accountConverter.toEntity(createAccountRequest);
 
-        Role userRole = roleRepository.findRoleByRoleName(ERole.USER)
+        Role userRole = roleRepository.findById(createAccountRequest.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
         createAccount.setRole(userRole);
