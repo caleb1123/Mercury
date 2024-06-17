@@ -23,27 +23,25 @@ public class PostController {
 
     @PutMapping("/update/{postId}")
     public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable(value = "postId") int postId) {
-            PostDTO postDTO1 = postService.updatePost(postDTO, postId);
-            if (postDTO1 != null) {
-                return new ResponseEntity<>(postDTO1, HttpStatus.OK);
-            }
-            else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        PostDTO postDTO1 = postService.updatePost(postDTO, postId);
+        if (postDTO1 != null) {
+            return new ResponseEntity<>(postDTO1, HttpStatus.OK);
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/delete/{postId}")
-    public ResponseEntity<PostDTO> deletePost(@PathVariable(value = "postId") int postId){
-        try {
-            postService.deletePost(postId);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PostDTO> deletePost(@PathVariable(value = "postId") int postId) {
+        PostDTO deletePost = postService.deletePost(postId);
+        if (deletePost != null)
+            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
     @GetMapping("/search/{input}")
-    public ResponseEntity<List<PostDTO>> searchPost(@PathVariable(value = "input") String input){
-        List<PostDTO> postDTOList = postService.getPostByNameLike(input);
-        if(postDTOList.isEmpty()){
+    public ResponseEntity<List<PostDTO>> searchPost(@PathVariable(value = "input") String input) {
+        List<PostDTO> postDTOList = postService.getPostByTitleLike(input);
+        if (postDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(postDTOList, HttpStatus.OK);
