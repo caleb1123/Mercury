@@ -95,4 +95,13 @@ public class BidServiceImpl implements BidService {
         }
         return bidDTOList;
     }
+    @Override
+    public List<BidDTO> getBidByAuction(int auctionId) {
+        List<Bid> bidList = bidRepository.findByAuctionId(auctionId);
+        List<BidDTO> bidDTOList = new ArrayList<>();
+        for (Bid bid : bidList) {
+            bidDTOList.add(bidConverter.toDTO(bid));
+        }
+        return bidDTOList;
+    }
 }

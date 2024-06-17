@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -129,20 +130,21 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionDTOList;
     }
     @Override
-    public List<AuctionDTO> getAuctionByDate(LocalDateTime date1, LocalDateTime date2) {
-        List<AuctionDTO> auctionDTOList = getAuctionList();
-        if (date1 != null && date2 == null) {
-            auctionDTOList.removeIf(auctionDTO
-                    -> date1.isBefore(auctionDTO.getStartDate()) || date1.isAfter(auctionDTO.getEndDate()));
-        }
-        if (date1 != null && date2 != null) {
-            LocalDateTime startDate = date1.isBefore(date2) ? date1 : date2;
-            LocalDateTime endDate = date1.isAfter(date2) ? date1 : date2;
-            auctionDTOList.removeIf(auctionDTO ->
-                    startDate.isAfter(auctionDTO.getEndDate()) || endDate.isBefore(auctionDTO.getStartDate())
-            );
-        }
-        return auctionDTOList;
+    public List<AuctionDTO> getUpcomingAuctionList() {
+        List<AuctionDTO> allAuctions = getAuctionList();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<AuctionDTO> liveAuctions = getLiveAuctionList();
+
+        List<AuctionDTO> upcomingAuctions = allAuctions.stream()
+                .filter(auction -> now.isBefore(auction.getStartDate()))
+                .sorted(Comparator.comparing(AuctionDTO::getStartDate))
+                .toList();
+
+        // Combine live auctions and upcoming auctions
+        liveAuctions.addAll(upcomingAuctions);
+
+        return liveAuctions;
     }
     @Override
     public BidDTO getHighestBid(int auctionId) {
@@ -177,4 +179,5 @@ public class AuctionServiceImpl implements AuctionService {
             throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
         }
     }
+
 }

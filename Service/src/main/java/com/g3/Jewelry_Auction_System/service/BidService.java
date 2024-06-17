@@ -9,4 +9,5 @@ public interface BidService {
     void updateBid(BidDTO bidDTO, int id);
     void deleteBid(int id);
     List<BidDTO> getAllBid();
+    List<BidDTO> getBidByAuction(int auctionId);
 }

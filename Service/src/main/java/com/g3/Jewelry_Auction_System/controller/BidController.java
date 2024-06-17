@@ -33,6 +33,14 @@ public class BidController {
         } else {
             return new ResponseEntity<>(bids, HttpStatus.OK);
         }
-
+    }
+    @GetMapping("/list/{auctionId}")
+    public ResponseEntity<List<BidDTO>> getBidByAuction(@PathVariable int auctionId) {
+        List<BidDTO> bids = bidService.getBidByAuction(auctionId);
+        if (bids == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(bids, HttpStatus.OK);
+        }
     }
 }

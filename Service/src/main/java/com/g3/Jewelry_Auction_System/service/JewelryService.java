@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.service;
 
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
+import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryCategoryDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 
@@ -13,4 +14,5 @@ public interface JewelryService {
     List<JewelryDTO> getAllJewelry();
     List<JewelryDTO> searchName(String jewelryName);
     JewelryDTO getJewelryDetail(int jewelryId);
+    AuctionDTO getAuctionByJewelry(int jewelryId);
 }

@@ -60,9 +60,9 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
-    @GetMapping("/list/byDate")
-    public ResponseEntity<List<AuctionDTO>> getAuctionByDate(@RequestParam LocalDateTime date1, LocalDateTime date2) {
-        List<AuctionDTO> auctionList = auctionService.getAuctionByDate(date1, date2);
+    @GetMapping("/list/upcoming")
+    public ResponseEntity<List<AuctionDTO>> getUpcomingAuctionList() {
+        List<AuctionDTO> auctionList = auctionService.getUpcomingAuctionList();
         if (auctionList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -79,6 +79,4 @@ public class AuctionController {
         WinnerResponse winner = auctionService.getWinner(auctionId);
         return ResponseEntity.ok(winner);
     }
-
-
 }

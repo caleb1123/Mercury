@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from "react";
 import "./ViewJewelry.css";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import line from './image/line-3.svg';
 
@@ -14,6 +14,36 @@ const categoryMapping = {
   6: 'LOOSESTONES_BEADS',
   7: 'NECKLACES_PENDANTS',
   8: 'WATCHES'
+};
+
+// Bid increment ranges
+const bidIncrements = [
+  { price: 0, increment: 1 },
+  { price: 20, increment: 5 },
+  { price: 100, increment: 10 },
+  { price: 250, increment: 25 },
+  { price: 500, increment: 50 },
+  { price: 1000, increment: 100 },
+  { price: 5000, increment: 250 },
+  { price: 25000, increment: 500 },
+  { price: 50000, increment: 500 },
+  { price: 100000, increment: 2500 },
+  { price: 250000, increment: 5000 },
+  { price: 1000000, increment: 10000 }
+];
+
+// Function to calculate the next bids
+const getNextBids = (startingPrice) => {
+  const nextBids = [];
+  let currentPrice = startingPrice;
+
+  for (let i = 0; i < 10; i++) {
+    nextBids.push(currentPrice);
+    const increment = bidIncrements.find(b => currentPrice < b.price).increment;
+    currentPrice += increment;
+  }
+
+  return nextBids;
 };
 
 // Popup component for place bid
@@ -32,9 +62,11 @@ const Popup = ({ isOpen, handleClose, children }) => {
 
 const ViewJewelry = () => {
   const { id } = useParams(); // get the id from the route parameters
+  const navigate = useNavigate(); // get the navigate function for navigation
   const [inputValue, setInputValue] = useState('');
   const [jewelry, setJewelry] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedBid, setSelectedBid] = useState(null); // state to hold the selected bid
 
   useEffect(() => {
     const fetchJewelryData = async () => {
@@ -59,7 +91,8 @@ const ViewJewelry = () => {
   }, [id]);
 
   const handleClick = () => {
-    window.location.href = '/ViewAuction';
+    // Redirect to another page with selectedBid and jewelryId
+    navigate('/ViewAuction', { state: { bid: selectedBid, jewelryId: id } });
   };
 
   const handleChange = (event) => {
@@ -74,6 +107,10 @@ const ViewJewelry = () => {
     setIsPopupOpen(false);
   };
 
+  const handleBidChange = (event) => {
+    setSelectedBid(event.target.value); // update the selected bid
+  };
+
   if (!jewelry) {
     return <div>Loading...</div>;
   }
@@ -82,6 +119,9 @@ const ViewJewelry = () => {
   const estimate = jewelry.estimate;
   const minEstimate = (estimate * 0.85).toFixed(2);
   const maxEstimate = (estimate * 1.275).toFixed(2);
+
+  // Get the next bids based on the starting price
+  const nextBids = getNextBids(jewelry.startingPrice);
 
   return (
     <>
@@ -128,15 +168,10 @@ const ViewJewelry = () => {
               <p>Enter the highest amount you are willing to bid. We'll bid you incrementally to keep you in the lead. </p>
               <div className="WordStyle_JewelryInfo">Maximum Bid ($)
                 <span>
-                  <select name="Bid_List">
-                    <option>375</option>
-                    <option>400</option>
-                    <option>425</option>
-                    <option>450</option>
-                    <option>475</option>
-                    <option>500</option>
-                    <option>525</option>
-                    <option>550</option>
+                  <select name="Bid_List" onChange={handleBidChange}>
+                    {nextBids.map(bid => (
+                      <option key={bid} value={bid}>{bid}</option>
+                    ))}
                   </select>
                 </span>
               </div>

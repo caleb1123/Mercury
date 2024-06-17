@@ -1,12 +1,16 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
 
+import com.g3.Jewelry_Auction_System.converter.AuctionConverter;
 import com.g3.Jewelry_Auction_System.converter.JewelryConverter;
+import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
+import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryCategoryDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
+import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryCategoryRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 
@@ -25,6 +29,10 @@ public class JewelryServiceImpl implements JewelryService {
     JewelryConverter    jewelryConverter;
     @Autowired
     private JewelryCategoryRepository jewelryCategoryRepository;
+    @Autowired
+    AuctionRepository auctionRepository;
+    @Autowired
+    AuctionConverter auctionConverter;
 
     @Override
     public JewelryDTO addJewelry(JewelryDTO jewelryDTO) {
@@ -83,6 +91,19 @@ public class JewelryServiceImpl implements JewelryService {
                 )
         );
     }
-
+    @Override
+    public AuctionDTO getAuctionByJewelry(int jewelryId) {
+        Jewelry jewelry = jewelryRepository
+                .findByJewelryId(jewelryId).orElseThrow(
+                () -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED)
+        );
+        List<Auction> auctions = auctionRepository.findByJewelry(jewelry);
+        for (Auction auction : auctions) {
+            if (auction.getStatus()) {
+                return auctionConverter.toDTO(auction);
+            }
+        }
+        throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
+    }
 }
 
