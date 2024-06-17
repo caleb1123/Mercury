@@ -52,14 +52,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(int id) {
-        Optional<Post> opPost = postRepository.findById(id);
-        if (opPost.isPresent()) {
-            Post post = opPost.get();
+        Post post = postRepository
+                .findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
             post.setStatus(false);
             postRepository.save(post);
-        } else {
-            throw new RuntimeException("Post not found");
-        }
     }
 
     @Override

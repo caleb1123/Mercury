@@ -4,6 +4,7 @@ import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.payload.request.CreateAccountRequest;
+import com.g3.Jewelry_Auction_System.payload.request.SignUpRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
@@ -42,6 +43,20 @@ public class AccountConverter {
         Account entity = new Account();
         entity.setUserName(accountDTO.getUserName());
 
+        entity.setEmail(accountDTO.getEmail());
+        entity.setPhone(accountDTO.getPhone());
+        entity.setRole(roleRepository.getReferenceById(accountDTO.getRoleId()));
+        return entity;
+    }
+
+    public Account toEntity(SignUpRequest accountDTO) {
+        if (accountDTO == null){
+            return null;
+        }
+        Account entity = new Account();
+        entity.setFullName(accountDTO.getFullName());
+        entity.setUserName(accountDTO.getUserName());
+        entity.setPassword(accountDTO.getPassword());
         entity.setEmail(accountDTO.getEmail());
         entity.setPhone(accountDTO.getPhone());
         entity.setRole(roleRepository.getReferenceById(accountDTO.getRoleId()));

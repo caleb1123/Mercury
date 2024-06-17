@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -31,10 +31,10 @@ public class BidServiceImpl implements BidService {
         if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
             throw new AppException(ErrorCode.ID_EXISTED);
         }
-        if (bidDTO.getBidAmount() < 1) {
+        if (bidDTO.getBidAmount() < 0) {
             throw new IllegalArgumentException("Bid amount must be greater than 0");
         }
-        Auction auction = auctionRepository.findById(bidDTO.getBidId()).orElseThrow(
+        Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
         if (auction.getEndDate().isBefore(LocalDateTime.now())) {
@@ -45,20 +45,24 @@ public class BidServiceImpl implements BidService {
             Bid bid = bidConverter.toEntity(bidDTO);
             bidRepository.save(bid);
             return bidDTO;
-        } else {
-            Bid highestBid = auction.getBids().stream()
-                    .max(Comparator.comparing(Bid::getBidAmount)).orElseThrow(
-                            () -> new AppException(ErrorCode.BID_NOT_FOUND)
-                    );
-            if (bidDTO.getBidAmount() <= highestBid.getBidAmount()) {
-                throw new AppException(ErrorCode.INVALID_BID);
-            } else {
+        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
+        {
+            Optional<Bid> highestBid = bidRepository
+                    .getHighestBidAmount(auction.getAuctionId());
+            double currentPrice = auction.getCurrentPrice();
+            if (highestBid.isPresent() && highestBid.get().getBidAmount() > currentPrice) {
+                currentPrice = highestBid.get().getBidAmount();
+            }
+            if (bidDTO.getBidAmount() > currentPrice) {
                 bidDTO.setBidTime(LocalDateTime.now());
                 Bid bid = bidConverter.toEntity(bidDTO);
                 bidRepository.save(bid);
                 return bidDTO;
+            } else {
+                throw new AppException(ErrorCode.INVALID_BID);
             }
         }
+        throw new AppException(ErrorCode.INVALID_DOB);
     }
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
