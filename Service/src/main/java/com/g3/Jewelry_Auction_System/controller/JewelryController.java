@@ -61,5 +61,10 @@ public class JewelryController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<JewelryDTO> getJewelryDetail(@PathVariable int id){
+        JewelryDTO jewelryDetail = jewelryService.getJewelryDetail(id);
+        return new ResponseEntity<>(jewelryDetail, HttpStatus.OK);
 
+    }
 }
