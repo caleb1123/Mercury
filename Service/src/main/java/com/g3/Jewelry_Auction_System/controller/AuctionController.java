@@ -79,4 +79,6 @@ public class AuctionController {
         WinnerResponse winner = auctionService.getWinner(auctionId);
         return ResponseEntity.ok(winner);
     }
+
+
 }

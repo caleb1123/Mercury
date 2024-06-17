@@ -1,11 +1,9 @@
 package com.g3.Jewelry_Auction_System.controller;
 
-import com.g3.Jewelry_Auction_System.exception.AppException;
-import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.entity.Account;
-import com.g3.Jewelry_Auction_System.payload.request.AuthenticationRequest;
 import com.g3.Jewelry_Auction_System.payload.request.CreateAccountRequest;
+import com.g3.Jewelry_Auction_System.payload.request.SignUpRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.AccountSearchByRoleResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
@@ -15,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,5 +74,11 @@ public class AccountController {
     public ResponseEntity<List<AccountSearchByRoleResponse>> searchAccountByRoleName(@RequestParam String roleName) {
         List<AccountSearchByRoleResponse> accounts = accountService.searchAccountByRoleName(roleName);
         return ResponseEntity.ok(accounts);
+    }
+
+    @PostMapping("/signUp")
+    public ResponseEntity<AccountDTO> signUp(@RequestBody SignUpRequest accountDTO) {
+        AccountDTO createdAccount = accountService.createAccountByUser(accountDTO);
+        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
 }
