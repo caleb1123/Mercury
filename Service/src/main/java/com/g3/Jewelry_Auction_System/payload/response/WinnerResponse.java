@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 public class WinnerResponse {
     private int winnerId;
     private String username;
-    private String winnerName;
+
     private double bidAmount;
+
     private int jewelryId;
     private String jewelryName;
+
     private int auctionId;
 }

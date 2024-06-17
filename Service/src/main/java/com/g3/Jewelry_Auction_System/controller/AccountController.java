@@ -48,6 +48,7 @@ public class AccountController {
             return ResponseEntity.ok().build(); // Return 200 OK on successful update
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list")
     public ResponseEntity<List<AccountDTO>> getAccountList() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();

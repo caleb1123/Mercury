@@ -6,6 +6,7 @@ import SignIn from './pages/users/Login';
 import SignUp from './pages/users/SignUp';
 import SendRequest from './pages/users/SendRequest';
 import ViewJewelryList from './pages/users/ViewJewelryList';
+import Admin from './pages/users/admin';
 
 
 
@@ -19,6 +20,10 @@ function App() {
         <Route path="/SignUp" element={<SignUp/>} />
         <Route path="/SendRequest" element={<SendRequest/>} />
         <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
+        <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
+        <Route path="/Admin" element={<Admin/>}/>
+
+
 
 
         </Routes>
