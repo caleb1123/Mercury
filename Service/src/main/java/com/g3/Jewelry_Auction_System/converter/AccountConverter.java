@@ -41,7 +41,7 @@ public class AccountConverter {
         }
         Account entity = new Account();
         entity.setUserName(accountDTO.getUserName());
-        entity.setPassword(accountDTO.getPassword());
+
         entity.setEmail(accountDTO.getEmail());
         entity.setPhone(accountDTO.getPhone());
         entity.setRole(roleRepository.getReferenceById(accountDTO.getRoleId()));
