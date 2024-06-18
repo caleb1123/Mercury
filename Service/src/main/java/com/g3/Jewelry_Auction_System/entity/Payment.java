@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -26,6 +27,7 @@ public class Payment {
     private double amount;
 
     @Column
+    @NotBlank(message = "Payment method is required")
     private String paymentMethod;
 
     @Column
