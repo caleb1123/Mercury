@@ -18,21 +18,25 @@ import java.util.List;
 public class AuctionController {
     @Autowired
     AuctionService auctionService;
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<AuctionDTO> createAuction(@RequestBody AuctionDTO auctionDTO) {
         AuctionDTO auction = auctionService.createAuction(auctionDTO);
         return new ResponseEntity<>(auction, HttpStatus.CREATED);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delete/{auctionId}")
     public ResponseEntity<Auction> deleteAuction(@PathVariable int auctionId) {
         auctionService.deleteAuction(auctionId);
         return ResponseEntity.ok().build();
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{auctionId}")
     public ResponseEntity<Auction> updateAuction(@PathVariable int auctionId, @RequestBody AuctionDTO auctionDTO) {
         auctionService.updateAuction(auctionDTO, auctionId);
         return ResponseEntity.ok().build();
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list")
     public ResponseEntity<List<AuctionDTO>> getAuctionList() {
         List<AuctionDTO> auctionList = auctionService.getAuctionList();
@@ -42,6 +46,7 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{status}")
     public ResponseEntity<List<AuctionDTO>> getAuctionByStatus(@PathVariable boolean status) {
         List<AuctionDTO> auctionList = auctionService.getAuctionByStatus(status);
@@ -51,6 +56,7 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/live")
     public ResponseEntity<List<AuctionDTO>> getLiveAuctionList() {
         List<AuctionDTO> auctionList = auctionService.getLiveAuctionList();
@@ -60,6 +66,7 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/upcoming")
     public ResponseEntity<List<AuctionDTO>> getUpcomingAuctionList() {
         List<AuctionDTO> auctionList = auctionService.getUpcomingAuctionList();
@@ -69,11 +76,13 @@ public class AuctionController {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{auctionId}/highestBid")
     public ResponseEntity<BidDTO> getHighestBid(@PathVariable int auctionId) {
         BidDTO bid = auctionService.getHighestBid(auctionId);
         return ResponseEntity.ok(bid);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{auctionId}/winner")
     public ResponseEntity<WinnerResponse> getWinner(@PathVariable int auctionId) {
         WinnerResponse winner = auctionService.getWinner(auctionId);

@@ -25,19 +25,19 @@ public class AccountController {
     AccountService accountService;
     @Autowired
     AccountRepository accountRepository;
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<AccountDTO> createAccount(@RequestBody CreateAccountRequest accountDTO) {
         AccountDTO createdAccount = accountService.createAccount(accountDTO);
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/deactivate/{userName}")
     public ResponseEntity<Account> deactivateAccount(@PathVariable String userName) {
             accountService.deactivateAccount(userName);
             return ResponseEntity.ok().build(); // Return 200 OK on successful deactivation
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{userName}")
     public ResponseEntity<Account> updateAccount(@RequestBody AccountDTO accountDTO, @PathVariable String userName) {
             accountService.updateAccount(accountDTO, userName);
@@ -57,30 +57,31 @@ public class AccountController {
             return new ResponseEntity<>(accountList, HttpStatus.OK);
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/myinfor")
     public ResponseEntity<AccountResponse> getMyInfo() {
         AccountResponse accountResponse = accountService.getMyInfor();
         return ResponseEntity.ok(accountResponse);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/search")
     public ResponseEntity<List<AccountResponse>> searchAccountByName(@RequestParam String name) {
         List<AccountResponse> accounts = accountService.searchAccountByName(name);
         return ResponseEntity.ok(accounts);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/searchByRole")
     public ResponseEntity<List<AccountSearchByRoleResponse>> searchAccountByRoleName(@RequestParam String roleName) {
         List<AccountSearchByRoleResponse> accounts = accountService.searchAccountByRoleName(roleName);
         return ResponseEntity.ok(accounts);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/signUp")
     public ResponseEntity<AccountDTO> signUp(@RequestBody SignUpRequest accountDTO) {
         AccountDTO createdAccount = accountService.createAccountByUser(accountDTO);
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{username}")
     public ResponseEntity<AccountDTO> getAccountByUsername(@PathVariable String username) {
         AccountDTO accountDTO = accountService.getAccountByUsername(username);

@@ -16,13 +16,13 @@ import java.util.List;
 public class JewelryController {
     @Autowired
     JewelryService jewelryService;
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/add")
     public ResponseEntity<JewelryDTO> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
         JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delist/{jewelryId}")
     public ResponseEntity<Jewelry> delistJewelry(@PathVariable int jewelryId) {
         try {
@@ -32,9 +32,8 @@ public class JewelryController {
             // Handle other potential exceptions (e.g., database issues)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
         }
-
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{jewelryId}")
     public ResponseEntity<JewelryDTO> updateJewelry(@RequestBody JewelryDTO jewelryDTO, @PathVariable(value = "jewelryId") int id) {
         JewelryDTO jewelryDTO1 = jewelryService.updateJewelry(jewelryDTO, id);
@@ -43,7 +42,7 @@ public class JewelryController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getAll")
     public List<JewelryDTO> getAllJewelries(){
         List<JewelryDTO> jewelryDTOList = jewelryService.getAllJewelry();
@@ -52,6 +51,7 @@ public class JewelryController {
         }
         return jewelryDTOList;
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/search/{name}")
     public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
         List<JewelryDTO> result = jewelryService.searchName(name);
@@ -60,12 +60,13 @@ public class JewelryController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{id}")
     public ResponseEntity<JewelryDTO> getJewelryDetail(@PathVariable int id){
         JewelryDTO jewelryDetail = jewelryService.getJewelryDetail(id);
         return new ResponseEntity<>(jewelryDetail, HttpStatus.OK);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{jewelryId}/auction")
     public ResponseEntity<AuctionDTO> getAuctionByJewelry(@PathVariable int jewelryId) {
         AuctionDTO auction = jewelryService.getAuctionByJewelry(jewelryId);

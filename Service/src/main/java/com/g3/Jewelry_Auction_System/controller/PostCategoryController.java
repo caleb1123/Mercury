@@ -16,13 +16,13 @@ import java.util.List;
 public class PostCategoryController {
     @Autowired
     private PostCategoryService postCategoryService;
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<PostCategoryDTO> createPostCategory(@RequestBody PostCategoryDTO postCategoryDTO) {
         PostCategoryDTO createdPostCategoryDTO = postCategoryService.createPostCategory(postCategoryDTO);
         return new ResponseEntity<>(createdPostCategoryDTO, HttpStatus.CREATED);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{categoryId}")
     public ResponseEntity<PostCategoryDTO> updatePostCategory(@RequestBody PostCategoryDTO postCategoryDTO, @PathVariable(value = "categoryId") int categoryId) {
         PostCategoryDTO postCategoryDTO1 = postCategoryService.updatePostCategory(postCategoryDTO, categoryId);
@@ -32,7 +32,7 @@ public class PostCategoryController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/search/{input}")
     public ResponseEntity<List<PostCategoryDTO>> searchPost(@PathVariable(value = "input") String input) {
         List<PostCategoryDTO> postCategoryDTOList = postCategoryService.getPostByCategoryLike(input);

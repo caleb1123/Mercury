@@ -17,16 +17,19 @@ import java.util.List;
 public class BidController {
     @Autowired
     BidService bidService;
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<BidDTO> createBid(@RequestBody BidDTO bidDTO) {
         BidDTO bid = bidService.createBid(bidDTO);
         return new ResponseEntity<>(bid, HttpStatus.CREATED);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{bidId}")
     public ResponseEntity<Bid> updateBid(@RequestBody BidDTO bidDTO, @PathVariable int bidId) {
         bidService.updateBid(bidDTO, bidId);
         return ResponseEntity.ok().build();
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list")
     public ResponseEntity<List<BidDTO>> getAllBid() {
         List<BidDTO> bids = bidService.getAllBid();
@@ -36,6 +39,7 @@ public class BidController {
             return new ResponseEntity<>(bids, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{auctionId}")
     public ResponseEntity<List<BidResponse>> getBidByAuction(@PathVariable int auctionId) {
         List<BidResponse> bids = bidService.getBidByAuction(auctionId);
@@ -45,6 +49,7 @@ public class BidController {
             return new ResponseEntity<>(bids, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{bidId}/account")
     public ResponseEntity<AccountDTO> getAccountByBid(@PathVariable int bidId) {
         AccountDTO account = bidService.getAccountByBid(bidId);

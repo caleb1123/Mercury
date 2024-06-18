@@ -26,31 +26,27 @@ public class AuthencationController {
     @Autowired
     private AccountService accountService;
 
-
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse response = authenticationService.authenticate(request);
         return ResponseEntity.ok(response);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/introspect")
     public ResponseEntity<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         IntrospectResponse response = authenticationService.introspect(request);
         return ResponseEntity.ok(response);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/logout")
     public void logout(@RequestBody LogoutRequest logoutRequest) throws ParseException {
         authenticationService.logout(logoutRequest);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) throws ParseException, JOSEException {
         var result = authenticationService.refreshToken(refreshTokenRequest);
         return ResponseEntity.ok(result);
     }
-
-
-
 }

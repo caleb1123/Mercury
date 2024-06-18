@@ -14,13 +14,13 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
         PostDTO createdPost = postService.createPost(postDTO);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{postId}")
     public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable(value = "postId") int postId) {
             PostDTO postDTO1 = postService.updatePost(postDTO, postId);
@@ -29,7 +29,7 @@ public class PostController {
             }
             else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delete/{postId}")
     public ResponseEntity<PostDTO> deletePost(@PathVariable(value = "postId") int postId){
         try {
@@ -39,7 +39,7 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/search/{input}")
     public ResponseEntity<List<PostDTO>> searchPost(@PathVariable(value = "input") String input){
         List<PostDTO> postDTOList = postService.getPostByNameLike(input);
@@ -48,5 +48,4 @@ public class PostController {
         }
         return new ResponseEntity<>(postDTOList, HttpStatus.OK);
     }
-
 }
