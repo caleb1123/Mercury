@@ -91,19 +91,19 @@ const ViewJewelry = () => {
     fetchJewelryData();
   }, [id]);
 
-  const getAccountIdFromUsername = async (username, token) => {
-    try {
-      const response = await axios.get(`http://localhost:8088/users/username/${username}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      return response.data.accountId;
-    } catch (error) {
-      console.error('Error fetching accountId:', error);
-      throw new Error('Unable to retrieve accountId', {username});
-    }
-  };
+  // const getAccountIdFromUsername = async (username, token) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:8088/users/username/${username}`, {
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`
+  //       }
+  //     });
+  //     return response.data.accountId;
+  //   } catch (error) {
+  //     console.error('Error fetching accountId:', error);
+  //     throw new Error('Unable to retrieve accountId', {username});
+  //   }
+  // };
 
   const handleClick = async () => {
     try {
@@ -116,7 +116,7 @@ const ViewJewelry = () => {
       const decodedToken = jwtDecode(token);
       const username = decodedToken.sub;
 
-      const accountId = await getAccountIdFromUsername(username, token);
+      //const accountId = await getAccountIdFromUsername(username, token);
 
       const response = await axios.get(`http://localhost:8088/jewelry/${id}/auction`, {
         headers: {
@@ -133,7 +133,7 @@ const ViewJewelry = () => {
       await axios.post('http://localhost:8088/bid/create', {
         bidAmount: selectedBid,
         auctionId: auctionId,
-        accountId: accountId
+        // accountId: accountId
       }, {
         headers: {
           'Content-Type': 'application/json',

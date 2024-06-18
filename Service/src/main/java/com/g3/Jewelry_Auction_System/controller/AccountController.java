@@ -82,4 +82,9 @@ public class AccountController {
         AccountDTO createdAccount = accountService.createAccountByUser(accountDTO);
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
+    @GetMapping("/{username}")
+    public ResponseEntity<AccountDTO> getAccountByUsername(@PathVariable String username) {
+        AccountDTO accountDTO = accountService.getAccountByUsername(username);
+        return ResponseEntity.ok(accountDTO);
+    }
 }

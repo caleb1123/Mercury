@@ -14,7 +14,7 @@ public interface AccountService {
     void updateAccount(AccountDTO accountDTO, String username);
     List<AccountDTO> getAccountList();
     AccountResponse getMyInfor();
-
+    AccountDTO getAccountByUsername(String username);
     List<AccountResponse> searchAccountByName(String name);
 
     List<AccountSearchByRoleResponse> searchAccountByRoleName(String roleName);
