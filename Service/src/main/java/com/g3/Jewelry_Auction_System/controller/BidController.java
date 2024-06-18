@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.controller;
 import com.g3.Jewelry_Auction_System.entity.Bid;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,8 @@ public class BidController {
         }
     }
     @GetMapping("/list/{auctionId}")
-    public ResponseEntity<List<BidDTO>> getBidByAuction(@PathVariable int auctionId) {
-        List<BidDTO> bids = bidService.getBidByAuction(auctionId);
+    public ResponseEntity<List<BidResponse>> getBidByAuction(@PathVariable int auctionId) {
+        List<BidResponse> bids = bidService.getBidByAuction(auctionId);
         if (bids == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
