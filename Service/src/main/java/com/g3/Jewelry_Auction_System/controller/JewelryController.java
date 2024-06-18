@@ -52,7 +52,6 @@ public class JewelryController {
         }
         return jewelryDTOList;
     }
-
     @GetMapping("/search/{name}")
     public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
         List<JewelryDTO> result = jewelryService.searchName(name);

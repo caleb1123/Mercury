@@ -12,8 +12,10 @@ import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
+import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,9 +33,16 @@ public class BidServiceImpl implements BidService {
     AuctionRepository auctionRepository;
     @Autowired
     AccountConverter accountConverter;
+    @Autowired
+    AccountRepository accountRepository;
 
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        var account  = accountRepository.findByUserName(name);
+        bidDTO.setAccountId(account.get().getAccountId());
+
         if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
             throw new AppException(ErrorCode.ID_EXISTED);
         }
