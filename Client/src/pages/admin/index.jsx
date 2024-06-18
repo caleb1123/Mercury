@@ -145,12 +145,12 @@ function Sidebar() {
                 <TableBody>
                   {filteredAccounts.map((account) => (
                     <TableRow key={account.account_id}>
-                      <TableCell>{account.accountId || '-'}</TableCell>
-                      <TableCell>{account.address || '-'}</TableCell>
-                      <TableCell>{account.dob || '-'}</TableCell>
-                      <TableCell>{account.email || '-'}</TableCell>
-                      <TableCell>{account.fullName || '-'}</TableCell>
-                      <TableCell>{account.phone || '-'}</TableCell>
+                      <TableCell>{account.accountId || 'NULL'}</TableCell>
+                      <TableCell>{account.address || 'NULL'}</TableCell>
+                      <TableCell>{account.dob || 'NULL'}</TableCell>
+                      <TableCell>{account.email || 'NULL'}</TableCell>
+                      <TableCell>{account.fullName || 'NULL'}</TableCell>
+                      <TableCell>{account.phone || 'NULL'}</TableCell>
                       <TableCell>{account.sex ? 'Female' : 'Male'}</TableCell>
                       <TableCell>{account.status ? 'Enable' : 'Disable'}</TableCell>
                       <TableCell>

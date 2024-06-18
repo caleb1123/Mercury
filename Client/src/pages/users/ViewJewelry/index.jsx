@@ -3,6 +3,7 @@ import "./ViewJewelry.css";
 import { NavLink, useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import line from './image/line-3.svg';
+import { jwtDecode } from "jwt-decode";
 
 // Category mapping based on the provided image
 const categoryMapping = {
@@ -90,9 +91,62 @@ const ViewJewelry = () => {
     fetchJewelryData();
   }, [id]);
 
-  const handleClick = () => {
-    // Redirect to another page with selectedBid and jewelryId
-    navigate('/ViewAuction', { state: { bid: selectedBid, jewelryId: id } });
+  const getAccountIdFromUsername = async (username, token) => {
+    try {
+      const response = await axios.get(`http://localhost:8088/users/username/${username}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data.accountId;
+    } catch (error) {
+      console.error('Error fetching accountId:', error);
+      throw new Error('Unable to retrieve accountId', {username});
+    }
+  };
+
+  const handleClick = async () => {
+    try {
+      const token = localStorage.getItem('token'); // assuming token is stored in local storage
+
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const decodedToken = jwtDecode(token);
+      const username = decodedToken.sub;
+
+      const accountId = await getAccountIdFromUsername(username, token);
+
+      const response = await axios.get(`http://localhost:8088/jewelry/${id}/auction`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const auctionId = response.data.auctionId;
+
+      if (!auctionId) {
+        throw new Error('Auction ID not found');
+      }
+
+      await axios.post('http://localhost:8088/bid/create', {
+        bidAmount: selectedBid,
+        auctionId: auctionId,
+        accountId: accountId
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // Redirect to another page with selectedBid and jewelryId
+      navigate('/ViewAuction', { state: { bid: selectedBid, jewelryId: id } });
+    } catch (error) {
+      console.error('Error creating bid:', error);
+      alert('Error creating bid: ' + error.message);
+    }
   };
 
   const handleChange = (event) => {

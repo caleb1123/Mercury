@@ -22,6 +22,7 @@ public class JewelryController {
         JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
 
     @PutMapping("/delist/{jewelryId}")
     public ResponseEntity<Jewelry> delistJewelry(@PathVariable int jewelryId) {

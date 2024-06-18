@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.Bid;
+import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import java.util.List;
 public class BidController {
     @Autowired
     BidService bidService;
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @PostMapping("/create")
     public ResponseEntity<BidDTO> createBid(@RequestBody BidDTO bidDTO) {
         BidDTO bid = bidService.createBid(bidDTO);
@@ -34,6 +37,7 @@ public class BidController {
             return new ResponseEntity<>(bids, HttpStatus.OK);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{auctionId}")
     public ResponseEntity<List<BidDTO>> getBidByAuction(@PathVariable int auctionId) {
         List<BidDTO> bids = bidService.getBidByAuction(auctionId);
@@ -41,6 +45,15 @@ public class BidController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(bids, HttpStatus.OK);
+        }
+    }
+    @GetMapping("/{bidId}/account")
+    public ResponseEntity<AccountDTO> getAccountByBid(@PathVariable int bidId) {
+        AccountDTO account = bidService.getAccountByBid(bidId);
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(account, HttpStatus.OK);
         }
     }
 }

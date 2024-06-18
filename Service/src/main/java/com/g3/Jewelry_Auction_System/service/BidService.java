@@ -1,5 +1,6 @@
 package com.g3.Jewelry_Auction_System.service;
 
+import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 
 import java.util.List;
@@ -10,4 +11,5 @@ public interface BidService {
     void deleteBid(int id);
     List<BidDTO> getAllBid();
     List<BidDTO> getBidByAuction(int auctionId);
+    AccountDTO getAccountByBid(int bidId);
 }

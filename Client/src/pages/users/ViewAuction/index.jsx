@@ -22,19 +22,8 @@ function ViewAuction() {
   const { jewelryId, bid } = state || {};
   const [inputValue, setInputValue] = useState('');
   const [jewelry, setJewelry] = useState(null);
-  const [auction, setAuction] = useState({
-    currentBid: 500.0,
-    bidCount: 6,
-    endDate: '2024-06-09',
-    bids: [
-      { owner: 'MinhTrung', time: '2024-06-09T11:00:00Z', amount: 400.0 },
-      { owner: 'PhuocDuy', time: '2024-06-08T19:00:00Z', amount: 350.0 },
-      { owner: 'KhanhVy', time: '2024-06-08T20:00:00Z', amount: 325.0 },
-      { owner: 'NgocHan', time: '2024-06-08T21:00:00Z', amount: 300.0 },
-      { owner: 'Nam', time: '2024-06-07T00:00:00Z', amount: 200.0 },
-      { owner: 'MinhTrung', time: '2024-06-07T00:00:00Z', amount: 100.0 },
-    ]
-  });
+  const [auction, setAuction] = useState(null);
+  const [bids, setBids] = useState([]);
 
   useEffect(() => {
     if (jewelryId) {
@@ -56,16 +45,60 @@ function ViewAuction() {
         }
       };
 
+      const fetchAuctionData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}/auction`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.status !== 200) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          setAuction(response.data);
+        } catch (error) {
+          console.error('Error fetching auction data:', error);
+        }
+      };
+
       fetchJewelryData();
+      fetchAuctionData();
     }
   }, [jewelryId]);
+
+  useEffect(() => {
+    if (auction && auction.auctionId) {
+      const fetchBidsData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8088/bid/list/${auction.auctionId}`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.status !== 200) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          console.log('Bids data:', response.data);
+          setBids(response.data);
+        } catch (error) {
+          console.error('Error fetching bids data:', error);
+        }
+      };
+
+      fetchBidsData();
+    }
+  }, [auction]);
 
   // Handle input change
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  if (!jewelry) {
+  if (!jewelry || !auction) {
     return <div>Loading...</div>;
   }
 
@@ -101,8 +134,8 @@ function ViewAuction() {
             <div className="info_data_style">End Date</div>
           </div>
           <div className="info_data">
-            ${auction.currentBid}
-            <div className="info_data_style">{auction.bidCount}</div>
+            ${auction.currentPrice}
+            <div className="info_data_style">{bids.length}</div>
             <div className="info_data_style">{new Date(auction.endDate).toLocaleDateString()}</div>
           </div>
         </div>
@@ -121,13 +154,13 @@ function ViewAuction() {
             </div>
           </div>
           <div className="BidHistory">
-            <h4>Bids history ({auction.bidCount})</h4>
-            {auction.bids && auction.bids.length > 0 ? (
-              auction.bids.map((bid, index) => (
+            <h4>Bids history ({bids.length})</h4>
+            {bids && bids.length > 0 ? (
+              bids.map((bid, index) => (
                 <div className="BidDetals" key={index}>
-                  <div className="BidOwner">{bid.owner}</div>
-                  <div className="BidTime">{new Date(bid.time).toLocaleTimeString()}</div>
-                  <div className="BidPlaced">${bid.amount}</div>
+                  <div className="BidOwner">{bid.auctionId}</div>
+                  <div className="BidTime">{new Date(bid.bidTime).toLocaleTimeString()}</div>
+                  <div className="BidPlaced">${bid.bidAmount}</div>
                 </div>
               ))
             ) : (
