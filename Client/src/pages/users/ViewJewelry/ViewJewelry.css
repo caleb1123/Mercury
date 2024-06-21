@@ -33,7 +33,6 @@ body{
 }
 .ImageFrame{
   display: flex;
-  align-self: stretch;
   background-color: #5f4a3a;
   flex-direction: column;
   padding: 50px;

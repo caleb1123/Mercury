@@ -57,6 +57,9 @@ public class AccountController {
             return new ResponseEntity<>(accountList, HttpStatus.OK);
         }
     }
+
+
+
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/myinfor")
     public ResponseEntity<AccountResponse> getMyInfo() {
@@ -75,6 +78,7 @@ public class AccountController {
         List<AccountSearchByRoleResponse> accounts = accountService.searchAccountByRoleName(roleName);
         return ResponseEntity.ok(accounts);
     }
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/signUp")
     public ResponseEntity<AccountDTO> signUp(@RequestBody SignUpRequest accountDTO) {

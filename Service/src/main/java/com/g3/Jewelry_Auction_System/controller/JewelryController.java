@@ -16,12 +16,17 @@ import java.util.List;
 public class JewelryController {
     @Autowired
     JewelryService jewelryService;
+
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/add")
     public ResponseEntity<JewelryDTO> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
         JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
+
+
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delist/{jewelryId}")
     public ResponseEntity<Jewelry> delistJewelry(@PathVariable int jewelryId) {
@@ -33,6 +38,7 @@ public class JewelryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
         }
     }
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/update/{jewelryId}")
     public ResponseEntity<JewelryDTO> updateJewelry(@RequestBody JewelryDTO jewelryDTO, @PathVariable(value = "jewelryId") int id) {
@@ -42,6 +48,7 @@ public class JewelryController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getAll")
     public List<JewelryDTO> getAllJewelries(){
@@ -60,6 +67,10 @@ public class JewelryController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
+
+
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{id}")
     public ResponseEntity<JewelryDTO> getJewelryDetail(@PathVariable int id){
