@@ -51,6 +51,9 @@ public class AuctionServiceImpl implements AuctionService {
         LocalDateTime endDate = auctionDTO.getEndDate();
         List<Auction> existingAuctions = auctionRepository
                 .findByJewelry(jewelryRepository.getReferenceById(auctionDTO.getJewelryId()));
+        if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
+            throw new IllegalArgumentException("Start date has to be at least 24h after today");
+        }
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date");
         }

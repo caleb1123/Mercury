@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.converter.RequestConverter;
+import com.g3.Jewelry_Auction_System.entity.ERequestStatus;
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -32,11 +34,12 @@ public class RequestServiceImpl implements RequestService {
             throw new AppException(ErrorCode.ID_EXISTED);
         }
         Optional<Request> existingRequest = requestRepository.findByJewelry(jewelryRepository.getReferenceById(requestDTO.getJewelryId()));
-        if (existingRequest.isPresent() && existingRequest.get().getStatus()) {
+        if (existingRequest.isPresent() && existingRequest.get().getStatus() != ERequestStatus.CANCELED) {
             throw new AppException(ErrorCode.REQUEST_EXISTED);
         }
         Request request = requestConverter.toEntity(requestDTO);
         request.setRequestDate(LocalDate.now());
+        request.setStatus(ERequestStatus.PENDING);
         requestRepository.save(request);
         return requestConverter.toDTO(request);
     }
@@ -55,7 +58,7 @@ public class RequestServiceImpl implements RequestService {
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
             request.setEvaluationDate(LocalDate.now());
-            request.setStatus(true);
+            request.setStatus(ERequestStatus.AWAIT_RESPONSE);
         }
         requestRepository.save(request);
     }
@@ -74,7 +77,7 @@ public class RequestServiceImpl implements RequestService {
         if (request.getFinalPrice() != requestDTO.getFinalPrice()) {
             request.setFinalPrice(requestDTO.getFinalPrice());
             request.setEvaluationDate(LocalDate.now());
-            request.setStatus(true);
+            request.setStatus(ERequestStatus.AWAIT_RESPONSE);
         }
         requestRepository.save(request);
     }
@@ -84,7 +87,7 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository
                 .findByRequestId(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
-        request.setStatus(false);
+        request.setStatus(ERequestStatus.CANCELED);
         requestRepository.save(request);
     }
 
@@ -98,9 +101,9 @@ public class RequestServiceImpl implements RequestService {
         return requestDTOList;
     }
     @Override
-    public List<RequestDTO> getRequestByStatus(boolean status) {
+    public List<RequestDTO> getRequestByStatus(String status) {
         List<RequestDTO> requestDTOList = getRequestList();
-        requestDTOList.removeIf(requestDTO -> requestDTO.getStatus() != status);
+        requestDTOList.removeIf(requestDTO -> !Objects.equals(requestDTO.getStatus(), status));
         return requestDTOList;
     }
 }

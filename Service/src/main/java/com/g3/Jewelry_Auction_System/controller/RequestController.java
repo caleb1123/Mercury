@@ -51,7 +51,7 @@ public class RequestController {
     }
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{status}")
-    public ResponseEntity<List<RequestDTO>> getRequestByStatus(@PathVariable boolean status) {
+    public ResponseEntity<List<RequestDTO>> getRequestByStatus(@PathVariable String status) {
         List<RequestDTO> requestList = requestService.getRequestByStatus(status);
         if (requestList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

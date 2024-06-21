@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class RequestDTO {
     private int requestId;
     private LocalDate requestDate;
-    private Boolean status;
+    private String status;
     private LocalDate evaluationDate;
     private double preliminaryPrice;
     private double finalPrice;

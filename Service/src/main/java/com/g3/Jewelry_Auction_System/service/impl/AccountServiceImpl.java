@@ -34,7 +34,7 @@ public class AccountServiceImpl implements AccountService {
     AccountConverter accountConverter;
     @Autowired
     RoleRepository roleRepository;
-    private AuctionRepository auctionRepository;
+
 
     //@PreAuthorize("hasRole('ADMIN')")
     @Override

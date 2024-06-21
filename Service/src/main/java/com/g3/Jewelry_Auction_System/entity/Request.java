@@ -22,8 +22,9 @@ public class Request {
     @Column
     private LocalDate requestDate;
 
-    @Column
-    private Boolean status;
+    @Enumerated(EnumType.STRING)
+    @Column(unique = true)
+    private ERequestStatus status;
 
     @Column
     private LocalDate evaluationDate;

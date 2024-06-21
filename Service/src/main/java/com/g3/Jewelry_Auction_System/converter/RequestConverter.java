@@ -1,5 +1,7 @@
 package com.g3.Jewelry_Auction_System.converter;
 
+import com.g3.Jewelry_Auction_System.entity.ERequestStatus;
+import com.g3.Jewelry_Auction_System.entity.ERole;
 import com.g3.Jewelry_Auction_System.payload.DTO.RequestDTO;
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
@@ -22,7 +24,7 @@ public class RequestConverter {
         Request request = new Request();
         request.setRequestId(dto.getRequestId());
         request.setRequestDate(dto.getRequestDate());
-        request.setStatus(dto.getStatus());
+        request.setStatus(ERequestStatus.valueOf(dto.getStatus()));
         request.setEvaluationDate(dto.getEvaluationDate());
         request.setPreliminaryPrice(dto.getPreliminaryPrice());
         request.setFinalPrice(dto.getFinalPrice());
@@ -36,7 +38,7 @@ public class RequestConverter {
         RequestDTO dto = new RequestDTO();
         dto.setRequestId(request.getRequestId());
         dto.setRequestDate(request.getRequestDate());
-        dto.setStatus(request.getStatus());
+        dto.setStatus(request.getStatus().name());
         dto.setEvaluationDate(request.getEvaluationDate());
         dto.setPreliminaryPrice(request.getPreliminaryPrice());
         dto.setFinalPrice(request.getFinalPrice());

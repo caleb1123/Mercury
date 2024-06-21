@@ -28,7 +28,7 @@ public class JewelryServiceImpl implements JewelryService {
     @Autowired
     JewelryConverter    jewelryConverter;
     @Autowired
-    private JewelryCategoryRepository jewelryCategoryRepository;
+    JewelryCategoryRepository jewelryCategoryRepository;
     @Autowired
     AuctionRepository auctionRepository;
     @Autowired
