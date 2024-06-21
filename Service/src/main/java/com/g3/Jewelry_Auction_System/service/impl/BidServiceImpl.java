@@ -17,6 +17,7 @@ import com.g3.Jewelry_Auction_System.repository.BidRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -43,10 +44,15 @@ public class BidServiceImpl implements BidService {
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
         var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
-        var account  = accountRepository.findByUserName(name);
-        bidDTO.setAccountId(account.get().getAccountId());
 
+        String name = context.getAuthentication().getName();
+        Optional<Account> account  = accountRepository.findByUserName(name);
+        if (name.equals("anonymousUser")) {
+            throw new AppException(ErrorCode.NOT_LOGGED_IN);
+        } else if (account.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
+        bidDTO.setAccountId(account.get().getAccountId());
         if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
             throw new AppException(ErrorCode.ID_EXISTED);
         }
@@ -63,7 +69,7 @@ public class BidServiceImpl implements BidService {
             bidDTO.setBidTime(LocalDateTime.now());
             Bid bid = bidConverter.toEntity(bidDTO);
             bidRepository.save(bid);
-            return bidDTO;
+            return bidConverter.toDTO(bid);
         } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
         {
             Optional<Bid> highestBid = bidRepository

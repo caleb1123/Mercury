@@ -49,8 +49,10 @@ public class AuctionServiceImpl implements AuctionService {
         }
         LocalDateTime startDate = auctionDTO.getStartDate();
         LocalDateTime endDate = auctionDTO.getEndDate();
-        List<Auction> existingAuctions = auctionRepository
-                .findByJewelry(jewelryRepository.getReferenceById(auctionDTO.getJewelryId()));
+        Jewelry jewelry = jewelryRepository
+                .findByJewelryId(auctionDTO
+                        .getJewelryId()).orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
+        List<Auction> existingAuctions = auctionRepository.findByJewelry(jewelry);
         if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
             throw new IllegalArgumentException("Start date has to be at least 24h after today");
         }
@@ -63,8 +65,8 @@ public class AuctionServiceImpl implements AuctionService {
         if (auctionDTO.getCurrentPrice() < 1) {
             throw new IllegalArgumentException("Current price cannot be less than 1");
         }
-        if (existingAuctions.stream().anyMatch(Auction::getStatus)) {
-            throw new IllegalArgumentException("An auction for this jewelry is still active");
+        if (existingAuctions.stream().anyMatch(Auction::getStatus) || !jewelry.getStatus()) {
+            throw new AppException(ErrorCode.JEWELRY_NOT_VALID);
         }
         Auction auction = auctionConverter.toEntity(auctionDTO);
         auctionRepository.save(auction);
@@ -74,7 +76,7 @@ public class AuctionServiceImpl implements AuctionService {
     public void deleteAuction(int auctionId) {
         Auction auction = auctionRepository
                 .findById(auctionId)
-                .orElseThrow(() -> new RuntimeException("Auction not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
         auction.setStatus(false);
         auctionRepository.save(auction);
     }
@@ -85,7 +87,7 @@ public class AuctionServiceImpl implements AuctionService {
         }
         Auction auction = auctionRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Auction not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
 
         if (auctionDTO.getStartDate() != null) {
             if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
