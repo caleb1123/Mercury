@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
@@ -38,8 +37,11 @@ export default function SendRequest() {
     const data = new FormData(event.currentTarget);
     console.log({
       jewelryName: data.get("jewelryName"),
-      category: data.get("category"),
-      jewelryDescription: data.get("jewelryDescription"),
+      designer: data.get("designer"),
+      gemstone: data.get("gemstone"),
+      image: data.get("image"),
+      description: data.get("description"),
+      condition: data.get("condition"),
     });
   };
 
@@ -97,35 +99,54 @@ export default function SendRequest() {
                 autoComplete="jewelryName"
                 autoFocus
               />
-              <Select
-                defaultValue=""
-                id="category"
-                name="category"
-                fullWidth
-                required
-                displayEmpty
-                sx={{ mt: 2, mb: 2 }}
-              >
-                <MenuItem value="" disabled>
-                  Select Category
-                </MenuItem>
-                <MenuItem value="Bracelet">Bracelet</MenuItem>
-                <MenuItem value="Brooches Pins">Brooches Pins</MenuItem>
-                <MenuItem value="Cuffin">Cuffin</MenuItem>
-                <MenuItem value="Earrings">Earrings</MenuItem>
-                <MenuItem value="Loose Stone">Loose Stone</MenuItem>
-                <MenuItem value="Necklace">Necklace</MenuItem>
-                <MenuItem value="Ring">Ring</MenuItem>
-                <MenuItem value="Watches">Watches</MenuItem>
-              </Select>
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="jewelryDescription"
+                id="designer"
+                label="Designer"
+                name="designer"
+                autoComplete="designer"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="gemstone"
+                label="Gemstone"
+                name="gemstone"
+                autoComplete="gemstone"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="image"
+                label="Image URL"
+                name="image"
+                autoComplete="image"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="description"
                 label="Jewelry Description"
-                name="jewelryDescription"
-                autoComplete="jewelryDescription"
+                name="description"
+                autoComplete="description"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="condition"
+                label="Condition"
+                name="condition"
+                autoComplete="condition"
                 autoFocus
               />
               <Button

@@ -347,7 +347,16 @@ function StaffPage() {
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
             {selectedIndex === 5 && (
-              <CreatePost />
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ height: '100%' }}
+              >
+                <Box sx={{ width: '60%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
+                  <CreatePost />
+                </Box>
+              </Box>
             )}
           </Box>
         </Box>
