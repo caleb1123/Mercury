@@ -26,7 +26,7 @@ public class Payment {
     private double amount;
 
     @Column
-    private String paymentMethod;
+    private EPaymentMethod paymentMethod;
 
     @Column
     private String address;
