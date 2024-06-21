@@ -33,7 +33,9 @@ public enum ErrorCode {
     REQUEST_EXISTED(1024, "Request for this jewelry already exists", HttpStatus.BAD_REQUEST),
     JEWELRY_NOT_EXISTED(1025,"Jewelry not found",HttpStatus.NOT_FOUND),
     JEWELRY_NOT_VALID(1026,"Jewelry not valid for auction",HttpStatus.NOT_FOUND),
-    NOT_LOGGED_IN(1027,"You need to log in to perform this action",HttpStatus.BAD_REQUEST);
+    NOT_LOGGED_IN(1027,"You need to log in to perform this action",HttpStatus.BAD_REQUEST),
+    LIST_EMPTY(1028,"List is empty",HttpStatus.NOT_FOUND);
+
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

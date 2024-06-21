@@ -85,6 +85,15 @@ public class JewelryServiceImpl implements JewelryService {
     }
 
     @Override
+    public List<JewelryDTO> getAll() {
+        List<JewelryDTO> jewelryDTOs = jewelryConverter.convertToJewelryDTOList(jewelryRepository.findAll());
+        if (jewelryDTOs.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_EMPTY);
+        }
+        return jewelryDTOs;
+    }
+
+    @Override
     public List<JewelryDTO> searchName(String name) {
         List<JewelryDTO> list = jewelryConverter.convertToJewelryDTOList(jewelryRepository.getJewelriesByName(name));
         if (list.isEmpty()) {

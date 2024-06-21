@@ -59,6 +59,15 @@ public class JewelryController {
         return jewelryService.getAllJewelry(offset);
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<JewelryDTO>> getAllJewelries(){
+        List<JewelryDTO> list = jewelryService.getAll();
+        if (!list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping("/search/{name}")
     public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
         List<JewelryDTO> result = jewelryService.searchName(name);
