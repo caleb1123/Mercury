@@ -59,4 +59,5 @@ public class BidController {
             return new ResponseEntity<>(account, HttpStatus.OK);
         }
     }
+
 }

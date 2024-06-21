@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -22,9 +23,11 @@ public class Auction {
     private int auctionId;
 
     @Column
+    @NotBlank(message = "Start date must not be blank")
     private LocalDateTime startDate;
 
     @Column
+    @NotBlank(message = "End date must not be blank")
     private LocalDateTime endDate;
 
     @Column

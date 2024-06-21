@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -21,9 +23,11 @@ public class JewelryCategory {
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true)
+    @NotNull(message = "Category name is required")
     private EJewelCategory categoryName;
 
     @Column
+    @NotBlank(message = "Image URL is required")
     private String image;
 
     @OneToMany(mappedBy = "jewelryCategory")

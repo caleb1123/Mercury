@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -20,6 +21,7 @@ public class PostCategory {
     private int categoryId;
 
     @Column(unique = true)
+    @NotNull(message = "Post category name is required")
     private String categoryName;
 
     @OneToMany(mappedBy = "postCategory")
