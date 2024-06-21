@@ -26,9 +26,10 @@ public class Payment {
     @Column
     private double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column
     @NotBlank(message = "Payment method is required")
-    private String paymentMethod;
+    private EPaymentMethod paymentMethod;
 
     @Column
     private String address;
