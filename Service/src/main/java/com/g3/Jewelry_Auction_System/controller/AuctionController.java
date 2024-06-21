@@ -33,6 +33,8 @@ public class AuctionController {
         auctionService.updateAuction(auctionDTO, auctionId);
         return ResponseEntity.ok().build();
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @GetMapping("/list")
     public ResponseEntity<List<AuctionDTO>> getAuctionList() {
         List<AuctionDTO> auctionList = auctionService.getAuctionList();

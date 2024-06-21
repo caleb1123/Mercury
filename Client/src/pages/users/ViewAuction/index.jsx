@@ -158,7 +158,7 @@ function ViewAuction() {
             {bids && bids.length > 0 ? (
               bids.map((bid, index) => (
                 <div className="BidDetals" key={index}>
-                  <div className="BidOwner">{bid.auctionId}</div>
+                  <div className="BidOwner">{bid.username}</div>
                   <div className="BidTime">{new Date(bid.bidTime).toLocaleTimeString()}</div>
                   <div className="BidPlaced">${bid.bidAmount}</div>
                 </div>

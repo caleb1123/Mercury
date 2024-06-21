@@ -17,11 +17,15 @@ public class JewelryController {
     @Autowired
     JewelryService jewelryService;
 
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @PostMapping("/add")
     public ResponseEntity<JewelryDTO> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
         JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
+
+
     @CrossOrigin(origins = "http://localhost:3001")
 
     @PutMapping("/delist/{jewelryId}")
@@ -35,6 +39,8 @@ public class JewelryController {
         }
 
     }
+
+    @CrossOrigin(origins = "http://localhost:3001")
 
     @PutMapping("/update/{jewelryId}")
     public ResponseEntity<JewelryDTO> updateJewelry(@RequestBody JewelryDTO jewelryDTO, @PathVariable(value = "jewelryId") int id) {

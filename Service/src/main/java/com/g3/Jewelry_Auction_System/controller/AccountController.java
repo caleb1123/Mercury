@@ -58,6 +58,9 @@ public class AccountController {
         }
     }
 
+
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @GetMapping("/myinfor")
     public ResponseEntity<AccountResponse> getMyInfo() {
         AccountResponse accountResponse = accountService.getMyInfor();

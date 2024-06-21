@@ -24,54 +24,126 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import JewelryIcon from '@mui/icons-material/Stars';
 import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
-import PostIcon from '@mui/icons-material/PostAdd';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import CreatePost from './CreatePost';
+import AddJewelry from './AddJewelry';
+import EditJewelry from './EditJewelry';
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [profile, setProfile] = useState({});
   const [jewelryList, setJewelryList] = useState([]);
+  const [filteredJewelryList, setFilteredJewelryList] = useState([]);
   const [auctionList, setAuctionList] = useState([]);
   const [requestList, setRequestList] = useState([]);
-  const [postList, setPostList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [addJewelryMode, setAddJewelryMode] = useState(false);
+  const [selectedJewelry, setSelectedJewelry] = useState(null);
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
-    // Fetch data based on selected index
+    setEditMode(false);
+    setAddJewelryMode(false);
   };
 
-  // Fetch functions for different entities
   const fetchProfile = async () => {
-    // Fetch profile data
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+      const username = decodedToken.username;
+
+      const response = await axios.get(`http://localhost:8088/account/myinfor/${username}`);
+      setProfile(response.data);
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    }
   };
 
   const fetchJewelry = async () => {
-    // Fetch jewelry data
+    try {
+      const response = await axios.get('http://localhost:8088/jewelry/getAll');
+      setJewelryList(response.data);
+      setFilteredJewelryList(response.data);
+    } catch (error) {
+      console.error('Error fetching jewelry data:', error);
+    }
   };
 
   const fetchAuctions = async () => {
-    // Fetch auction data
+    try {
+      const response = await axios.get('http://localhost:8088/auction/list');
+      setAuctionList(response.data);
+    } catch (error) {
+      console.error('Error fetching auction data:', error);
+    }
   };
 
   const fetchRequests = async () => {
-    // Fetch request data
+    try {
+      const response = await axios.get('http://localhost:8088/request/list');
+      setRequestList(response.data);
+    } catch (error) {
+      console.error('Error fetching request data:', error);
+    }
   };
 
   const fetchPosts = async () => {
     // Fetch post data
   };
 
-  // Example fetch for profile
+  const handleCategoryChange = (event) => {
+    const categoryId = event.target.value;
+    setSelectedCategory(categoryId);
+    if (categoryId === '') {
+      setFilteredJewelryList(jewelryList);
+    } else {
+      const filteredList = jewelryList.filter(jewelry => jewelry.jewelryCategoryId === categoryId);
+      setFilteredJewelryList(filteredList);
+    }
+  };
+
+  const handleEditClick = (jewelry) => {
+    setSelectedJewelry(jewelry);
+    setEditMode(true);
+  };
+
+  const handleDeleteClick = async (jewelry) => {
+    try {
+      await axios.put(`http://localhost:8088/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false });
+      fetchJewelry();
+    } catch (error) {
+      console.error('Error deleting jewelry:', error);
+    }
+  };
+
   useEffect(() => {
     if (selectedIndex === 0) {
       fetchProfile();
+    } else if (selectedIndex === 1) {
+      fetchJewelry();
+    } else if (selectedIndex === 2) {
+      fetchAuctions();
+    } else if (selectedIndex === 3) {
+      fetchRequests();
     }
   }, [selectedIndex]);
 
+  const categories = [
+    { jewelry_category_id: 1, category_name: 'RINGS' },
+    { jewelry_category_id: 2, category_name: 'BRACELETS' },
+    { jewelry_category_id: 3, category_name: 'BROOCHES_PINS' },
+    { jewelry_category_id: 4, category_name: 'CUFFLINKS_TIEPINS_TIECLIPS' },
+    { jewelry_category_id: 5, category_name: 'EARRINGS' },
+    { jewelry_category_id: 6, category_name: 'LOOSESTONES_BEADS' },
+    { jewelry_category_id: 7, category_name: 'NECKLACES_PENDANTS' },
+    { jewelry_category_id: 8, category_name: 'WATCHES' },
+  ];
+
   return (
     <Grid container sx={{ height: '100vh', backgroundColor: '#000', color: '#fff' }}>
-      {/* Sidebar content */}
       <Grid item xs={2} container direction="column" justifyContent="space-between" alignItems="center">
         <Grid item>
           <List>
@@ -99,16 +171,15 @@ function StaffPage() {
               </ListItemIcon>
               <ListItemText primary="Requests" sx={{ color: '#fff' }} />
             </ListItem>
-            <ListItem button selected={selectedIndex === 4} onClick={() => handleListItemClick(4)} sx={{ color: '#fff' }} key="post">
+            <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }} key="createPost">
               <ListItemIcon sx={{ color: '#fff' }}>
-                <PostIcon />
               </ListItemIcon>
-              <ListItemText primary="Posts" sx={{ color: '#fff' }} />
+              <ListItemText primary="Create Post" sx={{ color: '#fff' }} />
             </ListItem>
           </List>
           <Divider sx={{ backgroundColor: '#fff' }} />
           <List>
-            <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }} key="logout">
+            <ListItem button selected={selectedIndex === 6} onClick={() => handleListItemClick(6)} sx={{ color: '#fff' }} key="logout">
               <ListItemIcon sx={{ color: '#fff' }}>
                 <ExitToAppIcon />
               </ListItemIcon>
@@ -117,7 +188,6 @@ function StaffPage() {
           </List>
         </Grid>
 
-        {/* Footer */}
         <Grid item>
           <Typography variant="body2" color="textSecondary" align="center" sx={{ pb: 2 }}>
             © {new Date().getFullYear()} Mercury
@@ -125,7 +195,6 @@ function StaffPage() {
         </Grid>
       </Grid>
 
-      {/* Main content */}
       <Grid item xs={10} sx={{ backgroundColor: '#000', padding: 2 }}>
         <Box
           display="flex"
@@ -137,82 +206,148 @@ function StaffPage() {
             {selectedIndex === 0 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Profile</Typography>
-                {/* Profile update form */}
-                <TextField label="Full Name" value={profile.full_name} fullWidth margin="normal" />
-                <TextField label="Email" value={profile.email} fullWidth margin="normal" />
-                <TextField label="Phone" value={profile.phone} fullWidth margin="normal" />
+                <TextField label="Full Name" value={profile.fullName || ''} fullWidth margin="normal" />
+                <TextField label="Email" value={profile.email || ''} fullWidth margin="normal" />
+                <TextField label="Phone" value={profile.phone || ''} fullWidth margin="normal" />
                 <Button variant="contained" color="primary">Update Profile</Button>
               </Paper>
             )}
-            {selectedIndex === 1 && (
+            {selectedIndex === 1 && !editMode && !addJewelryMode && (
               <React.Fragment>
-                <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
-                  <TextField
-                    label="Search by name"
-                    variant="outlined"
-                    sx={{ backgroundColor: '#fff', marginRight: 2 }}
-                  />
+                <Box sx={{ mb: 2 }}>
                   <Select
                     displayEmpty
-                    sx={{ backgroundColor: '#fff', minWidth: 120 }}
+                    fullWidth
+                    name="jewelryCategoryId"
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                    sx={{ backgroundColor: '#fff' }}
                   >
                     <MenuItem value=""><em>All Categories</em></MenuItem>
-                    <MenuItem value={1}>Category 1</MenuItem>
-                    <MenuItem value={2}>Category 2</MenuItem>
+                    {categories.map((category) => (
+                      <MenuItem key={category.jewelry_category_id} value={category.jewelry_category_id}>
+                        {category.category_name}
+                      </MenuItem>
+                    ))}
                   </Select>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                  >
-                    Add Jewelry
-                  </Button>
-                </Grid>
+                </Box>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>ID</TableCell>
                         <TableCell>Name</TableCell>
+                        <TableCell>Designer</TableCell>
+                        <TableCell>Gemstone</TableCell>
                         <TableCell>Category</TableCell>
                         <TableCell>Price</TableCell>
+                        <TableCell>Status</TableCell>
                         <TableCell>Actions</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {jewelryList.map((jewelry) => (
-                        <TableRow key={jewelry.id}>
-                          <TableCell>{jewelry.id}</TableCell>
-                          <TableCell>{jewelry.name}</TableCell>
-                          <TableCell>{jewelry.category}</TableCell>
-                          <TableCell>{jewelry.price}</TableCell>
+                      {filteredJewelryList.map((jewelry) => (
+                        <TableRow key={jewelry.jewelryId}>
+                          <TableCell>{jewelry.jewelryId}</TableCell>
+                          <TableCell>{jewelry.jewelryName}</TableCell>
+                          <TableCell>{jewelry.designer}</TableCell>
+                          <TableCell>{jewelry.gemstone}</TableCell>
+                          <TableCell>{categories.find(category => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}</TableCell>
+                          <TableCell>{jewelry.startingPrice}</TableCell>
+                          <TableCell>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
                           <TableCell>
-                            <Button variant="contained" color="primary">Edit</Button>
-                            <Button variant="contained" color="secondary">Delete</Button>
+                            <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
+                            <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
+                  Add Jewelry
+                </Button>
               </React.Fragment>
+            )}
+            {selectedIndex === 1 && editMode && selectedJewelry && (
+              <EditJewelry jewelry={selectedJewelry} fetchJewelry={fetchJewelry} setEditMode={setEditMode} />
+            )}
+            {selectedIndex === 1 && addJewelryMode && (
+              <AddJewelry fetchJewelry={fetchJewelry} />
             )}
             {selectedIndex === 2 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Auctions</Typography>
-                {/* Auction list and actions */}
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Current Price</TableCell>
+                        <TableCell>End Date</TableCell>
+                        <TableCell>Start Date</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Winner ID</TableCell>
+                        <TableCell>Jewelry ID</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {auctionList.map((auction) => (
+                        <TableRow key={auction.auctionId}>
+                          <TableCell>{auction.auctionId}</TableCell>
+                          <TableCell>{auction.currentPrice}</TableCell>
+                          <TableCell>{auction.endDate}</TableCell>
+                          <TableCell>{auction.startDate}</TableCell>
+                          <TableCell>{auction.status ? 'Active' : 'Inactive'}</TableCell>
+                          <TableCell>{auction.winner_id || 'N/A'}</TableCell>
+                          <TableCell>{auction.jewelryId}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
             )}
             {selectedIndex === 3 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Requests</Typography>
-                {/* Request list and actions */}
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Request ID</TableCell>
+                        <TableCell>Evaluation Date</TableCell>
+                        <TableCell>Final Price</TableCell>
+                        <TableCell>Preliminary Price</TableCell>
+                        <TableCell>Request Date</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Seller ID</TableCell>
+                        <TableCell>Jewelry ID</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {requestList.map((request) => (
+                        <TableRow key={request.requestId}>
+                          <TableCell>{request.requestId}</TableCell>
+                          <TableCell>{request.evaluationDate || 'N/A'}</TableCell>
+                          <TableCell>{request.finalPrice}</TableCell>
+                          <TableCell>{request.preliminaryPrice}</TableCell>
+                          <TableCell>{request.requestDate}</TableCell>
+                          <TableCell>{request.status ? 'Active' : 'Inactive'}</TableCell>
+                          <TableCell>{request.sellerId}</TableCell>
+                          <TableCell>{request.jewelryId}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
             )}
             {selectedIndex === 4 && (
-              <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
-                <Typography variant="h6">Posts</Typography>
-                {/* Post list and actions */}
-              </Paper>
+              <AddJewelry fetchJewelry={fetchJewelry} />
+            )}
+            {selectedIndex === 5 && (
+              <CreatePost />
             )}
           </Box>
         </Box>

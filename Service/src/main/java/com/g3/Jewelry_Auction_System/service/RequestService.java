@@ -12,4 +12,5 @@ public interface RequestService {
     void deleteRequest(int requestID);
     List<RequestDTO> getRequestList();
     List<RequestDTO> getRequestByStatus(boolean status);
+
 }

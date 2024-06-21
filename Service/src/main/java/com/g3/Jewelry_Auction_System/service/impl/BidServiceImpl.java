@@ -9,6 +9,8 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
+import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
@@ -18,10 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -111,13 +115,13 @@ public class BidServiceImpl implements BidService {
         return bidDTOList;
     }
     @Override
-    public List<BidDTO> getBidByAuction(int auctionId) {
-        List<Bid> bidList = bidRepository.findByAuctionId(auctionId);
-        List<BidDTO> bidDTOList = new ArrayList<>();
-        for (Bid bid : bidList) {
-            bidDTOList.add(bidConverter.toDTO(bid));
-        }
-        return bidDTOList;
+    public List<BidResponse> getBidByAuction(int auctionId) {
+        List<Object[]> bidData = bidRepository.getBidResponseListByAuctionId(auctionId);
+        return bidData.stream().map(data -> new BidResponse(
+                (Double) data[0],
+                (String) data[1],
+                (Timestamp) data[2]
+        )).collect(Collectors.toList());
     }
     @Override
     public AccountDTO getAccountByBid(int bidId) {
