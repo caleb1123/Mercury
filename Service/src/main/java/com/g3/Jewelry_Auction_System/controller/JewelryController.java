@@ -3,8 +3,10 @@ package com.g3.Jewelry_Auction_System.controller;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
+import com.g3.Jewelry_Auction_System.payload.request.JewelryPageRequest;
 import com.g3.Jewelry_Auction_System.service.JewelryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,7 @@ public class JewelryController {
             // Handle other potential exceptions (e.g., database issues)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
         }
+
     }
 
     @CrossOrigin(origins = "http://localhost:3001")
@@ -50,15 +53,12 @@ public class JewelryController {
     }
 
     @CrossOrigin(origins = "http://localhost:3001")
-    @GetMapping("/getAll")
-    public List<JewelryDTO> getAllJewelries(){
-        List<JewelryDTO> jewelryDTOList = jewelryService.getAllJewelry();
-        if (jewelryDTOList.isEmpty()){
-            ResponseEntity.notFound().build();
-        }
-        return jewelryDTOList;
+    @GetMapping("/getAll/{page}")
+    public Page<JewelryDTO> getAllJewelries(@PathVariable(value = "page") Integer offset){
+        JewelryPageRequest pageRequest = new JewelryPageRequest(2, offset);
+        return jewelryService.getAllJewelry(offset);
     }
-    @CrossOrigin(origins = "http://localhost:3001")
+
     @GetMapping("/search/{name}")
     public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
         List<JewelryDTO> result = jewelryService.searchName(name);

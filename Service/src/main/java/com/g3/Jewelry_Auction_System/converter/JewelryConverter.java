@@ -3,9 +3,11 @@ package com.g3.Jewelry_Auction_System.converter;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
+import com.g3.Jewelry_Auction_System.payload.request.JewelryPageRequest;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.JewelryCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -71,4 +73,5 @@ public class JewelryConverter {
         dto.setJewelryName(jewelry.getJewelryName());
         return dto;
     }
+
 }

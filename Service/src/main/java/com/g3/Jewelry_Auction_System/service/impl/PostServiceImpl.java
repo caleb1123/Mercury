@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -51,16 +50,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(int id) {
+    public PostDTO deletePost(int id) {
         Post post = postRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
-            post.setStatus(false);
-            postRepository.save(post);
+        post.setStatus(false);
+        postRepository.save(post);
+        return postConverter.toDTO(post);
     }
 
     @Override
-    public List<PostDTO> getPostByNameLike(String title) {
+    public List<PostDTO> getPostByTitleLike(String title) {
         List<PostDTO> list = postConverter.convertToDTOList(postRepository.findByTitle(title));
         if (list.isEmpty()) {
             throw new AppException(ErrorCode.ITEM_NOT_FOUND);

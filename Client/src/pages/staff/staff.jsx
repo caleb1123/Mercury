@@ -353,7 +353,7 @@ function StaffPage() {
                 alignItems="center"
                 sx={{ height: '100%' }}
               >
-                <Box sx={{ width: '60%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
+                <Box sx={{ width: '100%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
                   <CreatePost />
                 </Box>
               </Box>
