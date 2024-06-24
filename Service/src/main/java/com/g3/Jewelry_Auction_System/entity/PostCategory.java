@@ -20,9 +20,9 @@ public class PostCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryId;
 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true)
-    @NotNull(message = "Post category name is required")
-    private String categoryName;
+    private EPostCategory categoryName;
 
     @OneToMany(mappedBy = "postCategory")
     private Collection<Post> posts;
