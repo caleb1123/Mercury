@@ -44,6 +44,7 @@ public class RequestServiceImpl implements RequestService {
         } else if (account.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
+        requestDTO.setSellerId(account.get().getAccountId());
         Optional<Request> existingRequest = requestRepository.findByJewelry(jewelryRepository.getReferenceById(requestDTO.getJewelryId()));
         if (existingRequest.isPresent() && existingRequest.get().getStatus() != ERequestStatus.CANCELED) {
             throw new AppException(ErrorCode.REQUEST_EXISTED);
