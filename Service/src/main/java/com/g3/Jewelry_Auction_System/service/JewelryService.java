@@ -11,6 +11,7 @@ public interface JewelryService {
     JewelryDTO addJewelry(JewelryDTO jewelryDTO);
     JewelryDTO updateJewelry(JewelryDTO jewelryDTO, int id);
     Page<JewelryDTO> getAllJewelry(int id);
+    List<JewelryDTO> getAll();
     List<JewelryDTO> searchName(String jewelryName);
     JewelryDTO getJewelryDetail(int jewelryId);
     AuctionDTO getAuctionByJewelry(int jewelryId);

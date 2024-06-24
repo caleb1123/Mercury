@@ -1,44 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Grid,
   Typography,
   Paper,
   Button,
   TextField,
-  Select,
-  MenuItem,
   Box,
-  InputLabel,
-  FormControl,
   Container,
 } from '@mui/material';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('');
-  const [files, setFiles] = useState([]);
+  const [accountId, setAccountId] = useState(null);
+  const defaultCategory = 5;
 
-  const handleFileChange = (event) => {
-    setFiles(event.target.files);
-  };
+  useEffect(() => {
+    const fetchAccountId = () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const decodedToken = jwtDecode(token);
+          if (decodedToken && decodedToken.account_id) {
+            setAccountId(decodedToken.account_id);  // Adjust according to the token's structure
+          } else {
+            console.error('Decoded token does not contain account_id');
+          }
+        } else {
+          console.error('No token found in localStorage');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    };
+
+    fetchAccountId();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('category', category);
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
+    if (!accountId) {
+      console.error('Account ID not available');
+      return;
     }
 
+    const postData = {
+      title,
+      content,
+      category: defaultCategory,
+      account_id: accountId,
+    };
+
     try {
-      const response = await axios.post('http://localhost:8088/posts/create', formData, {
+      const response = await axios.post('http://localhost:8088/posts/create', postData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       });
       console.log('Post created successfully:', response.data);
@@ -72,38 +90,8 @@ function CreatePost() {
             rows={6}
             sx={{ backgroundColor: '#fff', borderRadius: 1 }}
           />
-          <FormControl fullWidth margin="normal" required sx={{ backgroundColor: '#fff', borderRadius: 1 }}>
-            <InputLabel id="category-label">Post Category</InputLabel>
-            <Select
-              labelId="category-label"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              label="Post Category"
-            >
-              <MenuItem value="Instruction">Instruction</MenuItem>
-              <MenuItem value="Announcement">Announcement</MenuItem>
-              <MenuItem value="Update">Update</MenuItem>
-              <MenuItem value="New Arrivals">New Arrivals</MenuItem>
-              <MenuItem value="Upcoming Auctions">Upcoming Auctions</MenuItem>
-              <MenuItem value="Auction Results">Auction Results</MenuItem>
-              <MenuItem value="Jewelry Care Tips">Jewelry Care Tips</MenuItem>
-              <MenuItem value="Promotions">Promotions</MenuItem>
-            </Select>
-          </FormControl>
           <Box mt={2} mb={2}>
-            <input
-              accept="image/*,video/*"
-              id="contained-button-file"
-              multiple
-              type="file"
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="contained-button-file">
-              <Button variant="contained" color="primary" component="span" sx={{ backgroundColor: '#1976d2' }}>
-                Upload Files
-              </Button>
-            </label>
+            <Typography variant="body2">Category ID: {defaultCategory}</Typography>
           </Box>
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2' }}>
             Submit Post
