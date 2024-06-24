@@ -17,40 +17,40 @@ function CreatePost() {
   const defaultCategory = 5;
 
   useEffect(() => {
-    const fetchAccountId = () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const decodedToken = jwtDecode(token);
-          if (decodedToken && decodedToken.account_id) {
-            setAccountId(decodedToken.account_id);  // Adjust according to the token's structure
-          } else {
-            console.error('Decoded token does not contain account_id');
-          }
-        } else {
-          console.error('No token found in localStorage');
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
-    };
+    // const fetchAccountId = () => {
+    //   try {
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
+    //       const decodedToken = jwtDecode(token);
+    //       if (decodedToken && decodedToken.account_id) {
+    //         setAccountId(decodedToken.account_id);  // Adjust according to the token's structure
+    //       } else {
+    //         console.error('Decoded token does not contain account_id');
+    //       }
+    //     } else {
+    //       console.error('No token found in localStorage');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error decoding token:', error);
+    //   }
+    // };
 
-    fetchAccountId();
+    //fetchAccountId();
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!accountId) {
-      console.error('Account ID not available');
-      return;
-    }
+    // if (!accountId) {
+    //   console.error('Account ID not available');
+    //   return;
+    // }
 
     const postData = {
       title,
       content,
       category: defaultCategory,
-      account_id: accountId,
+      //account_id: accountId,
     };
 
     try {
