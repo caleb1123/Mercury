@@ -33,7 +33,10 @@ public enum ErrorCode {
     REQUEST_EXISTED(1024, "Request for this jewelry already exists", HttpStatus.BAD_REQUEST),
     JEWELRY_NOT_EXISTED(1025,"Jewelry not found",HttpStatus.NOT_FOUND),
     JEWELRY_NOT_VALID(1026,"Jewelry not valid for auction",HttpStatus.NOT_FOUND),
-    NOT_LOGGED_IN(1027,"You need to log in to perform this action",HttpStatus.BAD_REQUEST);
+    NOT_LOGGED_IN(1027,"You need to log in to perform this action",HttpStatus.BAD_REQUEST),
+    INVALID_VALUE(1028,"Input value must be greater than 0",HttpStatus.BAD_REQUEST),
+    INVALID_STARTDATE(1029,"Start date cannot be after end date",HttpStatus.BAD_REQUEST),
+    INVALID_ENDDATE(1030,"End date cannot be before current date",HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
