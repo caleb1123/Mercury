@@ -12,6 +12,7 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,13 +59,13 @@ public class AuctionServiceImpl implements AuctionService {
             throw new IllegalArgumentException("Start date has to be at least 24h after today");
         }
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("Start date cannot be after end date");
+            throw new AppException(ErrorCode.INVALID_STARTDATE);
         }
         if (LocalDateTime.now().isAfter(endDate)) {
-            throw new IllegalArgumentException("End date cannot be before current date");
+            throw new AppException(ErrorCode.INVALID_ENDDATE);
         }
         if (auctionDTO.getCurrentPrice() < 1) {
-            throw new IllegalArgumentException("Current price cannot be less than 1");
+            throw new AppException(ErrorCode.INVALID_VALUE);
         }
         if (existingAuctions.stream().anyMatch(Auction::getStatus) || !jewelry.getStatus()) {
             throw new AppException(ErrorCode.JEWELRY_NOT_VALID);
@@ -91,14 +93,14 @@ public class AuctionServiceImpl implements AuctionService {
 
         if (auctionDTO.getStartDate() != null) {
             if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
-                throw new IllegalArgumentException("Start date cannot be after end date");
+                throw new AppException(ErrorCode.INVALID_STARTDATE);
             } else {
                 auction.setStartDate(auctionDTO.getStartDate());
             }
         }
         if (auctionDTO.getEndDate() != null) {
             if (LocalDateTime.now().isAfter(auctionDTO.getEndDate())) {
-                throw new IllegalArgumentException("End date cannot be before current date");
+                throw new AppException(ErrorCode.INVALID_ENDDATE);
             } else {
                 auction.setEndDate(auctionDTO.getEndDate());
             }
@@ -163,23 +165,24 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public WinnerResponse getWinner(int auctionId) {
-        WinnerResponse winner = new WinnerResponse();
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(
                 ()-> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
         if (auction.getEndDate().isBefore(LocalDateTime.now())) {
-            Jewelry jewelry = auction.getJewelry();
-            Bid bid = bidRepository.getHighestBidAmount(auctionId).orElseThrow(
-                            () -> new AppException(ErrorCode.BID_NOT_FOUND)
-                    );
-            Account account = bid.getAccount();
-            winner.setWinnerId(account.getAccountId());
-            winner.setUsername(account.getUserName());
-            winner.setBidAmount(bid.getBidAmount());
-            winner.setJewelryId(jewelry.getJewelryId());
-            winner.setJewelryName(jewelry.getJewelryName());
-            winner.setAuctionId(auction.getAuctionId());
-            return winner;
+            List<Object[]> winnerData = auctionRepository.getWinnerByAuctionId(auctionId);
+            if (!winnerData.isEmpty()) {
+                Object[] firstWinner = winnerData.get(0);
+                return new WinnerResponse(
+                        (Integer) firstWinner[0],
+                        (String) firstWinner[1],
+                        (Double) firstWinner[2],
+                        (Integer) firstWinner[3],
+                        (String) firstWinner[4],
+                        (Integer) firstWinner[5]
+                );
+            } else {
+                throw new AppException(ErrorCode.BID_NOT_FOUND);
+            }
         } else {
             throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
         }

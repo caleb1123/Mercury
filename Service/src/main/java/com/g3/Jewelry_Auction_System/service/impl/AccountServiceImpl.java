@@ -55,7 +55,6 @@ public class AccountServiceImpl implements AccountService {
         createAccount.setPassword(encodedPassword);
 
 
-
         Role userRole = roleRepository.findById(createAccountRequest.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 

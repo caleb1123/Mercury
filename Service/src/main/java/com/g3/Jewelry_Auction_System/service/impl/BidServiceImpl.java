@@ -44,7 +44,6 @@ public class BidServiceImpl implements BidService {
     @Override
     public BidDTO createBid(BidDTO bidDTO) {
         var context = SecurityContextHolder.getContext();
-
         String name = context.getAuthentication().getName();
         Optional<Account> account  = accountRepository.findByUserName(name);
         if (name.equals("anonymousUser")) {
@@ -56,8 +55,8 @@ public class BidServiceImpl implements BidService {
         if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
             throw new AppException(ErrorCode.ID_EXISTED);
         }
-        if (bidDTO.getBidAmount() < 0) {
-            throw new IllegalArgumentException("Bid amount must be greater than 0");
+        if (bidDTO.getBidAmount() < 1) {
+            throw new AppException(ErrorCode.INVALID_VALUE);
         }
         Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
@@ -96,7 +95,7 @@ public class BidServiceImpl implements BidService {
         }
         Bid bid = bidRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Bid not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
         if (bidDTO.getBidAmount() >= bid.getBidAmount()) {
             throw new AppException(ErrorCode.INVALID_BID);
         }
@@ -108,7 +107,7 @@ public class BidServiceImpl implements BidService {
     public void deleteBid(int id) {
         Bid bid = bidRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Bid not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
 
     }
     @Override
