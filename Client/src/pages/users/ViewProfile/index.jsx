@@ -10,7 +10,7 @@ import phone from './image/vuesaxlinearcall.svg'
 import line from './image/line-3.svg'
 
 
-const ViewProfile = () =>{
+function ViewProfile  () {
     const [inputValue, setInputValue] = useState('');
 
     // Hàm xử lý sự kiện khi người dùng nhập
@@ -31,7 +31,7 @@ const ViewProfile = () =>{
             </div>
             <div className="Down_Header">
                 <div className="Bar">
-                    AUTIONS
+                    AUCTIONS
                     <div className="world_bar_style" >SELL</div>
                     <div className="world_bar_style" >RESULT</div>
                     <div className="world_bar_style" >CATEGORY</div>
@@ -44,6 +44,7 @@ const ViewProfile = () =>{
             </div>
 
         </div>
+
         <div className="ViewProfile">
             <div className="PageName_YourProfile">YOUR PROFILE</div>
             <div className="User">
@@ -78,7 +79,32 @@ const ViewProfile = () =>{
             <button className="EditProfileButton" >Edit Profile</button>
 
         </div>
-  
+        <div className="Footer">
+            <div className="Mercury">MERCURY</div>
+            <div className="Footer_Info">
+                <div className="Footer_Small" >
+                    <div className="Footer_Style" >Privacy Policy</div>
+                    <div className="Footer_Style">How to buy</div>
+                    <div className="Footer_Style">Modern Slavery </div>
+                    <div className="Footer_Style">Cookie settings</div>
+                </div>
+                <div className="Footer_Small" >
+                    <div className="Footer_Style" >Contacts</div>
+                    <div className="Footer_Style">Help</div>
+                    <div className="Footer_Style">About Us </div>
+                </div>
+                <div className="Footer_Small" >
+                    <div className="Footer_Style" >Careers</div>
+                    <div className="Footer_Style">Terms & Conditions</div>
+                    <div className="Footer_Style">Press </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
 
         </>
     )

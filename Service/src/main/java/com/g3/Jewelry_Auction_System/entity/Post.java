@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -20,12 +22,15 @@ public class Post {
     private int postId;
 
     @Column
+    @NotBlank(message = "Title is required")
     private String title;
 
     @Column
+    @NotNull(message = "Post date is required")
     private LocalDate postDate;
 
     @Column
+    @NotBlank(message = "Content is required")
     private String content;
 
     @Column
@@ -33,9 +38,11 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "accountId")
+    @NotNull(message = "Account is required")
     private Account account;
 
     @ManyToOne
     @JoinColumn(name = "postCategoryId")
+    @NotNull(message = "Post category is required")
     private PostCategory postCategory;
 }

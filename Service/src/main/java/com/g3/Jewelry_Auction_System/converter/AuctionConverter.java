@@ -8,6 +8,9 @@ import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class AuctionConverter {
     @Autowired
@@ -38,5 +41,13 @@ public class AuctionConverter {
         auctionDTO.setJewelryId(jewelryConverter.toDTO(auction.getJewelry()).getJewelryId());
 
         return auctionDTO;
+    }
+
+    public List<AuctionDTO> toDTO(List<Auction> auctions) {
+        List<AuctionDTO> auctionDTOs = new ArrayList<>();
+        for (Auction auction : auctions) {
+            auctionDTOs.add(toDTO(auction));
+        }
+        return auctionDTOs;
     }
 }

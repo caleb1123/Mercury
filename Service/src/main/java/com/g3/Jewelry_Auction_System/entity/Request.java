@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Entity
@@ -22,23 +24,28 @@ public class Request {
     @Column
     private LocalDate requestDate;
 
-    @Column
-    private Boolean status;
+    @Enumerated(EnumType.STRING)
+    @Column(unique = true)
+    private ERequestStatus status;
 
     @Column
     private LocalDate evaluationDate;
 
     @Column
+    @PositiveOrZero(message = "Preliminary price must be zero or positive")
     private double preliminaryPrice;
 
     @Column
+    @PositiveOrZero(message = "Final price must be zero or positive")
     private double finalPrice;
 
     @ManyToOne
     @JoinColumn(name = "jewelryId")
+    @NotNull(message = "Jewelry is required")
     private Jewelry jewelry;
 
     @ManyToOne
     @JoinColumn(name = "sellerId")
+    @NotNull(message = "Account is required")
     private Account account;
 }

@@ -1,5 +1,6 @@
 package com.g3.Jewelry_Auction_System.converter;
 
+import com.g3.Jewelry_Auction_System.entity.EPaymentMethod;
 import com.g3.Jewelry_Auction_System.payload.DTO.PaymentDTO;
 import com.g3.Jewelry_Auction_System.entity.Payment;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
@@ -24,7 +25,7 @@ public class PaymentConverter {
         entity.setPaymentId(dto.getPaymentId());
         entity.setPaymentDate(dto.getPaymentDate());
         entity.setAmount(dto.getAmount());
-        entity.setPaymentMethod(dto.getPaymentMethod());
+        entity.setPaymentMethod(EPaymentMethod.valueOf(dto.getPaymentMethod()));
         entity.setAddress(dto.getAddress());
         entity.setAuction(auctionRepository.getReferenceById(dto.getAuctionId()));
         entity.setAccount(accountRepository.getReferenceById(dto.getAccountId()));
@@ -37,7 +38,7 @@ public class PaymentConverter {
         dto.setPaymentId(entity.getPaymentId());
         dto.setPaymentDate(entity.getPaymentDate());
         dto.setAmount(entity.getAmount());
-        dto.setPaymentMethod(entity.getPaymentMethod());
+        dto.setPaymentMethod(entity.getPaymentMethod().name());
         dto.setAddress(entity.getAddress());
         dto.setAuctionId(auctionConverter.toDTO(entity.getAuction()).getAuctionId());
         dto.setAccountId(accountConverter.toDTO(entity.getAccount()).getAccountId());

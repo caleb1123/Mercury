@@ -35,26 +35,25 @@ export default function ResetPassword() {
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
-      password: data.get('password'),
     });
   };
 
   return (
-      <Container component="main" maxWidth="xs" sx={{ height: '100vh' }}>
+      <Container component="main" maxWidth="xs" sx={{ height: '100vh' ,justifyContent: 'center', position: 'relative' }} >
         <CssBaseline />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square></Grid>
           <Box
             sx={{
-              my: 8,
+              mt:8,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              border: '1px solid #ccc',
+              border: '2px solid #ccc',
               borderRadius: '8px',
-              padding: '20px',
+              padding: '20px'
             }}
           >
-            <Typography component="h1" variant="h4">
+            <Typography component="h1" variant="h4" >
               Forgot Password
             </Typography><br></br>
             <Typography component="h2" variant="subtitle1" color="text.secondary">
@@ -103,6 +102,6 @@ export default function ResetPassword() {
             </Box>
           </Box>
           <Copyright sx={{ mt: 5 }} />
-        </Container>
-    );
+      </Container>
+  );
 }

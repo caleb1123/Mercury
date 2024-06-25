@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Entity
@@ -19,8 +20,9 @@ public class PostCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryId;
 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true)
-    private String categoryName;
+    private EPostCategory categoryName;
 
     @OneToMany(mappedBy = "postCategory")
     private Collection<Post> posts;
