@@ -27,9 +27,6 @@ public class JewelryController {
           var newj = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newj , HttpStatus.CREATED);
     }
-
-
-
     @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delist/{jewelryId}")
     public ResponseEntity<Jewelry> delistJewelry(@PathVariable int jewelryId) {
@@ -61,7 +58,6 @@ public class JewelryController {
     }
 
     @CrossOrigin(origins = "http://localhost:3001")
-
     @GetMapping("/getAll")
     public ResponseEntity<List<JewelryDTO>> getAllJewelries(){
         List<JewelryDTO> list = jewelryService.getAll();
@@ -79,9 +75,6 @@ public class JewelryController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-
-
 
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{id}")
