@@ -65,4 +65,10 @@ public class RequestController {
         requestService.updateRequestStatus(requestId, dto);
         return ResponseEntity.ok().build();
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/list/thisuser")
+    public ResponseEntity<List<RequestDTO>> getRequestByToken() {
+        List<RequestDTO> requestList = requestService.getRequestByToken();
+        return new ResponseEntity<>(requestList, HttpStatus.OK);
+    }
 }

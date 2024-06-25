@@ -9,15 +9,12 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
-import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
-import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -63,13 +60,14 @@ public class BidServiceImpl implements BidService {
         );
         if (auction.getEndDate().isBefore(LocalDateTime.now())) {
             throw new AppException(ErrorCode.AUCTION_CLOSED);
-        }
-        if (auction.getStartDate().isAfter(LocalDateTime.now())) {
-            bidDTO.setBidTime(LocalDateTime.now());
-            Bid bid = bidConverter.toEntity(bidDTO);
-            bidRepository.save(bid);
-            return bidConverter.toDTO(bid);
-        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
+        } else
+//        if
+//        (auction.getStartDate().isAfter(LocalDateTime.now())) {
+//            bidDTO.setBidTime(LocalDateTime.now());
+//            Bid bid = bidConverter.toEntity(bidDTO);
+//            bidRepository.save(bid);
+//            return bidConverter.toDTO(bid);
+//        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
         {
             Optional<Bid> highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId());
@@ -86,7 +84,6 @@ public class BidServiceImpl implements BidService {
                 throw new AppException(ErrorCode.INVALID_BID);
             }
         }
-        throw new AppException(ErrorCode.INVALID_DOB);
     }
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
@@ -108,7 +105,6 @@ public class BidServiceImpl implements BidService {
         Bid bid = bidRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
-
     }
     @Override
     public List<BidDTO> getAllBid() {

@@ -147,7 +147,6 @@ public class AuctionServiceImpl implements AuctionService {
                 .filter(auction -> now.isBefore(auction.getStartDate()))
                 .sorted(Comparator.comparing(AuctionDTO::getStartDate))
                 .toList();
-
         // Combine live auctions and upcoming auctions
         liveAuctions.addAll(upcomingAuctions);
 
