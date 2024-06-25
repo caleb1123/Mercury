@@ -66,4 +66,21 @@ public class Jewelry {
 
     @OneToMany(mappedBy = "jewelry")
     private Collection<Auction> auctions;
+
+    @Override
+    public String toString() {
+        return "Jewelry{" +
+                "jewelryId=" + jewelryId +
+                ", jewelryName='" + jewelryName + '\'' +
+                ", designer='" + designer + '\'' +
+                ", gemstone='" + gemstone + '\'' +
+                ", image='" + image + '\'' +
+                ", description='" + description + '\'' +
+                ", condition='" + condition + '\'' +
+                ", estimate=" + estimate +
+                ", startingPrice=" + startingPrice +
+                ", status=" + status +
+                // Loại bỏ requests, jewelryCategory, và auctions để tránh đệ quy
+                '}';
+    }
 }

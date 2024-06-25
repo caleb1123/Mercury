@@ -1,28 +1,61 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import React, { useState } from "react";
+import {
+  Paper,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Box,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const defaultTheme = createTheme();
 
+const categories = [
+  { jewelry_category_id: 1, category_name: "RINGS" },
+  { jewelry_category_id: 2, category_name: "BRACELETS" },
+  { jewelry_category_id: 3, category_name: "BROOCHES_PINS" },
+  { jewelry_category_id: 4, category_name: "CUFFLINKS_TIEPINS_TIECLIPS" },
+  { jewelry_category_id: 5, category_name: "EARRINGS" },
+  { jewelry_category_id: 6, category_name: "LOOSESTONES_BEADS" },
+  { jewelry_category_id: 7, category_name: "NECKLACES_PENDANTS" },
+  { jewelry_category_id: 8, category_name: "WATCHES" },
+];
+
 export default function SendRequest() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [newJewelry, setNewJewelry] = useState({
+    condition: "",
+    description: "",
+    designer: "",
+    gemstone: "",
+    image: "",
+    jewelryName: "",
+    estimate: 0,
+    startingPrice: 0,
+    status: false,
+    jewelryCategoryId: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewJewelry({
+      ...newJewelry,
+      [name]: value,
+    });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,17 +65,68 @@ export default function SendRequest() {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleAddJewelry = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+
+      const jewelryResponse = await axios.post(
+        "http://localhost:8088/jewelry/add",
+        newJewelry,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (jewelryResponse.status !== 201) {
+        throw new Error("Failed to create jewelry");
+      }
+
+      const jewelryId = jewelryResponse.data.jewelryId;
+      console.log("Jewelry created with ID:", jewelryId);
+
+      const requestData = {
+        jewelryId: jewelryId,
+        requestDate: new Date().toISOString(),
+        status: "PENDING",
+        evaluationDate: null,
+        preliminaryPrice: 0,
+        finalPrice: 0,
+      };
+
+      const requestResponse = await axios.post(
+        "http://localhost:8088/request/create",
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (requestResponse.status !== 201) {
+        throw new Error("Failed to create request");
+      }
+
+      console.log("Request created successfully");
+      handleClickOpen(); // Open success dialog
+    } catch (error) {
+      console.error(
+        "Error creating request:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
+  const handleDialogSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      jewelryName: data.get("jewelryName"),
-      designer: data.get("designer"),
-      gemstone: data.get("gemstone"),
-      image: data.get("image"),
-      description: data.get("description"),
-      condition: data.get("condition"),
-    });
+    handleClose();
   };
 
   return (
@@ -83,75 +167,80 @@ export default function SendRequest() {
               Send Jewelry Valuation Request
             </Typography>
             <br />
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
-            >
+            <Paper sx={{ padding: 2, backgroundColor: "#fff", color: "#000" }}>
               <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="jewelryName"
-                label="Jewelry Name"
-                name="jewelryName"
-                autoComplete="jewelryName"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="designer"
-                label="Designer"
-                name="designer"
-                autoComplete="designer"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="gemstone"
-                label="Gemstone"
-                name="gemstone"
-                autoComplete="gemstone"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="image"
-                label="Image URL"
-                name="image"
-                autoComplete="image"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="description"
-                label="Jewelry Description"
-                name="description"
-                autoComplete="description"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="condition"
                 label="Condition"
                 name="condition"
-                autoComplete="condition"
-                autoFocus
+                value={newJewelry.condition}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
               />
+              <TextField
+                label="Description"
+                name="description"
+                value={newJewelry.description}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Designer"
+                name="designer"
+                value={newJewelry.designer}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Gemstone"
+                name="gemstone"
+                value={newJewelry.gemstone}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Image"
+                name="image"
+                value={newJewelry.image}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Jewelry Name"
+                name="jewelryName"
+                value={newJewelry.jewelryName}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Select Category</InputLabel>
+                <Select
+                  displayEmpty
+                  name="jewelryCategoryId"
+                  value={newJewelry.jewelryCategoryId}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value="">
+                    <em>Select Category</em>
+                  </MenuItem>
+                  {categories.map((category) => (
+                    <MenuItem
+                      key={category.jewelry_category_id}
+                      value={category.jewelry_category_id}
+                    >
+                      {category.category_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Button
-                variant="outlined"
-                onClick={handleClickOpen}
+                variant="contained"
+                color="primary"
+                onClick={handleAddJewelry}
                 sx={{ mt: 2 }}
               >
                 Send Request
@@ -161,20 +250,14 @@ export default function SendRequest() {
                 onClose={handleClose}
                 PaperProps={{
                   component: "form",
-                  onSubmit: (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    const email = formJson.email;
-                    console.log(email);
-                    handleClose();
-                  },
+                  onSubmit: handleDialogSubmit,
                 }}
               >
                 <DialogTitle>Successfully</DialogTitle>
-                <DialogContent>
+                {/* <DialogContent>
                   <DialogContentText>
-                    Please enter your email address here. We will send updates occasionally.
+                    Please enter your email address here. We will send updates
+                    occasionally.
                   </DialogContentText>
                   <TextField
                     autoFocus
@@ -186,14 +269,24 @@ export default function SendRequest() {
                     type="email"
                     fullWidth
                     variant="standard"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
-                </DialogContent>
+                </DialogContent> */}
+                  <DialogContentText
+                          sx={{
+                            textAlign: 'center',
+                            marginTop: 2,
+                          }}
+                  >
+                  Sending request successfully, please wait for our staff to make valuation for the jewelry for you!
+                  </DialogContentText>
                 <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <Button type="submit">Submit</Button>
+                  <Button onClick={handleClose}>Close</Button>
+                  {/* <Button type="submit">Submit</Button> */}
                 </DialogActions>
               </Dialog>
-            </Box>
+            </Paper>
           </Box>
         </Grid>
       </Grid>

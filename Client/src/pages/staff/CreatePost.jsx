@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   Paper,
@@ -6,62 +6,72 @@ import {
   TextField,
   Box,
   Container,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
+const postCategories = [
+  { category_id: 1, category_name: 'AUCTION_INSIGHTS' },
+  { category_id: 2, category_name: 'BIDDER_GUIDE' },
+  { category_id: 3, category_name: 'SELLER_GUIDE' },
+  { category_id: 4, category_name: 'AUCTION_NEWS' },
+  { category_id: 5, category_name: 'TREND' },
+  { category_id: 6, category_name: 'UPCOMING_AUCTION' },
+  { category_id: 7, category_name: 'JEWELRY_CARE' },
+  { category_id: 8, category_name: 'BEHIND_THE_SCENES' },
+];
+
 function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [accountId, setAccountId] = useState(null);
-  const defaultCategory = 5;
-
-  useEffect(() => {
-    // const fetchAccountId = () => {
-    //   try {
-    //     const token = localStorage.getItem('token');
-    //     if (token) {
-    //       const decodedToken = jwtDecode(token);
-    //       if (decodedToken && decodedToken.account_id) {
-    //         setAccountId(decodedToken.account_id);  // Adjust according to the token's structure
-    //       } else {
-    //         console.error('Decoded token does not contain account_id');
-    //       }
-    //     } else {
-    //       console.error('No token found in localStorage');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error decoding token:', error);
-    //   }
-    // };
-
-    //fetchAccountId();
-  }, []);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // if (!accountId) {
-    //   console.error('Account ID not available');
-    //   return;
-    // }
-
-    const postData = {
-      title,
-      content,
-      category: defaultCategory,
-      //account_id: accountId,
-    };
-
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const account_id = decodedToken.account_id; // Adjust according to your token structure
+
+      const postData = {
+        title,
+        content,
+        categoryId: parseInt(selectedCategory),
+        postDate: new Date().toISOString(),
+        status: true,
+      };
+
+      console.log('postData:', postData); // Log the postData object
+
       const response = await axios.post('http://localhost:8088/posts/create', postData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
       });
       console.log('Post created successfully:', response.data);
     } catch (error) {
-      console.error('Error creating post:', error);
+      if (error.response) {
+        // Server responded with a status other than 200 range
+        console.error('Error response:', error.response.data);
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('Error request:', error.request);
+      } else {
+        // Something else happened in making the request
+        console.error('Error message:', error.message);
+      }
+      console.error('Error config:', error.config);
     }
   };
 
@@ -90,9 +100,20 @@ function CreatePost() {
             rows={6}
             sx={{ backgroundColor: '#fff', borderRadius: 1 }}
           />
-          <Box mt={2} mb={2}>
-            <Typography variant="body2">Category ID: {defaultCategory}</Typography>
-          </Box>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Category</InputLabel>
+            <Select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              sx={{ backgroundColor: '#fff', borderRadius: 1 }}
+            >
+              {postCategories.map((category) => (
+                <MenuItem key={category.category_id} value={category.category_id}>
+                  {category.category_name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2' }}>
             Submit Post
           </Button>
