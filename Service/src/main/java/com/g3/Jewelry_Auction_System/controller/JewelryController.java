@@ -18,17 +18,12 @@ import java.util.List;
 public class JewelryController {
     @Autowired
     JewelryService jewelryService;
-
-
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/add")
     public ResponseEntity<JewelryDTO> addJewelry(@RequestBody JewelryDTO jewelryDTO) {
         JewelryDTO newJewelry = jewelryService.addJewelry(jewelryDTO);
         return new ResponseEntity<>(newJewelry, HttpStatus.CREATED);
     }
-
-
-
     @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delist/{jewelryId}")
     public ResponseEntity<Jewelry> delistJewelry(@PathVariable int jewelryId) {
@@ -59,6 +54,7 @@ public class JewelryController {
         return jewelryService.getAllJewelry(offset);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getAll")
     public ResponseEntity<List<JewelryDTO>> getAllJewelries(){
         List<JewelryDTO> list = jewelryService.getAll();
@@ -76,9 +72,6 @@ public class JewelryController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-
-
 
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{id}")
