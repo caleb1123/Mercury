@@ -42,7 +42,7 @@ public class JewelryServiceImpl implements JewelryService {
         Jewelry newJewelry = jewelryConverter.toEntity(jewelryDTO);
         newJewelry.setStatus(false);
         jewelryRepository.save(newJewelry);
-        return jewelryDTO;
+        return jewelryConverter.toDTO(newJewelry);
     }
 
     @Override
