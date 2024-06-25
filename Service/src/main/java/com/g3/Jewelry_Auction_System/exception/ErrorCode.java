@@ -37,7 +37,9 @@ public enum ErrorCode {
     INVALID_VALUE(1028,"Input value must be greater than 0",HttpStatus.BAD_REQUEST),
     INVALID_STARTDATE(1029,"Start date cannot be after end date",HttpStatus.BAD_REQUEST),
     INVALID_ENDDATE(1030,"End date cannot be before current date",HttpStatus.BAD_REQUEST),
-    LIST_EMPTY(1031,"List is empty",HttpStatus.NOT_FOUND);
+    LIST_EMPTY(1031,"List is empty",HttpStatus.NOT_FOUND),
+    REQUEST_NOT_FOUND(1032, "Request not found", HttpStatus.NOT_FOUND),
+    INVALID_STATUS(1033,"Invalid status",HttpStatus.BAD_REQUEST );
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

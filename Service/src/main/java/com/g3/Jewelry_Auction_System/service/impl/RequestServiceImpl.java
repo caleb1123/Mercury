@@ -63,9 +63,9 @@ public class RequestServiceImpl implements RequestService {
         }
         Request request = requestRepository
                 .findByRequestId(id)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
-        if (requestDTO.getPreliminaryPrice() < 0) {
-            throw new IllegalArgumentException("Preliminary price cannot be negative");
+                .orElseThrow(() -> new AppException(ErrorCode.REQUEST_NOT_FOUND));
+        if (requestDTO.getPreliminaryPrice() < 1) {
+            throw new AppException(ErrorCode.INVALID_VALUE);
         }
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
@@ -74,7 +74,6 @@ public class RequestServiceImpl implements RequestService {
         }
         requestRepository.save(request);
     }
-
     @Override
     public void updateFinalPrice(int id, RequestDTO requestDTO) {
         if (requestDTO.getRequestId() != id) {
@@ -82,9 +81,9 @@ public class RequestServiceImpl implements RequestService {
         }
         Request request = requestRepository
                 .findByRequestId(id)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
-        if (requestDTO.getFinalPrice() < 0) {
-            throw new IllegalArgumentException("Final price cannot be negative");
+                .orElseThrow(() -> new AppException(ErrorCode.REQUEST_NOT_FOUND));
+        if (requestDTO.getFinalPrice() < 1) {
+            throw new AppException(ErrorCode.INVALID_VALUE);
         }
         if (request.getFinalPrice() != requestDTO.getFinalPrice()) {
             request.setFinalPrice(requestDTO.getFinalPrice());
@@ -93,12 +92,27 @@ public class RequestServiceImpl implements RequestService {
         }
         requestRepository.save(request);
     }
-
+    @Override
+    public void updateRequestStatus(int id, RequestDTO requestDTO) {
+        if (requestDTO.getRequestId() != id) {
+            throw new AppException(ErrorCode.ID_NOT_MATCHED);
+        }
+        Request request = requestRepository
+                .findByRequestId(id)
+                .orElseThrow(() -> new AppException(ErrorCode.REQUEST_NOT_FOUND));
+        try {
+            ERequestStatus.valueOf(requestDTO.getStatus());
+            request.setStatus(ERequestStatus.valueOf(requestDTO.getStatus()));
+            requestRepository.save(request);
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ErrorCode.INVALID_STATUS);
+        }
+    }
     @Override
     public void deleteRequest (int requestId) {
         Request request = requestRepository
                 .findByRequestId(requestId)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.REQUEST_NOT_FOUND));
         request.setStatus(ERequestStatus.CANCELED);
         requestRepository.save(request);
     }
