@@ -13,6 +13,7 @@ import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import com.g3.Jewelry_Auction_System.repository.RequestRepository;
 import com.g3.Jewelry_Auction_System.service.RequestService;
 
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class RequestServiceImpl implements RequestService {
     JewelryRepository jewelryRepository;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    EmailService emailService;
 
     @Override
     public RequestDTO createRequest(RequestDTO requestDTO) {
@@ -155,5 +158,24 @@ public class RequestServiceImpl implements RequestService {
             }
             return requestDTOList;
         }
+    }
+
+    @Override
+    public void sendEmailDeadlineRequest(RequestDTO requestDTO) throws MessagingException {
+        Account account = accountRepository.findById(requestDTO.getSellerId()).orElseThrow(
+                () -> new AppException(ErrorCode.USERNAME_INVALID)
+        );
+        Jewelry jewelry = jewelryRepository.findByJewelryId(requestDTO.getJewelryId()).orElseThrow(
+                () -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED)
+        );
+
+        emailService.  sendPreliminaryValuationCompleteEmail(
+                account.getEmail(),
+                jewelry.getJewelryName(),
+                String.valueOf(requestDTO.getPreliminaryPrice()),
+                requestDTO.getEvaluationDate(),
+                account.getFullName()
+
+        );
     }
 }

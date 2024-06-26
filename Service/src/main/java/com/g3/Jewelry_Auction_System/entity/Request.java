@@ -39,6 +39,7 @@ public class Request {
     @PositiveOrZero(message = "Final price must be zero or positive")
     private double finalPrice;
 
+
     @ManyToOne
     @JoinColumn(name = "jewelryId")
     @NotNull(message = "Jewelry is required")

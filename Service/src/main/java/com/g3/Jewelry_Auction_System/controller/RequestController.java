@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.controller;
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.payload.DTO.RequestDTO;
 import com.g3.Jewelry_Auction_System.service.RequestService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +71,17 @@ public class RequestController {
     public ResponseEntity<List<RequestDTO>> getRequestByToken() {
         List<RequestDTO> requestList = requestService.getRequestByToken();
         return new ResponseEntity<>(requestList, HttpStatus.OK);
+    }
+
+    @PostMapping("/sendDeadlineRequest")
+    public ResponseEntity<String> sendDeadlineRequestEmail(@RequestBody RequestDTO requestDTO) {
+        try {
+            requestService.sendEmailDeadlineRequest(requestDTO);
+            return ResponseEntity.ok("Email sent successfully!");
+        } catch (MessagingException e) {
+            return ResponseEntity.status(500).body("Error sending email: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
     }
 }
