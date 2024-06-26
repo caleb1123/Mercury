@@ -60,7 +60,7 @@ function StaffPage() {
       const decodedToken = jwtDecode(token);
       const username = decodedToken.username;
 
-      const response = await axios.get(`http://localhost:8088/account/myinfor/${username}`, {
+      const response = await axios.get(`http://localhost:8088/account/myinfor`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

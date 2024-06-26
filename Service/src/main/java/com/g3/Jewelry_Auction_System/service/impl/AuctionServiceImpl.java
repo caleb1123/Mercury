@@ -55,9 +55,9 @@ public class AuctionServiceImpl implements AuctionService {
                 .findByJewelryId(auctionDTO
                         .getJewelryId()).orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
         List<Auction> existingAuctions = auctionRepository.findByJewelry(jewelry);
-        if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
-            throw new IllegalArgumentException("Start date has to be at least 24h after today");
-        }
+//        if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
+//            throw new IllegalArgumentException("Start date has to be at least 24h after today");
+//        }
         if (startDate.isAfter(endDate)) {
             throw new AppException(ErrorCode.INVALID_STARTDATE);
         }

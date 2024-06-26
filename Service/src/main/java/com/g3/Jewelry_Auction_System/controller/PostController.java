@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.PostDTO;
+import com.g3.Jewelry_Auction_System.repository.PostRepository;
 import com.g3.Jewelry_Auction_System.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,9 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
+    @Autowired
+    private PostRepository postRepository;
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
@@ -46,4 +50,13 @@ public class PostController {
         return new ResponseEntity<>(postDTOList, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PostDTO>> getAllPosts() {
+        List<PostDTO> postDTOList = postService.getAllPosts();
+        if (postDTOList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+    }
 }
