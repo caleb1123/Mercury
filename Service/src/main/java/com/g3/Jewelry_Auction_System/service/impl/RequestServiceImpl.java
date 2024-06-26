@@ -3,7 +3,6 @@ package com.g3.Jewelry_Auction_System.service.impl;
 import com.g3.Jewelry_Auction_System.converter.RequestConverter;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.ERequestStatus;
-import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
@@ -21,7 +20,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -49,6 +47,8 @@ public class RequestServiceImpl implements RequestService {
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             requestDTO.setSellerId(account.getAccountId());
             requestDTO.setRequestDate(LocalDate.now());
+            requestDTO.setEvaluationDate(null);
+            requestDTO.setDeliveryDate(null);
             requestDTO.setStatus("PENDING");
             requestDTO.setPreliminaryPrice(0);
             requestDTO.setFinalPrice(0);
@@ -77,6 +77,7 @@ public class RequestServiceImpl implements RequestService {
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
             request.setEvaluationDate(LocalDate.now());
+            request.setDeliveryDate(LocalDate.now().plusDays(5));
             request.setStatus(ERequestStatus.AWAITING_APPROVAL);
         }
         requestRepository.save(request);
