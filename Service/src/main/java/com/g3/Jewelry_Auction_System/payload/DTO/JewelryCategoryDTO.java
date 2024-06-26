@@ -13,4 +13,9 @@ public class JewelryCategoryDTO {
     private int jewelryCategoryId;
     private String categoryName;
     private String image;
+
+    public JewelryCategoryDTO(int id, String displayName) {
+        this.jewelryCategoryId = id;
+        this.categoryName = displayName;
+    }
 }

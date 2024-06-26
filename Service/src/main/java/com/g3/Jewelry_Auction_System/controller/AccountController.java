@@ -97,4 +97,10 @@ public class AccountController {
         SecurityContext context = SecurityContextHolder.getContext();
         return ResponseEntity.ok(context);
     }
+    @GetMapping("/id/{id}")
+    public ResponseEntity<AccountDTO> getAccountByUsername(@PathVariable int id) {
+        AccountDTO accountDTO = accountService.getAccountByAccountId(id);
+        return ResponseEntity.ok(accountDTO);
+    }
+
 }

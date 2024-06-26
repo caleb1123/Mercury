@@ -353,6 +353,7 @@ function StaffPage() {
                         <TableCell>Final Price</TableCell>
                         <TableCell>Preliminary Price</TableCell>
                         <TableCell>Request Date</TableCell>
+                        <TableCell>Delivery Date</TableCell>
                         <TableCell>Status</TableCell>
                         <TableCell>Seller ID</TableCell>
                         <TableCell>Jewelry ID</TableCell>
@@ -367,6 +368,7 @@ function StaffPage() {
                           <TableCell>{request.finalPrice}</TableCell>
                           <TableCell>{request.preliminaryPrice}</TableCell>
                           <TableCell>{request.requestDate}</TableCell>
+                          <TableCell>{request.deliveryDate}</TableCell>
                           <TableCell>{request.status}</TableCell>
                           <TableCell>{request.sellerId}</TableCell>
                           <TableCell>{request.jewelryId}</TableCell>

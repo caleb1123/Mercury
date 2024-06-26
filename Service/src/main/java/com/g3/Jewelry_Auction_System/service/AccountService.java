@@ -19,4 +19,5 @@ public interface AccountService {
 
     List<AccountSearchByRoleResponse> searchAccountByRoleName(String roleName);
     AccountDTO createAccountByUser(SignUpRequest signUpRequest);
+    AccountDTO getAccountByAccountId(int id);
 }

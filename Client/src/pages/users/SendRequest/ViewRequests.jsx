@@ -67,6 +67,9 @@ export default function ViewRequests({ open, onClose }) {
                 <strong>Evaluation Date:</strong> {request.evaluationDate}
               </Typography>
               <Typography variant="body1">
+                <strong>Delivery Date:</strong> {request.deliveryDate}
+              </Typography>
+              <Typography variant="body1">
                 <strong>Preliminary Price:</strong> {request.preliminaryPrice}
               </Typography>
               <Typography variant="body1">

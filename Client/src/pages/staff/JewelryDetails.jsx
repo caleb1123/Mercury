@@ -99,3 +99,6 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 }
 
 export default JewelryDetails;
+
+
+
