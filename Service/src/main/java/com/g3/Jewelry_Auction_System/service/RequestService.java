@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.service;
 
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.payload.DTO.RequestDTO;
+import jakarta.mail.MessagingException;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface RequestService {
     List<RequestDTO> getRequestList();
     List<RequestDTO> getRequestByStatus(String status);
     List<RequestDTO> getRequestByToken();
+    void sendEmailDeadlineRequest(RequestDTO requestDTO) throws MessagingException;
 }

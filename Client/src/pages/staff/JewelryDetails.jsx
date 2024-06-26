@@ -5,6 +5,7 @@ import axios from 'axios';
 function JewelryDetails({ jewelryId, requestId, onClose }) {
   const [jewelry, setJewelry] = useState(null);
   const [preliminaryPrice, setPreliminaryPrice] = useState('');
+  const [requestDetails, setRequestDetails] = useState(null);
 
   useEffect(() => {
     const fetchJewelryDetails = async () => {
@@ -20,8 +21,23 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
       }
     };
 
+    const fetchRequestDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8088/request/${requestId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setRequestDetails(response.data);
+        setPreliminaryPrice(response.data.preliminaryPrice);
+      } catch (error) {
+        console.error('Error fetching request details:', error);
+      }
+    };
+
     fetchJewelryDetails();
-  }, [jewelryId]);
+    fetchRequestDetails();
+  }, [jewelryId, requestId]);
 
   const handlePreliminaryPriceChange = (e) => {
     setPreliminaryPrice(e.target.value);
@@ -29,10 +45,11 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
   const handleSave = async () => {
     try {
-      await axios.put(
+      // Update preliminary price
+      const updateResponse = await axios.put(
         `http://localhost:8088/request/update/preliminary/${requestId}`,
         {
-          requestId: requestId, // Ensure the requestId is included in the payload
+          requestId: requestId,
           preliminaryPrice: preliminaryPrice,
         },
         {
@@ -41,7 +58,28 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
           },
         }
       );
-      alert('Preliminary price updated successfully');
+
+      // If the preliminary price update is successful, send the email notification
+      if (updateResponse.status === 200) {
+        const emailResponse = await axios.post(
+          `http://localhost:8088/request/sendDeadlineRequest`,
+          {
+            ...requestDetails,
+            preliminaryPrice: preliminaryPrice,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        if (emailResponse.status === 200) {
+          alert('Preliminary price updated and email sent successfully');
+        } else {
+          alert('Preliminary price updated but failed to send email');
+        }
+      }
     } catch (error) {
       console.error('Error updating preliminary price:', error.response || error.message);
       if (error.response && error.response.data) {
@@ -99,6 +137,3 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 }
 
 export default JewelryDetails;
-
-
-
