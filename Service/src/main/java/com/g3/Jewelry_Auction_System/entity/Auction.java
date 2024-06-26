@@ -34,7 +34,7 @@ public class Auction {
     private double currentPrice;
 
     @Column
-    private Boolean status;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "jewelryId")
