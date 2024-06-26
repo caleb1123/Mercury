@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository
 public interface PostCategoryRepository extends JpaRepository<PostCategory, Integer> {
-    @Query(value = "SElECT * FROM post_category WHERE category_name LIKE '%'+:cate+'%'", nativeQuery = true)
-    List<PostCategory> findAllByCateName(@Param("cate") String cate);
+    List<PostCategory> findAll();
 }

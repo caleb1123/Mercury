@@ -19,8 +19,8 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     private PostCategoryRepository postCategoryRepository;
 
     @Override
-    public List<PostCategoryDTO> getPostByCategoryLike(String cate) {
-        List<PostCategoryDTO> list = postCategoryConverter.convertToDTOList(postCategoryRepository.findAllByCateName(cate));
+    public List<PostCategoryDTO> getAllPosts() {
+        List<PostCategoryDTO> list = postCategoryConverter.convertToDTOList(postCategoryRepository.findAll());
         if (list.isEmpty()) {
             throw new AppException(ErrorCode.ITEM_NOT_FOUND);
         }

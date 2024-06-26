@@ -10,6 +10,7 @@ import Admin from './pages/admin';
 import ViewJewelry from './pages/users/ViewJewelry';
 import ViewAuction from './pages/users/ViewAuction';
 import StaffPage from './pages/staff/staff';
+import ViewPost from './pages/users/ViewPost';
 
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/ViewJewelry/:id" element={<ViewJewelry/>} />
         <Route path="/ViewAuction" element={<ViewAuction/>} />
         <Route path="/Staff" element={<StaffPage/>} />
+        <Route path="/ViewPost" element={<ViewPost/>} />
 
 
 
