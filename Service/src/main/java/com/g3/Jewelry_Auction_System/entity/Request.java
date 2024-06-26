@@ -32,6 +32,9 @@ public class Request {
     private LocalDate evaluationDate;
 
     @Column
+    private LocalDate deliveryDate;
+
+    @Column
     @PositiveOrZero(message = "Preliminary price must be zero or positive")
     private double preliminaryPrice;
 
