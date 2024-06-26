@@ -180,4 +180,13 @@ public class RequestServiceImpl implements RequestService {
 
         );
     }
+
+    @Override
+    public RequestDTO getRequestById(int id) {
+       Request request = requestRepository.findByRequestId(id).orElseThrow(
+               () -> new AppException(ErrorCode.REQUEST_NOT_FOUND)
+       );
+
+        return requestConverter.toDTO(request);
+    }
 }

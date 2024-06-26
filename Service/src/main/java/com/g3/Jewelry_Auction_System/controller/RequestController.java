@@ -72,6 +72,7 @@ public class RequestController {
         List<RequestDTO> requestList = requestService.getRequestByToken();
         return new ResponseEntity<>(requestList, HttpStatus.OK);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
 
     @PostMapping("/sendDeadlineRequest")
     public ResponseEntity<String> sendDeadlineRequestEmail(@RequestBody RequestDTO requestDTO) {
@@ -83,5 +84,12 @@ public class RequestController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
+    }
+    @CrossOrigin(origins = "http://localhost:3001")
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<RequestDTO> getRequestById(@PathVariable("id") int id) {
+        RequestDTO requestDTO = requestService.getRequestById(id);
+        return ResponseEntity.ok(requestDTO);
     }
 }

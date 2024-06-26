@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Button, TextField, MenuItem, Select } from '@mui/material';
+import {
+  Grid, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, TableContainer, Table,
+  TableHead, TableBody, TableRow, TableCell, Paper, Button, TextField, MenuItem, Select
+} from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import axios from 'axios';
+import AddAccount from './AddAccount';
+import EditAccount from './EditAccount';
 
 function Sidebar() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [filteredAccounts, setFilteredAccounts] = useState([]);
 
   useEffect(() => {
     if (selectedIndex === 0) {
@@ -17,10 +24,18 @@ function Sidebar() {
     }
   }, [selectedIndex]);
 
+  useEffect(() => {
+    if (searchTerm) {
+      searchAccounts(searchTerm);
+    } else {
+      setFilteredAccounts(accounts);
+    }
+  }, [searchTerm, accounts]);
+
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
     if (index === 1) {
-      window.location.href = '/'; // Chuyển về trang chủ, bạn có thể điều chỉnh đường dẫn tùy ý
+      window.location.href = '/'; 
     }
   };
 
@@ -40,22 +55,85 @@ function Sidebar() {
 
       const data = response.data;
       setAccounts(data);
-      console.log(data);  
+      setFilteredAccounts(data); // Set filtered accounts initially to all accounts
     } catch (error) {
       console.error('Error fetching accounts:', error);
     }
   };
 
-  const filteredAccounts = accounts.filter((account) => {
-    return (
-      (!searchTerm || account.full_name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (!selectedRole || account.role_id === selectedRole)
-    );
+  const searchAccounts = async (name) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get(`http://localhost:8088/account/search/${name}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = response.data;
+      setFilteredAccounts(data);
+    } catch (error) {
+      console.error('Error searching accounts:', error);
+    }
+  };
+
+  const fetchAccountDetails = async (id) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get(`http://localhost:8088/account/id/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = response.data;
+      setSelectedAccount(data);
+    } catch (error) {
+      console.error('Error fetching account details:', error);
+    }
+  };
+
+  const handleEditClick = (id) => {
+    console.log("Editing account with ID:", id);
+    if (id) {
+      fetchAccountDetails(id);
+      setSelectedIndex(5);
+    } else {
+      console.error("Account ID is undefined");
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleRoleChange = (e) => {
+    setSelectedRole(e.target.value);
+  };
+
+  const handleLogout = () => {
+    // Remove the token from local storage
+    localStorage.removeItem('token');
+    // Redirect to the home page
+    window.location.href = '/';
+  };
+
+  const filteredAndSearchedAccounts = filteredAccounts.filter((account) => {
+    return (!selectedRole || account.roleId === selectedRole);
   });
 
   return (
     <Grid container sx={{ height: '100vh', backgroundColor: '#000', color: '#fff' }}>
-      {/* Sidebar content */}
       <Grid item xs={2} container direction="column" justifyContent="space-between" alignItems="center">
         <Grid item>
           <List>
@@ -74,7 +152,7 @@ function Sidebar() {
           </List>
           <Divider sx={{ backgroundColor: '#fff' }} />
           <List>
-            <ListItem button selected={selectedIndex === 3} onClick={() => handleListItemClick(3)} sx={{ color: '#fff' }} key="logout">
+            <ListItem button selected={selectedIndex === 3} onClick={handleLogout} sx={{ color: '#fff' }} key="logout">
               <ListItemIcon sx={{ color: '#fff' }}>
                 <ExitToAppIcon />
               </ListItemIcon>
@@ -82,18 +160,13 @@ function Sidebar() {
             </ListItem>
           </List>
         </Grid>
-
-        {/* Footer */}
         <Grid item>
           <Typography variant="body2" color="textSecondary" align="center" sx={{ pb: 2 }}>
             © {new Date().getFullYear()} Mercury
           </Typography>
         </Grid>
       </Grid>
-
-      {/* Main content */}
       <Grid item xs={10} sx={{ backgroundColor: '#000', padding: 2 }}>
-        {/* Account list */}
         {selectedIndex === 0 && (
           <React.Fragment>
             <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
@@ -101,12 +174,12 @@ function Sidebar() {
                 label="Search by name"
                 variant="outlined"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 sx={{ backgroundColor: '#fff', marginRight: 2 }}
               />
               <Select
                 value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
+                onChange={handleRoleChange}
                 displayEmpty
                 sx={{ backgroundColor: '#fff', minWidth: 120 }}
               >
@@ -119,9 +192,7 @@ function Sidebar() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                  window.location.href = '/add-account'; 
-                }}
+                onClick={() => setSelectedIndex(4)}
               >
                 Add
               </Button>
@@ -138,13 +209,13 @@ function Sidebar() {
                     <TableCell>Phone</TableCell>
                     <TableCell>Sex</TableCell>
                     <TableCell>Status</TableCell>
-                    <TableCell>Role ID</TableCell>
+                    <TableCell>Role</TableCell>
                     <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredAccounts.map((account) => (
-                    <TableRow key={account.account_id}>
+                  {filteredAndSearchedAccounts.map((account) => (
+                    <TableRow key={account.accountId}>
                       <TableCell>{account.accountId || 'NULL'}</TableCell>
                       <TableCell>{account.address || 'NULL'}</TableCell>
                       <TableCell>{account.dob || 'NULL'}</TableCell>
@@ -168,9 +239,7 @@ function Sidebar() {
                         <Button
                           variant="outlined"
                           color="primary"
-                          onClick={() => {
-                            window.location.href = `/edit-account/${account.account_id}`;
-                          }}
+                          onClick={() => handleEditClick(account.accountId)}
                         >
                           Edit
                         </Button>
@@ -181,6 +250,12 @@ function Sidebar() {
               </Table>
             </TableContainer>
           </React.Fragment>
+        )}
+        {selectedIndex === 4 && <AddAccount />}
+        {selectedIndex === 5 && selectedAccount && (
+          <Paper sx={{ padding: 2 }}>
+            <EditAccount account={selectedAccount} />
+          </Paper>
         )}
       </Grid>
     </Grid>

@@ -23,7 +23,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
     const fetchRequestDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/request/${requestId}`, {
+        const response = await axios.get(`http://localhost:8088/request/id/${requestId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
