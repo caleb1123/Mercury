@@ -8,18 +8,21 @@ import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
-import com.g3.Jewelry_Auction_System.payload.DTO.JewelryCategoryDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
+import com.g3.Jewelry_Auction_System.payload.request.JewelryPageRequest;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryCategoryRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 
 import com.g3.Jewelry_Auction_System.service.JewelryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JewelryServiceImpl implements JewelryService {
@@ -37,8 +40,10 @@ public class JewelryServiceImpl implements JewelryService {
     @Override
     public JewelryDTO addJewelry(JewelryDTO jewelryDTO) {
         Jewelry newJewelry = jewelryConverter.toEntity(jewelryDTO);
-        jewelryRepository.save(newJewelry);
-        return jewelryDTO;
+        newJewelry.setStatus(false);
+        Jewelry newJewelrySaved = jewelryRepository.save(newJewelry);
+        return jewelryConverter.toDTO(newJewelrySaved);
+
     }
 
     @Override
@@ -69,9 +74,24 @@ public class JewelryServiceImpl implements JewelryService {
     }
 
     @Override
-    public List<JewelryDTO> getAllJewelry() {
-        List<Jewelry> jewelryList = jewelryRepository.findAll();
-        return jewelryConverter.convertToJewelryDTOList(jewelryList);
+    public Page<JewelryDTO> getAllJewelry(int offset) {
+        Pageable jewelryPageable = new JewelryPageRequest(2, offset);
+        Page<Jewelry> allPosts = jewelryRepository.findAll(jewelryPageable);
+        List<JewelryDTO> jewelryDTOs = new ArrayList<>();
+        for (Jewelry j : allPosts) {
+            JewelryDTO dto = jewelryConverter.toDTO(j);
+            jewelryDTOs.add(dto);
+        }
+        return new PageImpl<>(jewelryDTOs, jewelryPageable, allPosts.getTotalElements());
+    }
+
+    @Override
+    public List<JewelryDTO> getAll() {
+        List<JewelryDTO> jewelryDTOs = jewelryConverter.convertToJewelryDTOList(jewelryRepository.findAll());
+        if (jewelryDTOs.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_EMPTY);
+        }
+        return jewelryDTOs;
     }
 
     @Override

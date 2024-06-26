@@ -9,12 +9,10 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
-import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
-import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,27 +42,32 @@ public class BidServiceImpl implements BidService {
     public BidDTO createBid(BidDTO bidDTO) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        var account  = accountRepository.findByUserName(name);
+        Optional<Account> account  = accountRepository.findByUserName(name);
+        if (name.equals("anonymousUser")) {
+            throw new AppException(ErrorCode.NOT_LOGGED_IN);
+        } else if (account.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
         bidDTO.setAccountId(account.get().getAccountId());
-
         if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
             throw new AppException(ErrorCode.ID_EXISTED);
         }
-        if (bidDTO.getBidAmount() < 0) {
-            throw new IllegalArgumentException("Bid amount must be greater than 0");
+        if (bidDTO.getBidAmount() < 1) {
+            throw new AppException(ErrorCode.INVALID_VALUE);
         }
         Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
         if (auction.getEndDate().isBefore(LocalDateTime.now())) {
             throw new AppException(ErrorCode.AUCTION_CLOSED);
-        }
-        if (auction.getStartDate().isAfter(LocalDateTime.now())) {
-            bidDTO.setBidTime(LocalDateTime.now());
-            Bid bid = bidConverter.toEntity(bidDTO);
-            bidRepository.save(bid);
-            return bidDTO;
-        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
+        } else
+//        if
+//        (auction.getStartDate().isAfter(LocalDateTime.now())) {
+//            bidDTO.setBidTime(LocalDateTime.now());
+//            Bid bid = bidConverter.toEntity(bidDTO);
+//            bidRepository.save(bid);
+//            return bidConverter.toDTO(bid);
+//        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
         {
             Optional<Bid> highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId());
@@ -81,7 +84,6 @@ public class BidServiceImpl implements BidService {
                 throw new AppException(ErrorCode.INVALID_BID);
             }
         }
-        throw new AppException(ErrorCode.INVALID_DOB);
     }
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
@@ -90,7 +92,7 @@ public class BidServiceImpl implements BidService {
         }
         Bid bid = bidRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Bid not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
         if (bidDTO.getBidAmount() >= bid.getBidAmount()) {
             throw new AppException(ErrorCode.INVALID_BID);
         }
@@ -102,8 +104,7 @@ public class BidServiceImpl implements BidService {
     public void deleteBid(int id) {
         Bid bid = bidRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Bid not found"));
-
+                .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
     }
     @Override
     public List<BidDTO> getAllBid() {
