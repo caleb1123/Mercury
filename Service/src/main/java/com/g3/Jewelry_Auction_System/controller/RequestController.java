@@ -84,4 +84,9 @@ public class RequestController {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
+    @GetMapping("/id/{id}")
+    public ResponseEntity<RequestDTO> getRequestById(@PathVariable("id") int id) {
+        RequestDTO requestDTO = requestService.getRequestById(id);
+        return ResponseEntity.ok(requestDTO);
+    }
 }

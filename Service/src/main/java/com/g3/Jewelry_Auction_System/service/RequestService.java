@@ -16,4 +16,5 @@ public interface RequestService {
     List<RequestDTO> getRequestByStatus(String status);
     List<RequestDTO> getRequestByToken();
     void sendEmailDeadlineRequest(RequestDTO requestDTO) throws MessagingException;
+    RequestDTO getRequestById(int id);
 }
