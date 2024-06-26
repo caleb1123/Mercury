@@ -16,12 +16,6 @@ const CategoryItem = ({ children, isActive, onClick }) => (
   </div>
 );
 
-const ImageColumn = ({ src, alt }) => (
-  <div className="image-column">
-    <img loading="lazy" src={src} alt={alt} className="grid-image" />
-  </div>
-);
-
 const Article = ({ title, excerpt }) => (
   <article className="article">
     <h2 className="article-title">{title}</h2>
