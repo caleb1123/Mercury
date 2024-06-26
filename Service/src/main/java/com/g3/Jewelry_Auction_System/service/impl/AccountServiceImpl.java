@@ -55,7 +55,6 @@ public class AccountServiceImpl implements AccountService {
         createAccount.setPassword(encodedPassword);
 
 
-
         Role userRole = roleRepository.findById(createAccountRequest.getRoleId())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
@@ -81,33 +80,35 @@ public class AccountServiceImpl implements AccountService {
         if (!updateDTO.getUserName().equals(username)) {
             throw new RuntimeException("Username does not match request");
         }
-        Optional<Account> existingUserEmail = accountRepository.findByEmail(updateDTO.getEmail());
-        Optional<Account> existingUserPhone = accountRepository.findByPhone(updateDTO.getPhone());
         Account user = accountRepository
-                .findByUserName(updateDTO.getUserName())
+                .findByUserName(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        String encodedPassword = passwordEncoder.encode(updateDTO.getPassword());
-        if (existingUserEmail.isPresent() && user.getAccountId() != existingUserEmail.get().getAccountId()) {
-            throw new AppException(ErrorCode.EMAIL_TAKEN);
-        }
-        if (existingUserPhone.isPresent() && user.getAccountId() != existingUserPhone.get().getAccountId()) {
-            throw new AppException(ErrorCode.PHONE_TAKEN);
-        }
-        if (!updateDTO.getPassword().isEmpty()) {
+        if (updateDTO.getPassword() !=  null) {
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            String encodedPassword = passwordEncoder.encode(updateDTO.getPassword());
             user.setPassword(encodedPassword);
         }
-        if (!updateDTO.getEmail().isEmpty()) {
-            user.setEmail(updateDTO.getEmail());
+        if (updateDTO.getEmail() != null) {
+            Account userWithSameEmail = accountRepository.findByEmail(updateDTO.getEmail()).orElse(null);
+            if (userWithSameEmail != null && user.getAccountId() != userWithSameEmail.getAccountId()) {
+                throw new AppException(ErrorCode.EMAIL_TAKEN);
+            } else {
+                user.setEmail(updateDTO.getEmail());
+            }
         }
-        if (!updateDTO.getAddress().isEmpty()) {
+        if (updateDTO.getPhone() != null) {
+            Account userWithSamePhone = accountRepository.findByPhone(updateDTO.getPhone()).orElse(null);
+            if (userWithSamePhone != null && user.getAccountId() != userWithSamePhone.getAccountId()) {
+                throw new AppException(ErrorCode.PHONE_TAKEN);
+            } else {
+                user.setPhone(updateDTO.getPhone());
+            }
+        }
+        if (updateDTO.getAddress() != null) {
             user.setAddress(updateDTO.getAddress());
         }
-        if (!updateDTO.getFullName().isEmpty()) {
+        if (updateDTO.getFullName() != null) {
             user.setFullName(updateDTO.getFullName());
-        }
-        if (!updateDTO.getPhone().isEmpty()) {
-            user.setPhone(updateDTO.getPhone());
         }
         if (updateDTO.getSex() != null) {
             user.setSex(updateDTO.getSex());
@@ -118,7 +119,6 @@ public class AccountServiceImpl implements AccountService {
         if (updateDTO.getStatus() != null) {
             user.setStatus(updateDTO.getStatus());
         }
-        //Assuming Sex and DoB can be selected with a dropbox, they shouldn't be empty
         accountRepository.save(user);
     }
 

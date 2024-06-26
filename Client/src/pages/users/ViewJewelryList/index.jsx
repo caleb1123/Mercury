@@ -43,6 +43,9 @@ function ViewJewelryList() {
     navigate(`/ViewJewelry/${id}`);
   };
 
+  // Filter jewelry list based on status
+  const filteredJewelryList = jewelryList.filter(jewelry => jewelry.status === true);
+
   return (
     <>
       <div className="Header">
@@ -70,7 +73,7 @@ function ViewJewelryList() {
       </div>
 
       <div className="ViewJewelryList">
-        {jewelryList.map((jewelry) => (
+        {filteredJewelryList.map((jewelry) => (
           <div key={jewelry.jewelryId} className="jewelry-item">
             <button onClick={() => handleItemClick(jewelry.jewelryId)} className="image-button">
               <img src={jewelry.image} alt={jewelry.jewelryName} className="jewelry-image" />

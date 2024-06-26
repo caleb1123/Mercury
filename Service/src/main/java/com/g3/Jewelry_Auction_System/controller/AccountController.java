@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,5 +91,10 @@ public class AccountController {
     public ResponseEntity<AccountDTO> getAccountByUsername(@PathVariable String username) {
         AccountDTO accountDTO = accountService.getAccountByUsername(username);
         return ResponseEntity.ok(accountDTO);
+    }
+    @GetMapping("/test")
+    public ResponseEntity<SecurityContext> getContext() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        return ResponseEntity.ok(context);
     }
 }

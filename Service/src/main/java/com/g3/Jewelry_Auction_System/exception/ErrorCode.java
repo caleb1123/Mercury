@@ -31,7 +31,15 @@ public enum ErrorCode {
     AUCTION_CLOSED(1022, "Auction has closed", HttpStatus.BAD_REQUEST),
     INVALID_BID(1023, "Bid must be higher than previous one or the current highest bid", HttpStatus.BAD_REQUEST),
     REQUEST_EXISTED(1024, "Request for this jewelry already exists", HttpStatus.BAD_REQUEST),
-    JEWELRY_NOT_EXISTED(1025,"Jewelry not found",HttpStatus.NOT_FOUND);
+    JEWELRY_NOT_EXISTED(1025,"Jewelry not found",HttpStatus.NOT_FOUND),
+    JEWELRY_NOT_VALID(1026,"Jewelry not valid for auction",HttpStatus.NOT_FOUND),
+    NOT_LOGGED_IN(1027,"You need to log in to perform this action",HttpStatus.BAD_REQUEST),
+    INVALID_VALUE(1028,"Input value must be greater than 0",HttpStatus.BAD_REQUEST),
+    INVALID_STARTDATE(1029,"Start date cannot be after end date",HttpStatus.BAD_REQUEST),
+    INVALID_ENDDATE(1030,"End date cannot be before current date",HttpStatus.BAD_REQUEST),
+    LIST_EMPTY(1031,"List is empty",HttpStatus.NOT_FOUND),
+    REQUEST_NOT_FOUND(1032, "Request not found", HttpStatus.NOT_FOUND),
+    INVALID_STATUS(1033,"Invalid status",HttpStatus.BAD_REQUEST );
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

@@ -26,10 +26,11 @@ import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import CreatePost from './CreatePost';
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';
+import JewelryDetails from './JewelryDetails';
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -42,11 +43,13 @@ function StaffPage() {
   const [editMode, setEditMode] = useState(false);
   const [addJewelryMode, setAddJewelryMode] = useState(false);
   const [selectedJewelry, setSelectedJewelry] = useState(null);
+  const [viewJewelryId, setViewJewelryId] = useState(null);
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
     setEditMode(false);
     setAddJewelryMode(false);
+    setViewJewelryId(null);
   };
 
   const fetchProfile = async () => {
@@ -55,7 +58,11 @@ function StaffPage() {
       const decodedToken = jwtDecode(token);
       const username = decodedToken.username;
 
-      const response = await axios.get(`http://localhost:8088/account/myinfor/${username}`);
+      const response = await axios.get(`http://localhost:8088/account/myinfor/${username}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       setProfile(response.data);
     } catch (error) {
       console.error('Error fetching profile data:', error);
@@ -64,7 +71,11 @@ function StaffPage() {
 
   const fetchJewelry = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/getAll');
+      const response = await axios.get('http://localhost:8088/jewelry/getAll', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       setJewelryList(response.data);
       setFilteredJewelryList(response.data);
     } catch (error) {
@@ -74,7 +85,11 @@ function StaffPage() {
 
   const fetchAuctions = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/auction/list');
+      const response = await axios.get('http://localhost:8088/auction/list', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       setAuctionList(response.data);
     } catch (error) {
       console.error('Error fetching auction data:', error);
@@ -83,10 +98,14 @@ function StaffPage() {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/request/list');
+      const response = await axios.get('http://localhost:8088/request/list', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       setRequestList(response.data);
     } catch (error) {
-      console.error('Error fetching request data:', error);
+      console.error('Error fetching request data:', error.response?.data || error.message);
     }
   };
 
@@ -112,7 +131,11 @@ function StaffPage() {
 
   const handleDeleteClick = async (jewelry) => {
     try {
-      await axios.put(`http://localhost:8088/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false });
+      await axios.put(`http://localhost:8088/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       fetchJewelry();
     } catch (error) {
       console.error('Error deleting jewelry:', error);
@@ -212,7 +235,7 @@ function StaffPage() {
                 <Button variant="contained" color="primary">Update Profile</Button>
               </Paper>
             )}
-            {selectedIndex === 1 && !editMode && !addJewelryMode && (
+            {selectedIndex === 1 && !editMode && !addJewelryMode && !viewJewelryId && (
               <React.Fragment>
                 <Box sx={{ mb: 2 }}>
                   <Select
@@ -275,6 +298,9 @@ function StaffPage() {
             {selectedIndex === 1 && addJewelryMode && (
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
+            {selectedIndex === 1 && viewJewelryId && (
+              <JewelryDetails jewelryId={viewJewelryId} onClose={() => setViewJewelryId(null)} />
+            )}
             {selectedIndex === 2 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Auctions</Typography>
@@ -308,7 +334,7 @@ function StaffPage() {
                 </TableContainer>
               </Paper>
             )}
-            {selectedIndex === 3 && (
+            {selectedIndex === 3 && !viewJewelryId && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Requests</Typography>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
@@ -323,6 +349,7 @@ function StaffPage() {
                         <TableCell>Status</TableCell>
                         <TableCell>Seller ID</TableCell>
                         <TableCell>Jewelry ID</TableCell>
+                        <TableCell>Actions</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -333,9 +360,12 @@ function StaffPage() {
                           <TableCell>{request.finalPrice}</TableCell>
                           <TableCell>{request.preliminaryPrice}</TableCell>
                           <TableCell>{request.requestDate}</TableCell>
-                          <TableCell>{request.status ? 'Active' : 'Inactive'}</TableCell>
+                          <TableCell>{request.status}</TableCell>
                           <TableCell>{request.sellerId}</TableCell>
                           <TableCell>{request.jewelryId}</TableCell>
+                          <TableCell>
+                            <Button variant="contained" onClick={() => setViewJewelryId(request.jewelryId)}>View Jewelry</Button>
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -343,11 +373,23 @@ function StaffPage() {
                 </TableContainer>
               </Paper>
             )}
+            {selectedIndex === 3 && viewJewelryId && (
+              <JewelryDetails jewelryId={viewJewelryId} onClose={() => setViewJewelryId(null)} />
+            )}
             {selectedIndex === 4 && (
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
             {selectedIndex === 5 && (
-              <CreatePost />
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ height: '100%' }}
+              >
+                <Box sx={{ width: '100vh', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
+                  <CreatePost />
+                </Box>
+              </Box>
             )}
           </Box>
         </Box>

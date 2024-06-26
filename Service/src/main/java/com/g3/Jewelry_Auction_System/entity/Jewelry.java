@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
@@ -20,9 +23,13 @@ public class Jewelry {
     private int jewelryId;
 
     @Column
+    @NotBlank(message = "Jewelry name is required")
+    @Size(min = 6, message = "Jewelry name must be at least 6 character")
     private String jewelryName;
 
     @Column
+    @NotBlank(message = "Designer is required")
+    @Size(min = 6, message = "Designer must be at least 6 character")
     private String designer;
 
     @Column
@@ -36,12 +43,15 @@ public class Jewelry {
     private String description;
 
     @Column
+    @NotBlank(message = "Condition is required")
     private String condition;
 
     @Column
+    @Positive(message = "Estimate must be a positive number")
     private double estimate;
 
     @Column
+    @Positive(message = "Starting price must be a positive number")
     private double startingPrice;
 
     @Column
@@ -56,4 +66,21 @@ public class Jewelry {
 
     @OneToMany(mappedBy = "jewelry")
     private Collection<Auction> auctions;
+
+    @Override
+    public String toString() {
+        return "Jewelry{" +
+                "jewelryId=" + jewelryId +
+                ", jewelryName='" + jewelryName + '\'' +
+                ", designer='" + designer + '\'' +
+                ", gemstone='" + gemstone + '\'' +
+                ", image='" + image + '\'' +
+                ", description='" + description + '\'' +
+                ", condition='" + condition + '\'' +
+                ", estimate=" + estimate +
+                ", startingPrice=" + startingPrice +
+                ", status=" + status +
+                // Loại bỏ requests, jewelryCategory, và auctions để tránh đệ quy
+                '}';
+    }
 }
