@@ -9,4 +9,5 @@ public interface PostService {
     PostDTO updatePost(PostDTO postDTO, int id);
     PostDTO deletePost(int id);
     List<PostDTO> getPostByTitleLike(String title);
+    List<PostDTO> getAllPosts();
 }
