@@ -218,6 +218,14 @@ public class AccountServiceImpl implements AccountService {
 
         return accountConverter.toDTO(createAccount);
     }
+
+    @Override
+    public AccountDTO getAccountByAccountId(int id) {
+       Account user = accountRepository.findById(id)
+               .orElseThrow(()-> new AppException(ErrorCode.USER_EXISTED));
+        return accountConverter.toDTO(user);
+    }
+
     @Override
     public AccountDTO getAccountByUsername(String username) {
         Account user = accountRepository
