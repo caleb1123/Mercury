@@ -44,12 +44,14 @@ function StaffPage() {
   const [addJewelryMode, setAddJewelryMode] = useState(false);
   const [selectedJewelry, setSelectedJewelry] = useState(null);
   const [viewJewelryId, setViewJewelryId] = useState(null);
+  const [viewRequestId, setViewRequestId] = useState(null);
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
     setEditMode(false);
     setAddJewelryMode(false);
     setViewJewelryId(null);
+    setViewRequestId(null);
   };
 
   const fetchProfile = async () => {
@@ -140,6 +142,11 @@ function StaffPage() {
     } catch (error) {
       console.error('Error deleting jewelry:', error);
     }
+  };
+
+  const handleViewJewelryClick = (jewelryId, requestId) => {
+    setViewJewelryId(jewelryId);
+    setViewRequestId(requestId);
   };
 
   useEffect(() => {
@@ -299,7 +306,7 @@ function StaffPage() {
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
             {selectedIndex === 1 && viewJewelryId && (
-              <JewelryDetails jewelryId={viewJewelryId} onClose={() => setViewJewelryId(null)} />
+              <JewelryDetails jewelryId={viewJewelryId} requestId={viewRequestId} onClose={() => { setViewJewelryId(null); setViewRequestId(null); }} />
             )}
             {selectedIndex === 2 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
@@ -364,7 +371,7 @@ function StaffPage() {
                           <TableCell>{request.sellerId}</TableCell>
                           <TableCell>{request.jewelryId}</TableCell>
                           <TableCell>
-                            <Button variant="contained" onClick={() => setViewJewelryId(request.jewelryId)}>View Jewelry</Button>
+                            <Button variant="contained" onClick={() => handleViewJewelryClick(request.jewelryId, request.requestId)}>View Jewelry</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -374,7 +381,7 @@ function StaffPage() {
               </Paper>
             )}
             {selectedIndex === 3 && viewJewelryId && (
-              <JewelryDetails jewelryId={viewJewelryId} onClose={() => setViewJewelryId(null)} />
+              <JewelryDetails jewelryId={viewJewelryId} requestId={viewRequestId} onClose={() => { setViewJewelryId(null); setViewRequestId(null); }} />
             )}
             {selectedIndex === 4 && (
               <AddJewelry fetchJewelry={fetchJewelry} />
