@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.service.impl;
 import com.g3.Jewelry_Auction_System.converter.RequestConverter;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.ERequestStatus;
+import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
@@ -172,9 +173,9 @@ public class RequestServiceImpl implements RequestService {
 
         emailService.  sendPreliminaryValuationCompleteEmail(
                 account.getEmail(),
-                jewelry.getJewelryName(),
+                ((Jewelry) jewelry).getJewelryName(),
                 String.valueOf(requestDTO.getPreliminaryPrice()),
-                requestDTO.getEvaluationDate(),
+                requestDTO.getDeliveryDate(),
                 account.getFullName()
 
         );
