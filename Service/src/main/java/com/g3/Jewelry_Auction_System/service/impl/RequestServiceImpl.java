@@ -74,7 +74,7 @@ public class RequestServiceImpl implements RequestService {
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
             request.setEvaluationDate(LocalDate.now());
-            requestDTO.setDeliveryDate(LocalDate.now().plusDays(5));
+            request.setDeliveryDate(LocalDate.now().plusDays(5));
             request.setStatus(ERequestStatus.AWAITING_APPROVAL);
         }
         requestRepository.save(request);
