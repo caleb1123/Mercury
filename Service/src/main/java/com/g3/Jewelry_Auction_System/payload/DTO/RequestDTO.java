@@ -15,6 +15,7 @@ public class RequestDTO {
     private LocalDate requestDate;
     private String status;
     private LocalDate evaluationDate;
+    private LocalDate deliveryDate;
     private double preliminaryPrice;
     private double finalPrice;
     private int sellerId;

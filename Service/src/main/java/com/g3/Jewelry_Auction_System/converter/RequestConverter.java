@@ -24,6 +24,7 @@ public class RequestConverter {
         request.setRequestId(dto.getRequestId());
         request.setRequestDate(dto.getRequestDate());
         request.setStatus(ERequestStatus.valueOf(dto.getStatus()));
+        request.setDeliveryDate(dto.getDeliveryDate());
         request.setEvaluationDate(dto.getEvaluationDate());
         request.setPreliminaryPrice(dto.getPreliminaryPrice());
         request.setFinalPrice(dto.getFinalPrice());
@@ -38,6 +39,7 @@ public class RequestConverter {
         dto.setRequestId(request.getRequestId());
         dto.setRequestDate(request.getRequestDate());
         dto.setStatus(request.getStatus().name());
+        dto.setDeliveryDate(request.getDeliveryDate());
         dto.setEvaluationDate(request.getEvaluationDate());
         dto.setPreliminaryPrice(request.getPreliminaryPrice());
         dto.setFinalPrice(request.getFinalPrice());
