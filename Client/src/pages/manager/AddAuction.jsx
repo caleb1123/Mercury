@@ -93,7 +93,7 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
             <InputLabel>Status</InputLabel>
             <Select
@@ -106,7 +106,7 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
               <MenuItem value={false}>Inactive</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
             <InputLabel>Jewelry</InputLabel>

@@ -297,7 +297,7 @@ function ManagerPage() {
                           <TableCell>{auction.startDate}</TableCell>
                           <TableCell>{auction.endDate}</TableCell>
                           <TableCell>{auction.currentPrice}</TableCell>
-                          <TableCell>{auction.status ? 'Active' : 'Inactive'}</TableCell>
+                          <TableCell>{auction.status}</TableCell>
                           <TableCell>{auction.jewelryId}</TableCell>
                           <TableCell>
                             <Button variant="contained" color="primary">Edit</Button>

@@ -67,10 +67,12 @@ public class AuctionServiceImpl implements AuctionService {
         if (auctionDTO.getCurrentPrice() < 1) {
             throw new AppException(ErrorCode.INVALID_VALUE);
         }
-        if (existingAuctions.stream().anyMatch(Auction::getStatus) || !jewelry.getStatus()) {
+        if (existingAuctions.stream().anyMatch(auction -> "ACTIVE".equals(auction.getStatus())) || !jewelry.getStatus()) {
             throw new AppException(ErrorCode.JEWELRY_NOT_VALID);
         }
+
         Auction auction = auctionConverter.toEntity(auctionDTO);
+        auction.setStatus("Pending");
         auctionRepository.save(auction);
         return auctionConverter.toDTO(auction);
     }
@@ -79,7 +81,7 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository
                 .findById(auctionId)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
-        auction.setStatus(false);
+        auction.setStatus("Delete");
         auctionRepository.save(auction);
     }
     @Override

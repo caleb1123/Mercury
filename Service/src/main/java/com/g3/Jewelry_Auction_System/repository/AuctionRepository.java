@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
             "    )\n" +
             "\tAND Auction.auction_id = :auctionId", nativeQuery = true)
     List<Object[]> getWinnerByAuctionId(int auctionId);
+
+    List<Auction> findByStartDateBeforeAndEndDateAfterAndStatus(LocalDateTime startDate, LocalDateTime endDate, String status);
+    List<Auction> findByEndDateBeforeAndStatus(LocalDateTime endDate, String status);
 }
