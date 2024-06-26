@@ -108,11 +108,3 @@ top: 72px;
   right: 10px;
   cursor: pointer;
 }
-.PlaceBidNextButton{
-  font-size: 24px; 
-  background-color: rgb(99 186 238);
-  color: white;
-  cursor: pointer;
-  border-radius:5px ;
-  margin: 15px 0 0 5px;
-}

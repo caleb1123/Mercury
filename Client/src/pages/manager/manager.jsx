@@ -10,15 +10,13 @@ import {
   Paper,
   Button,
   TextField,
-  Select,
-  MenuItem,
+  Box,
   TableContainer,
   Table,
   TableHead,
   TableBody,
   TableRow,
   TableCell,
-  Box,
 } from '@mui/material';
 import {
   AccountCircle as AccountCircleIcon,
@@ -29,8 +27,9 @@ import {
   Search as SearchIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import AddAuction from './AddAuction';
+import EditAuction from './EditAuction';
 
 function ManagerPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -43,6 +42,8 @@ function ManagerPage() {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [finalPrice, setFinalPrice] = useState('');
   const [showAddAuction, setShowAddAuction] = useState(false);
+  const [showEditAuction, setShowEditAuction] = useState(false);
+  const [selectedAuction, setSelectedAuction] = useState(null);
 
   useEffect(() => {
     if (selectedIndex === 0) {
@@ -55,6 +56,7 @@ function ManagerPage() {
       fetchRequests();
     }
     setShowAddAuction(false); // Hide AddAuction component when other tabs are selected
+    setShowEditAuction(false); // Hide EditAuction component when other tabs are selected
   }, [selectedIndex]);
 
   const fetchProfile = async () => {
@@ -116,6 +118,7 @@ function ManagerPage() {
     setEditMode(false);
     setSelectedRequest(null);
     setShowAddAuction(false);
+    setShowEditAuction(false);
   };
 
   const handleSearch = async () => {
@@ -146,6 +149,11 @@ function ManagerPage() {
     setEditMode(true);
   };
 
+  const handleAuctionEditClick = (auction) => {
+    setSelectedAuction(auction);
+    setShowEditAuction(true);
+  };
+
   const handleFinalPriceChange = (e) => {
     setFinalPrice(e.target.value);
   };
@@ -169,9 +177,38 @@ function ManagerPage() {
     }
   };
 
+  const handleDeleteAuction = async (auctionId) => {
+    try {
+      await axios.put(`http://localhost:8088/auction/delete/${auctionId}`, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      alert('Auction deleted successfully');
+      fetchAuctions(); // Refresh the auction list
+    } catch (error) {
+      console.error('Error deleting auction:', error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
+      alert('Failed to delete auction');
+    }
+  };
+
   const handleAuctionAdded = () => {
     fetchAuctions();
     setShowAddAuction(false);
+  };
+
+  const handleAuctionUpdated = () => {
+    fetchAuctions();
+    setShowEditAuction(false);
   };
 
   return (
@@ -228,7 +265,7 @@ function ManagerPage() {
       <Grid item xs={10} sx={{ backgroundColor: '#000', padding: 2 }}>
         <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
           <Box sx={{ width: '80%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
-            {selectedIndex === 0 && !showAddAuction && (
+            {selectedIndex === 0 && !showAddAuction && !showEditAuction && (
               <Paper sx={{ padding: 2 }}>
                 <Typography variant="h6">Profile</Typography>
                 <TextField label="Full Name" value={profile.fullName || ''} fullWidth margin="normal" />
@@ -238,7 +275,7 @@ function ManagerPage() {
               </Paper>
             )}
 
-            {selectedIndex === 1 && !showAddAuction && (
+            {selectedIndex === 1 && !showAddAuction && !showEditAuction && (
               <React.Fragment>
                 <Typography variant="h6">Jewelry</Typography>
                 <TableContainer component={Paper} sx={{ marginTop: 2 }}>
@@ -271,7 +308,7 @@ function ManagerPage() {
               </React.Fragment>
             )}
 
-            {selectedIndex === 2 && !showAddAuction && (
+            {selectedIndex === 2 && !showAddAuction && !showEditAuction && (
               <React.Fragment>
                 <Typography variant="h6">Auctions</Typography>
                 <Button variant="contained" color="primary" onClick={() => setShowAddAuction(true)} sx={{ mb: 2 }}>
@@ -300,8 +337,15 @@ function ManagerPage() {
                           <TableCell>{auction.status}</TableCell>
                           <TableCell>{auction.jewelryId}</TableCell>
                           <TableCell>
-                            <Button variant="contained" color="primary">Edit</Button>
-                            <Button variant="contained" color="secondary" sx={{ ml: 1 }}>Delete</Button>
+                            <Button variant="contained" color="primary" onClick={() => handleAuctionEditClick(auction)}>Edit</Button>
+                            <Button 
+                              variant="contained" 
+                              color="secondary" 
+                              sx={{ ml: 1 }} 
+                              onClick={() => handleDeleteAuction(auction.auctionId)}
+                            >
+                              Delete
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -311,7 +355,7 @@ function ManagerPage() {
               </React.Fragment>
             )}
 
-            {selectedIndex === 3 && !showAddAuction && (
+            {selectedIndex === 3 && !showAddAuction && !showEditAuction && (
               <React.Fragment>
                 <Typography variant="h6">Requests</Typography>
                 <TableContainer component={Paper} sx={{ marginTop: 2 }}>
@@ -343,7 +387,7 @@ function ManagerPage() {
               </React.Fragment>
             )}
 
-            {selectedIndex === 4 && !showAddAuction && (
+            {selectedIndex === 4 && !showAddAuction && !showEditAuction && (
               <React.Fragment>
                 <Typography variant="h6">Search</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
@@ -360,7 +404,7 @@ function ManagerPage() {
               </React.Fragment>
             )}
 
-            {editMode && selectedIndex === 3 && selectedRequest && !showAddAuction && (
+            {editMode && selectedIndex === 3 && selectedRequest && !showAddAuction && !showEditAuction && (
               <Paper sx={{ padding: 2, marginTop: 2 }}>
                 <Typography variant="h6">Edit Final Price</Typography>
                 <TextField
@@ -381,6 +425,14 @@ function ManagerPage() {
               <AddAuction
                 onClose={() => setShowAddAuction(false)}
                 onAuctionAdded={handleAuctionAdded}
+              />
+            )}
+
+            {showEditAuction && selectedAuction && (
+              <EditAuction
+                auction={selectedAuction}
+                onClose={() => setShowEditAuction(false)}
+                onAuctionUpdated={handleAuctionUpdated}
               />
             )}
           </Box>
