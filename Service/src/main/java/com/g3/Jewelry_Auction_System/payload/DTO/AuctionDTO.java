@@ -19,7 +19,7 @@ public class AuctionDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private double currentPrice;
-    private Boolean status;
+    private String status;
     private int jewelryId;
 
 }

@@ -14,13 +14,15 @@ import java.util.List;
 public class PostCategoryController {
     @Autowired
     private PostCategoryService postCategoryService;
+
     @CrossOrigin(origins = "http://localhost:3001")
-    @GetMapping("/search/{input}")
-    public ResponseEntity<List<PostCategoryDTO>> searchPost(@PathVariable(value = "input") String input) {
-        List<PostCategoryDTO> postCategoryDTOList = postCategoryService.getPostByCategoryLike(input);
-        if (postCategoryDTOList.isEmpty()) {
+    @GetMapping("/getCategories")
+    public ResponseEntity<List<PostCategoryDTO>> getAllCategories() {
+        List<PostCategoryDTO> categories = postCategoryService.getAllPosts();
+        if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(postCategoryDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
+
 }

@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.service.impl;
 import com.g3.Jewelry_Auction_System.converter.RequestConverter;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.ERequestStatus;
+import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.entity.Request;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
@@ -12,6 +13,7 @@ import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import com.g3.Jewelry_Auction_System.repository.RequestRepository;
 import com.g3.Jewelry_Auction_System.service.RequestService;
 
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,8 @@ public class RequestServiceImpl implements RequestService {
     JewelryRepository jewelryRepository;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    EmailService emailService;
 
     @Override
     public RequestDTO createRequest(RequestDTO requestDTO) {
@@ -93,7 +97,13 @@ public class RequestServiceImpl implements RequestService {
         if (request.getFinalPrice() != requestDTO.getFinalPrice()) {
             request.setFinalPrice(requestDTO.getFinalPrice());
             request.setEvaluationDate(LocalDate.now());
-            request.setStatus(ERequestStatus.AWAITING_APPROVAL);
+            request.setStatus(ERequestStatus.COMPLETED);
+            Jewelry jewelry = request.getJewelry();
+            jewelry.setStatus(true);
+            jewelry.setStartingPrice(request.getFinalPrice());
+            jewelry.setEstimate(Math.ceil((requestDTO.getFinalPrice()*1.2)/100)*100);
+            jewelryRepository.save(jewelry);
+
         }
         requestRepository.save(request);
     }
@@ -156,5 +166,33 @@ public class RequestServiceImpl implements RequestService {
             }
             return requestDTOList;
         }
+    }
+
+    @Override
+    public void sendEmailDeadlineRequest(RequestDTO requestDTO) throws MessagingException {
+        Account account = accountRepository.findById(requestDTO.getSellerId()).orElseThrow(
+                () -> new AppException(ErrorCode.USERNAME_INVALID)
+        );
+        Jewelry jewelry = jewelryRepository.findByJewelryId(requestDTO.getJewelryId()).orElseThrow(
+                () -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED)
+        );
+
+        emailService.  sendPreliminaryValuationCompleteEmail(
+                account.getEmail(),
+                ((Jewelry) jewelry).getJewelryName(),
+                String.valueOf(requestDTO.getPreliminaryPrice()),
+                requestDTO.getDeliveryDate(),
+                account.getFullName()
+
+        );
+    }
+
+    @Override
+    public RequestDTO getRequestById(int id) {
+       Request request = requestRepository.findByRequestId(id).orElseThrow(
+               () -> new AppException(ErrorCode.REQUEST_NOT_FOUND)
+       );
+
+        return requestConverter.toDTO(request);
     }
 }

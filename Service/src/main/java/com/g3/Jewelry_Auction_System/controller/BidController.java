@@ -1,15 +1,19 @@
 package com.g3.Jewelry_Auction_System.controller;
 
+import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.Bid;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
+import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -17,6 +21,11 @@ import java.util.List;
 public class BidController {
     @Autowired
     BidService bidService;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<BidDTO> createBid(@RequestBody BidDTO bidDTO) {
@@ -58,6 +67,26 @@ public class BidController {
         } else {
             return new ResponseEntity<>(account, HttpStatus.OK);
         }
+    }
+
+
+
+
+    @PostMapping("/submitBid")
+    public ResponseEntity<BidResponse> submitBid(@RequestBody BidDTO bidDTO) {
+         BidDTO newBid = bidService.createBid(bidDTO);
+        AccountDTO account = accountService.getAccountByAccountId(bidDTO.getBidId());
+        BidResponse bidResponse = BidResponse.builder()
+                .bidAmount(newBid.getBidAmount())
+                .username(account.getUserName()) // Assuming Account has a getUsername method
+                .bidTime(Timestamp.valueOf(newBid.getBidTime()))
+                .build();
+
+        // Send bid response to WebSocket topic
+        messagingTemplate.convertAndSend("/topic/bids/" + newBid.getAuctionId(), bidResponse);
+
+        // Return the created bid response DTO to the client
+        return new ResponseEntity<>(bidResponse, HttpStatus.CREATED);
     }
 
 }

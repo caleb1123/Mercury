@@ -84,4 +84,25 @@ public class PostServiceImpl implements PostService {
         }
         return list;
     }
+
+    @Override
+    public List<PostDTO> getPostByCategory(String categoryName) {
+        List<PostDTO> list = postConverter.convertToDTOList(postRepository.getPostsByCategoryName(categoryName));
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_EMPTY);
+        }
+        if (list.contains(null)) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return list;
+    }
+
+    @Override
+    public List<PostDTO> getAllPosts() {
+        List<PostDTO> list = postConverter.convertToDTOList(postRepository.findAll());
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return list;
+    }
 }

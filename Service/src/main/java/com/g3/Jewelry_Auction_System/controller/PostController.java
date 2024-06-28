@@ -14,6 +14,7 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
+
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
     public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
@@ -46,4 +47,23 @@ public class PostController {
         return new ResponseEntity<>(postDTOList, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/searchByCate/{categoryName}")
+    public ResponseEntity<List<PostDTO>> searchPostByCate(@PathVariable(value = "categoryName") String categoryName) {
+        List<PostDTO> postDTOList = postService.getPostByCategory(categoryName);
+        if (postDTOList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PostDTO>> getAllPosts() {
+        List<PostDTO> postDTOList = postService.getAllPosts();
+        if (postDTOList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class EmailService {
     @Autowired
@@ -38,5 +40,21 @@ public class EmailService {
                 "</html>";
 
         sendNewMail(to, subject, body,fullname);
+    }
+
+    public void sendPreliminaryValuationCompleteEmail(String to, String jewelryName, String preliminaryPrice, LocalDate expectedEvaluationDate, String fullname) throws MessagingException {
+        String subject = "Preliminary Valuation Complete - Mercury Jewelry Auction";
+        String body = "<html>" +
+                "<body>" +
+                "<h2 style=\"color: #0D6EFD;\">Preliminary Valuation Complete</h2>" +
+                "<p>Dear " + fullname + ",</p>" +
+                "<p>We are pleased to inform you that the preliminary valuation for your product, <strong>" + jewelryName + "</strong>, has been completed. The estimated price is <strong>" + preliminaryPrice + "</strong>.</p>" +
+                "<p>Please send your product to Mercury Company by <strong>" + expectedEvaluationDate + "</strong> for the final evaluation.</p>" +
+                "<p>Thank you for choosing Mercury Jewelry Auction for your valuation needs. We look forward to receiving your product.</p>" +
+                "<p>Best regards,<br/>Mercury</p>" +
+                "</body>" +
+                "</html>";
+
+        sendNewMail(to, subject, body, fullname);
     }
 }

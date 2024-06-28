@@ -55,9 +55,9 @@ public class AuctionServiceImpl implements AuctionService {
                 .findByJewelryId(auctionDTO
                         .getJewelryId()).orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
         List<Auction> existingAuctions = auctionRepository.findByJewelry(jewelry);
-        if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
-            throw new IllegalArgumentException("Start date has to be at least 24h after today");
-        }
+//        if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
+//            throw new IllegalArgumentException("Start date has to be at least 24h after today");
+//        }
         if (startDate.isAfter(endDate)) {
             throw new AppException(ErrorCode.INVALID_STARTDATE);
         }
@@ -67,10 +67,12 @@ public class AuctionServiceImpl implements AuctionService {
         if (auctionDTO.getCurrentPrice() < 1) {
             throw new AppException(ErrorCode.INVALID_VALUE);
         }
-        if (existingAuctions.stream().anyMatch(Auction::getStatus) || !jewelry.getStatus()) {
+        if (existingAuctions.stream().anyMatch(auction -> "ACTIVE".equals(auction.getStatus())) || !jewelry.getStatus()) {
             throw new AppException(ErrorCode.JEWELRY_NOT_VALID);
         }
+
         Auction auction = auctionConverter.toEntity(auctionDTO);
+        auction.setStatus("Pending");
         auctionRepository.save(auction);
         return auctionConverter.toDTO(auction);
     }
@@ -79,7 +81,10 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository
                 .findById(auctionId)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
-        auction.setStatus(false);
+        auction.setStatus("Deleted");
+        Jewelry jewelry = auction.getJewelry();
+        jewelry.setStatus(false);
+        jewelryRepository.save(jewelry);
         auctionRepository.save(auction);
     }
     @Override
