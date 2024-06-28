@@ -119,7 +119,7 @@ public class JewelryServiceImpl implements JewelryService {
         List<Auction> auctions = auctionRepository.findByJewelry(jewelry);
 
         for (Auction auction : auctions) {
-            if ("On Going".equals(auction.getStatus())) {
+            if (!"Deleted".equals(auction.getStatus())) {
                 return auctionConverter.toDTO(auction);
             }
         }
