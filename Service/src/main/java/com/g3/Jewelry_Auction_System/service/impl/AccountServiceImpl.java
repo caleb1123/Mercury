@@ -200,7 +200,6 @@ public class AccountServiceImpl implements AccountService {
         if (existingUserPhone.isPresent()) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
-
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
