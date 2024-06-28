@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: black;
+    background-color: chocolate;
 
 }
 
@@ -94,6 +94,7 @@ body {
 .HomePage {
     margin-top: 105px;
     color: white;
+    background-color: #002C3E;
 }
 
 .BackGrounPic {
@@ -114,6 +115,10 @@ body {
     font-style: italic;
     color: rgb(255, 255, 255);
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.IntroText{
+    margin-right: 200px;
 }
 
 .ViewJewelries {
