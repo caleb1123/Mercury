@@ -53,6 +53,7 @@ function ViewAuction() {
   const [bids, setBids] = useState([]);
   const [selectedBid, setSelectedBid] = useState(null);
   const [notification, setNotification] = useState({ type: '', message: '' });
+  const [winner, setWinner] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -130,6 +131,28 @@ function ViewAuction() {
     }
   };
 
+  const fetchWinnerData = async (auctionId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:8088/auction/${auctionId}/winner`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setWinner(response.data);
+    } catch (error) {
+      console.error('Error fetching winner data:', error);
+      console.error(error.response ? error.response.data : error.message);
+      setNotification({ type: 'error', message: `Error fetching winner data: ${error.message}` });
+    }
+  };
+
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
@@ -168,15 +191,15 @@ function ViewAuction() {
       });
 
       // Update currentPrice with the new bid amount
-      await axios.put(`http://localhost:8088/auction/update/${auctionId}`, {
-        auctionId: auctionId,
-        currentPrice: selectedBid
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // await axios.put(`http://localhost:8088/auction/update/${auctionId}`, {
+      //   auctionId: auctionId,
+      //   currentPrice: selectedBid
+      // }, {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${token}`
+      //   }
+      // });
 
       // Fetch auction data again to update the state
       fetchAuctionData();
@@ -192,6 +215,10 @@ function ViewAuction() {
 
   const handleBidChange = (event) => {
     setSelectedBid(event.target.value);
+  };
+
+  const handleViewResultClick = () => {
+    fetchWinnerData(auction.auctionId);
   };
 
   if (!jewelry || !auction) {
@@ -263,7 +290,7 @@ function ViewAuction() {
           </div>
           {auction.status === 'Ended' && (
             <div className="ViewResultContainer">
-              <button onClick={() => navigate(`/ViewResult/${auction.auctionId}`)} className="ViewResultButton">View Result</button>
+              <button onClick={handleViewResultClick} className="ViewResultButton">View Result</button>
             </div>
           )}
         </div>
@@ -295,6 +322,17 @@ function ViewAuction() {
               <div>No bids yet</div>
             )}
           </div>
+          {winner && (
+            <div className="WinnerInfo">
+              <h3>Winner Information</h3>
+              <div className="info_WordStyle"><strong>Winner ID:</strong> {winner.winnerId}</div>
+              <div className="info_WordStyle"><strong>Username:</strong> {winner.username}</div>
+              <div className="info_WordStyle"><strong>Bid Amount:</strong> ${winner.bidAmount}</div>
+              <div className="info_WordStyle"><strong>Jewelry ID:</strong> {winner.jewelryId}</div>
+              <div className="info_WordStyle"><strong>Jewelry Name:</strong> {winner.jewelryName}</div>
+              <div className="info_WordStyle"><strong>Auction ID:</strong> {winner.auctionId}</div>
+            </div>
+          )}
         </div>
       </div>
       <div className="Footer">

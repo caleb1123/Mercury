@@ -241,10 +241,7 @@ function ManagerPage() {
               <ListItemText primary="Requests" />
             </ListItem>
             <ListItem button selected={selectedIndex === 4} onClick={() => handleListItemClick(4)} sx={{ color: '#fff' }}>
-              <ListItemIcon sx={{ color: '#fff' }}>
-                <SearchIcon />
-              </ListItemIcon>
-              <ListItemText primary="Search" />
+
             </ListItem>
             <Divider sx={{ backgroundColor: '#fff' }} />
             <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }}>
