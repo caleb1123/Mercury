@@ -27,9 +27,10 @@ import {
   Search as SearchIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import AddAuction from './AddAuction';
 import EditAuction from './EditAuction';
+import RequestDetails from './RequestDetails';
 
 function ManagerPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -160,8 +161,7 @@ function ManagerPage() {
 
   const handleSaveFinalPrice = async () => {
     try {
-      await axios.put(`http://localhost:8088/request/update/${selectedRequest.requestId}`, {
-        ...selectedRequest,
+      await axios.put(`http://localhost:8088/request/update/final/${selectedRequest.requestId}`, {
         finalPrice: finalPrice,
       }, {
         headers: {
@@ -355,7 +355,7 @@ function ManagerPage() {
               </React.Fragment>
             )}
 
-            {selectedIndex === 3 && !showAddAuction && !showEditAuction && (
+            {selectedIndex === 3 && !showAddAuction && !showEditAuction && !editMode && (
               <React.Fragment>
                 <Typography variant="h6">Requests</Typography>
                 <TableContainer component={Paper} sx={{ marginTop: 2 }}>
@@ -363,9 +363,14 @@ function ManagerPage() {
                     <TableHead>
                       <TableRow>
                         <TableCell>ID</TableCell>
+                        <TableCell>Request Date</TableCell>
                         <TableCell>Status</TableCell>
+                        <TableCell>Evaluation Date</TableCell>
+                        <TableCell>Delivery Date</TableCell>
                         <TableCell>Preliminary Price</TableCell>
                         <TableCell>Final Price</TableCell>
+                        <TableCell>Seller ID</TableCell>
+                        <TableCell>Jewelry ID</TableCell>
                         <TableCell>Actions</TableCell>
                       </TableRow>
                     </TableHead>
@@ -373,9 +378,14 @@ function ManagerPage() {
                       {requestList.map(request => (
                         <TableRow key={request.requestId}>
                           <TableCell>{request.requestId}</TableCell>
+                          <TableCell>{request.requestDate}</TableCell>
                           <TableCell>{request.status}</TableCell>
+                          <TableCell>{request.evaluationDate}</TableCell>
+                          <TableCell>{request.deliveryDate}</TableCell>
                           <TableCell>{request.preliminaryPrice}</TableCell>
                           <TableCell>{request.finalPrice}</TableCell>
+                          <TableCell>{request.sellerId}</TableCell>
+                          <TableCell>{request.jewelryId}</TableCell>
                           <TableCell>
                             <Button variant="contained" color="primary" onClick={() => handleEditClick(request)}>Edit</Button>
                           </TableCell>
@@ -405,20 +415,15 @@ function ManagerPage() {
             )}
 
             {editMode && selectedIndex === 3 && selectedRequest && !showAddAuction && !showEditAuction && (
-              <Paper sx={{ padding: 2, marginTop: 2 }}>
-                <Typography variant="h6">Edit Final Price</Typography>
-                <TextField
-                  label="Final Price"
-                  value={finalPrice}
-                  onChange={handleFinalPriceChange}
-                  fullWidth
-                  margin="normal"
+              <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
+                <RequestDetails
+                  request={selectedRequest}
+                  onSave={handleSaveFinalPrice}
+                  onFinalPriceChange={handleFinalPriceChange}
+                  finalPrice={finalPrice}
+                  onCancel={() => setEditMode(false)}
                 />
-                <Box mt={2}>
-                  <Button variant="contained" color="primary" onClick={handleSaveFinalPrice}>Save</Button>
-                  <Button variant="contained" color="secondary" onClick={() => setEditMode(false)} sx={{ ml: 2 }}>Cancel</Button>
-                </Box>
-              </Paper>
+              </Box>
             )}
 
             {showAddAuction && (

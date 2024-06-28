@@ -11,6 +11,7 @@ import ViewJewelry from './pages/users/ViewJewelry';
 import ViewAuction from './pages/users/ViewAuction';
 import StaffPage from './pages/staff/staff';
 import ManagerPage from './pages/manager/manager';
+import ViewProfile from './pages/users/ViewProfile';
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/ViewAuction" element={<ViewAuction/>} />
         <Route path="/Staff" element={<StaffPage/>} />
         <Route path="/Manager" element={<ManagerPage/>} />
+        <Route path="/viewProfile" element={<ViewProfile/>} />
 
 
 

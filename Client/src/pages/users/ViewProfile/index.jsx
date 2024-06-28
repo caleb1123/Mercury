@@ -1,113 +1,143 @@
-import { memo } from "react";
-import { useState } from "react";
-import "./ViewProfile.css";
-import avt from './image/Avatar.jpg'
-import birthday from './image/vuesaxlinearcake.svg'
-import mail from './image/vuesaxlinearsms.svg'
-import sex from './image/vuesaxlinearuser.svg'
-import address from './image/vuesaxlinearlocation.svg'
-import phone from './image/vuesaxlinearcall.svg'
-import line from './image/line-3.svg'
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './ViewProfile.css';
 
+function ViewProfile() {
+  const [userData, setUserData] = useState(null);
+  const [editData, setEditData] = useState({
+    fullName: '',
+    address: '',
+    dob: '',
+    sex: ''
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-function ViewProfile  () {
-    const [inputValue, setInputValue] = useState('');
-
-    // Hàm xử lý sự kiện khi người dùng nhập
-    const handleChange = (event) => {
-      setInputValue(event.target.value);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:8088/account/myinfor', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        const data = await response.json();
+        setUserData(data);
+        setEditData({
+          fullName: data.fullName || '',
+          address: data.address || '',
+          dob: data.dob || '',
+          sex: data.sex !== null ? (data.sex ? 'Male' : 'Female') : ''
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
     };
-    return(
-        <>
-        <div className="Header">
-            <div className="UpHeader">
-                <div className="Mercury">MERCURY</div>
-                <div className="Login_CreaAccount">CREATE ACCOUNT
-                    <div className="LoginStyle">LOGIN</div>
-                </div>
-            </div>
-            <div className="Line">
-                <img src={line}/>
-            </div>
-            <div className="Down_Header">
-                <div className="Bar">
-                    AUCTIONS
-                    <div className="world_bar_style" >SELL</div>
-                    <div className="world_bar_style" >RESULT</div>
-                    <div className="world_bar_style" >CATEGORY</div>
-                    <div className="world_bar_style" >BLOG</div>
 
+    fetchUserData();
+  }, []);
 
-                </div>            
-            <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditData({
+      ...editData,
+      [name]: value
+    });
+  };
 
-            </div>
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setError(null); // Reset error state
+    try {
+      const response = await fetch(`http://localhost:8088/account/update/${userData.userName}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          fullName: editData.fullName || null,
+          address: editData.address || null,
+          dob: editData.dob || null,
+          sex: editData.sex === 'Male' ? true : (editData.sex === 'Female' ? false : null)
+        })
+      });
 
-        </div>
+      if (response.ok) {
+        const updatedData = await response.json();
+        setUserData(updatedData);
+        alert('Profile updated successfully');
+        setIsEditing(false);
+      } else {
+        const errorText = await response.text();
+        setError(`Failed to update profile: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error updating user data:', error);
+      setError('Error updating user data');
+    }
+  };
 
-        <div className="ViewProfile">
-            <div className="PageName_YourProfile">YOUR PROFILE</div>
-            <div className="User">
-                <div className="avt">
-                    <img src={avt} ></img>
-                </div>
-                <div className="UserInfo"> 
-                    <div className="UserName">NGUYEN MINH TRUNG</div>
-                    <div className="OtherInfo">
-                        <img src={birthday}/>
-                        <div className="WordStyleInfo">18/07/2004</div>
-                    </div>
-                    <div className="OtherInfo">
-                        <img src={mail}/>
-                        <div className="WordStyleInfo">nguyenminhtrung18072004@gmail.com</div>
-                    </div>
-                    <div className="OtherInfo">
-                        <img src={sex}/>
-                        <div className="WordStyleInfo">Male</div>
-                    </div>
-                    <div className="OtherInfo">
-                        <img src={address}/>
-                        <div className="WordStyleInfo">Vinhomes Grand Park</div>
-                    </div>
-                    <div className="OtherInfo">
-                        <img src={phone}/>
-                        <div className="WordStyleInfo">+84 745927098</div>
-                    </div>
-                </div>
-            </div>
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
-            <button className="EditProfileButton" >Edit Profile</button>
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
 
-        </div>
-        <div className="Footer">
-            <div className="Mercury">MERCURY</div>
-            <div className="Footer_Info">
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Privacy Policy</div>
-                    <div className="Footer_Style">How to buy</div>
-                    <div className="Footer_Style">Modern Slavery </div>
-                    <div className="Footer_Style">Cookie settings</div>
-                </div>
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Contacts</div>
-                    <div className="Footer_Style">Help</div>
-                    <div className="Footer_Style">About Us </div>
-                </div>
-                <div className="Footer_Small" >
-                    <div className="Footer_Style" >Careers</div>
-                    <div className="Footer_Style">Terms & Conditions</div>
-                    <div className="Footer_Style">Press </div>
-                </div>
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
 
-            </div>
+  return (
+    <div className="Profile">
+      <h2>User Profile</h2>
+      <div className="ProfileDetails">
+        <p><strong>Account ID:</strong> {userData.accountId}</p>
+        <p><strong>Full Name:</strong> {userData.fullName}</p>
+        <p><strong>User Name:</strong> {userData.userName}</p>
+        <p><strong>Address:</strong> {userData.address}</p>
+        <p><strong>Date of Birth:</strong> {userData.dob}</p>
+        <p><strong>Email:</strong> {userData.email}</p>
+        <p><strong>Sex:</strong> {userData.sex ? 'Male' : 'Female'}</p>
+        <p><strong>Phone:</strong> {userData.phone}</p>
+        <p><strong>Status:</strong> {userData.status ? 'Active' : 'Inactive'}</p>
+        <p><strong>Role ID:</strong> {userData.roleId}</p>
+      </div>
+      {!isEditing && <button onClick={handleEditClick} className="EditButton">Edit Profile</button>}
+      {isEditing && (
+        <form onSubmit={handleFormSubmit} className="EditProfileForm">
+          <h3>Edit Profile</h3>
+          {error && <div className="ErrorMessage">{error}</div>}
+          <div className="FormField">
+            <label>Full Name:</label>
+            <input type="text" name="fullName" value={editData.fullName} onChange={handleInputChange} />
+          </div>
+          <div className="FormField">
+            <label>Address:</label>
+            <input type="text" name="address" value={editData.address} onChange={handleInputChange} />
+          </div>
+          <div className="FormField">
+            <label>Date of Birth:</label>
+            <input type="date" name="dob" value={editData.dob} onChange={handleInputChange} />
+          </div>
+          <div className="FormField">
+            <label>Sex:</label>
+            <select name="sex" value={editData.sex} onChange={handleInputChange}>
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <button type="submit" className="SaveButton">Save Changes</button>
+        </form>
+      )}
+      <button onClick={handleLogout} className="LogoutButton">Logout</button>
+    </div>
+  );
+}
 
-
-
-        </div>
-
-
-        </>
-    )
-};
-
-export default memo(ViewProfile)
+export default ViewProfile;

@@ -56,6 +56,7 @@ function ViewAuction() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("jewelryId:", jewelryId); // Log the jewelryId
     if (jewelryId) {
       fetchJewelryData();
       fetchAuctionData();
@@ -64,9 +65,11 @@ function ViewAuction() {
 
   const fetchJewelryData = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}`, {
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -77,15 +80,18 @@ function ViewAuction() {
       setJewelry(response.data);
     } catch (error) {
       console.error('Error fetching jewelry data:', error);
+      console.error(error.response ? error.response.data : error.message);
       setNotification({ type: 'error', message: 'Error fetching jewelry data' });
     }
   };
 
   const fetchAuctionData = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}/auction`, {
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -97,15 +103,18 @@ function ViewAuction() {
       fetchBidsData(response.data.auctionId);
     } catch (error) {
       console.error('Error fetching auction data:', error);
-      setNotification({ type: 'error', message: 'Error fetching auction data' });
+      console.error(error.response ? error.response.data : error.message);
+      setNotification({ type: 'error', message: `Error fetching auction data: ${error.message}` });
     }
   };
 
   const fetchBidsData = async (auctionId) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(`http://localhost:8088/bid/list/${auctionId}`, {
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -116,7 +125,8 @@ function ViewAuction() {
       setBids(response.data);
     } catch (error) {
       console.error('Error fetching bids data:', error);
-      setNotification({ type: 'error', message: 'Error fetching bids data' });
+      console.error(error.response ? error.response.data : error.message);
+      setNotification({ type: 'error', message: `Error fetching bids data: ${error.message}` });
     }
   };
 
@@ -157,22 +167,24 @@ function ViewAuction() {
         }
       });
 
-      // Cập nhật currentPrice bằng bidAmount vừa được đặt
+      // Update currentPrice with the new bid amount
       await axios.put(`http://localhost:8088/auction/update/${auctionId}`, {
-        auctionId: auctionId, // Thêm auctionId vào dữ liệu gửi đi
+        auctionId: auctionId,
         currentPrice: selectedBid
       }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
-      }});
+        }
+      });
 
-      // Cập nhật lại dữ liệu auction sau khi đặt giá thầu
+      // Fetch auction data again to update the state
       fetchAuctionData();
 
       setNotification({ type: 'success', message: 'Bid placed successfully!' });
     } catch (error) {
       console.error('Error creating bid:', error);
+      console.error(error.response ? error.response.data : error.message);
       const errorMessage = error.response?.data || 'Unknown error occurred';
       setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
     }
@@ -228,11 +240,18 @@ function ViewAuction() {
             <div className="info_data_style">{bids.length}</div>
           </div>
           <div className="info_data">
+            <div>Start Date</div>
+            <div className="info_data_style">{new Date(auction.startDate).toLocaleDateString()}</div>
+          </div>
+          <div className="info_data">
             <div>End Date</div>
             <div className="info_data_style">{new Date(auction.endDate).toLocaleDateString()}</div>
           </div>
+          <div className="info_data">
+            <div>Status</div>
+            <div className="info_data_style">{auction.status}</div>
+          </div>
           <div className="PlaceBidContainer">
-            <div>Place Bid</div>
             <div className="WordStyle_JewelryInfo">Maximum Bid ($)
               <select name="Bid_List" onChange={handleBidChange}>
                 {nextBids.map(bid => (
@@ -242,6 +261,11 @@ function ViewAuction() {
             </div>
             <button onClick={handleBidSubmit} className="PlaceBidNextButton">Submit Bid</button>
           </div>
+          {auction.status === 'Ended' && (
+            <div className="ViewResultContainer">
+              <button onClick={() => navigate(`/ViewResult/${auction.auctionId}`)} className="ViewResultButton">View Result</button>
+            </div>
+          )}
         </div>
         <div className="AuctionName">{jewelry.jewelryName}</div>
         <div className="Auction_ViewAuction">
