@@ -98,6 +98,12 @@ public class RequestServiceImpl implements RequestService {
             request.setFinalPrice(requestDTO.getFinalPrice());
             request.setEvaluationDate(LocalDate.now());
             request.setStatus(ERequestStatus.COMPLETED);
+            Jewelry jewelry = request.getJewelry();
+            jewelry.setStatus(true);
+            jewelry.setStartingPrice(request.getFinalPrice());
+            jewelry.setEstimate(Math.ceil((requestDTO.getFinalPrice()*1.2)/100)*100);
+            jewelryRepository.save(jewelry);
+
         }
         requestRepository.save(request);
     }

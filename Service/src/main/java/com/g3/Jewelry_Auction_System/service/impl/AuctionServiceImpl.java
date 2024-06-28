@@ -82,6 +82,9 @@ public class AuctionServiceImpl implements AuctionService {
                 .findById(auctionId)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
         auction.setStatus("Deleted");
+        Jewelry jewelry = auction.getJewelry();
+        jewelry.setStatus(false);
+        jewelryRepository.save(jewelry);
         auctionRepository.save(auction);
     }
     @Override
