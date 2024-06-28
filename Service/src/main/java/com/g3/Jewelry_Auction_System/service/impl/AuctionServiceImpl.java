@@ -86,9 +86,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public void updateAuction(AuctionDTO auctionDTO, int id) {
-        if (auctionDTO.getAuctionId() != id) {
-            throw new AppException(ErrorCode.ID_NOT_MATCHED);
-        }
+//        if (auctionDTO.getAuctionId() != id) {
+//            throw new AppException(ErrorCode.ID_NOT_MATCHED);
+//        }
         Auction auction = auctionRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
