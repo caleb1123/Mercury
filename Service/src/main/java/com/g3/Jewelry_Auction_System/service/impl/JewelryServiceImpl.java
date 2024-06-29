@@ -123,7 +123,6 @@ public class JewelryServiceImpl implements JewelryService {
                 return auctionConverter.toDTO(auction);
             }
         }
-
         throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
     }
     @Override

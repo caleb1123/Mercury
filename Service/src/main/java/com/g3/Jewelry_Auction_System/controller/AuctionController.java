@@ -3,6 +3,8 @@ package com.g3.Jewelry_Auction_System.controller;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.AuctionToEndResponse;
+import com.g3.Jewelry_Auction_System.payload.response.UpcomingAuctionResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class AuctionController {
     }
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{status}")
-    public ResponseEntity<List<AuctionDTO>> getAuctionByStatus(@PathVariable boolean status) {
+    public ResponseEntity<List<AuctionDTO>> getAuctionByStatus(@PathVariable String status) {
         List<AuctionDTO> auctionList = auctionService.getAuctionByStatus(status);
         if (auctionList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -14,9 +14,12 @@ public interface AuctionService {
     void updateAuction(AuctionDTO auction, int id);
     void deleteAuction(int auctionId);
     List<AuctionDTO> getAuctionList();
-    List<AuctionDTO> getAuctionByStatus(boolean status);
+    List<AuctionDTO> getAuctionByStatus(String status);
     List<AuctionDTO> getLiveAuctionList();
-    List<AuctionDTO> getUpcomingAuctionList();
+    List<UpcomingAuctionResponse> getUpcomingAuctionList();
+
+    List<AuctionToEndResponse> getAuctionsWithDaysToEnd();
+
     WinnerResponse getWinner(int auctionId);
     BidDTO getHighestBid(int auctionId);
 
