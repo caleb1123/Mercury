@@ -3,7 +3,6 @@ package com.g3.Jewelry_Auction_System.service.impl;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
 import com.g3.Jewelry_Auction_System.converter.AuctionConverter;
 import com.g3.Jewelry_Auction_System.converter.BidConverter;
-import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 
 import com.g3.Jewelry_Auction_System.entity.Bid;
@@ -12,7 +11,7 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
-import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
+import com.g3.Jewelry_Auction_System.payload.response.AuctionToEndResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
@@ -164,6 +163,26 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
         return bidConverter.toDTO(highestBid);
     }
+
+    @Override
+    public List<AuctionToEndResponse> getAuctionsWithDaysToEnd() {
+        List<Object[]> results = auctionRepository.findAuctionsWithDaysToEnd();
+        return results.stream().map(result -> AuctionToEndResponse.builder()
+                        .auctionId((Integer) result[0])
+                        .currentPrice((Double) result[1])
+                        .endDate(convertToLocalDateTime((Timestamp) result[2]))
+                        .startDate(convertToLocalDateTime((Timestamp) result[3]))
+                        .status((String) result[4])
+                        .winnerId(result[5] != null ? (Integer) result[6] : null)
+                        .jewelryId((Integer) result[6])
+                        .daysToEnd((Integer) result[7])
+                        .build())
+                .collect(Collectors.toList());
+    }
+    private LocalDateTime convertToLocalDateTime(Timestamp timestamp) {
+        return timestamp != null ? timestamp.toLocalDateTime() : null;
+    }
+
     @Override
     public WinnerResponse getWinner(int auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(

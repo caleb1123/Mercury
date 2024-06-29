@@ -2,6 +2,7 @@ package com.g3.Jewelry_Auction_System.service;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.AuctionToEndResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 
 import java.time.LocalDateTime;
@@ -17,5 +18,5 @@ public interface AuctionService {
     List<AuctionDTO> getUpcomingAuctionList();
     WinnerResponse getWinner(int auctionId);
     BidDTO getHighestBid(int auctionId);
-
+     List<AuctionToEndResponse> getAuctionsWithDaysToEnd();
 }
