@@ -184,7 +184,6 @@ body {
   
   .CategoryList {
     position: absolute;
-    margin-top: 10px;
     margin-left: -89px;
     background-color: #ffffff;
     border: 1px solid #f9e9e9;
@@ -197,9 +196,11 @@ body {
   .CategoryItem {
     padding: 5px 0;
     border-bottom: 1px solid #ddd;
+    cursor: pointer;
   }
   
   .CategoryItem:last-child {
     border-bottom: none;
   }
+  
   
