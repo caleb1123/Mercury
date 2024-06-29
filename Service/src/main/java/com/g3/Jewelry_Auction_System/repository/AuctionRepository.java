@@ -44,4 +44,22 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
             "WHERE a.start_date > CURRENT_TIMESTAMP\n" +
             "ORDER BY a.start_date ASC", nativeQuery = true)
     List<Object[]> getUpcomingAuctions();
+
+    @Query(value="SELECT " +
+            "    auction_id, " +
+            "    current_price, " +
+            "    end_date, " +
+            "    start_date, " +
+            "    status, " +
+            "    winner_id, " +
+            "    jewelry_id, " +
+            "    CASE " +
+            "        WHEN DATEDIFF(day, GETDATE(), end_date) < 0 THEN 0 " +
+            "        ELSE DATEDIFF(day, GETDATE(), end_date) " +
+            "    END AS days_to_end " +
+            "FROM " +
+            "    JewelryAuctionSystem.dbo.auction " +
+            "ORDER BY " +
+            "    days_to_end ASC", nativeQuery = true)
+    List<Object[]> findAuctionsWithDaysToEnd();
 }
