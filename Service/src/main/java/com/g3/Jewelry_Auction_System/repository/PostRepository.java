@@ -19,6 +19,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where category_name like :categoryName", nativeQuery = true)
     List<Post> getPostsByCategoryName (@Param(value = "categoryName") String categoryName);
 
+    @Query(value = "select * from post where post_category_id = :categoryId", nativeQuery = true)
+    List<Post> getPostsByCategoryId (@Param(value = "categoryId") int categoryId);
+
     @Query(value = "select * from post where status = 1", nativeQuery = true)
     List<Post> findAll();
 }

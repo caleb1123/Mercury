@@ -18,7 +18,7 @@ public class PostCategoryController {
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getCategories")
     public ResponseEntity<List<PostCategoryDTO>> getAllCategories() {
-        List<PostCategoryDTO> categories = postCategoryService.getAllPosts();
+        List<PostCategoryDTO> categories = postCategoryService.getAllPostCategories();
         if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
