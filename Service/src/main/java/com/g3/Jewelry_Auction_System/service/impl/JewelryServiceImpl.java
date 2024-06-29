@@ -119,13 +119,24 @@ public class JewelryServiceImpl implements JewelryService {
         List<Auction> auctions = auctionRepository.findByJewelry(jewelry);
 
         for (Auction auction : auctions) {
-            if ("On Going".equals(auction.getStatus())) {
+            if (!"Deleted".equals(auction.getStatus())) {
                 return auctionConverter.toDTO(auction);
             }
         }
 
         throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
     }
-
+    @Override
+    public List<JewelryDTO> getJewelryForAuction() {
+        List<Jewelry> allJewelries = jewelryRepository.findAll();
+        List<JewelryDTO> list = new ArrayList<>();
+        for (Jewelry j : allJewelries) {
+            List<Auction> auctions = auctionRepository.findByJewelry(j);
+            if (auctions.isEmpty() || auctions.stream().allMatch(auction -> "Deleted".equals(auction.getStatus()))) {
+                list.add(jewelryConverter.toDTO(j));
+            }
+        }
+        return list;
+    }
 }
 

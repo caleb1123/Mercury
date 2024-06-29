@@ -12,7 +12,6 @@ import com.g3.Jewelry_Auction_System.payload.response.AccountResponse;
 import com.g3.Jewelry_Auction_System.payload.response.AccountSearchByRoleResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.RoleRepository;
-import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

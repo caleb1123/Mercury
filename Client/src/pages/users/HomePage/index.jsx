@@ -76,7 +76,7 @@ function HomePage() {
             <NavLink to="./SendRequest" className="world_bar_style">SELL</NavLink>
             <div className="world_bar_style">RESULT</div>
             <NavLink to="./Category" className="world_bar_style">CATEGORY</NavLink>
-            <div className="world_bar_style">BLOG</div>
+            <NavLink to="./ViewPost" className="world_bar_style">BLOG</NavLink>
           </div>
           <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
         </div>
@@ -85,8 +85,14 @@ function HomePage() {
         <div className="HomeBackGround">
           <img className="BackGrounPic" src={Homebackground} alt="background" />
           <div className="Introduction">
-            <span><h3>Welcome to Mercury,</h3></span> Your premier destination for exclusive online jewelry auctions. Discover a curated selection of exquisite pieces, from timeless classics to contemporary designs, all available at your fingertips. Whether you're a seasoned collector or searching for the perfect piece to elevate your style, Mercury offers unparalleled access to unique and luxurious jewelry. Join our community of discerning buyers and sellers and experience the thrill of bidding on high-quality, authenticated items from the comfort of your home. Start exploring today and let your next treasure find you at Mercury.
-            <div></div>
+            <span><h3>Welcome to Mercury,</h3></span> 
+            <div className="IntroText">
+            Your premier destination for exclusive online jewelry auctions. Discover a curated selection of exquisite pieces, 
+            from timeless classics to contemporary designs, all available at your fingertips. Whether you're a seasoned collector
+             or searching for the perfect piece to elevate your style, Mercury offers unparalleled access to unique and luxurious 
+             jewelry. Join our community of discerning buyers and sellers and experience the thrill of bidding on high-quality, 
+             authenticated items from the comfort of your home. Start exploring today and let your next treasure find you at Mercury.
+            </div>
             <button onClick={handleClick} className="ViewJewelries">View Jewelries</button>
           </div>
         </div>

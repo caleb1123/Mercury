@@ -1,38 +1,18 @@
 {
-  "name": "react_fe_mercury",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@fontsource/roboto": "^5.0.13",
-    "@mui/icons-material": "^5.15.19",
-    "@mui/material": "^5.15.19",
-    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.2",
-    "date-fns": "^3.6.0",
-    "jwt-decode": "^4.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1",
-    "react-scripts": "5.0.1",
-    "styled-components": "^6.1.11",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
-    "start": "cross-env PORT=3001 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "cross-env PORT=3001 react-scripts start"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-numeric-separator": "^7.21.0",
+    "@babel/plugin-transform-private-methods": "^7.21.0",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.21.0",
+    "@babel/plugin-transform-optional-chaining": "^7.21.0",
+    "@babel/plugin-transform-class-properties": "^7.21.0",
+    "@rollup/plugin-terser": "^7.0.2",
+    "cross-env": "^7.0.3"
   },
   "browserslist": {
     "production": [
@@ -45,9 +25,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/preset-react": "^7.24.6",
-    "cross-env": "^7.0.3"
   }
 }
