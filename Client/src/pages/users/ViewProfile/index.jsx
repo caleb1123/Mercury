@@ -22,14 +22,19 @@ function ViewProfile() {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
-        const data = await response.json();
-        setUserData(data);
-        setEditData({
-          fullName: data.fullName || '',
-          address: data.address || '',
-          dob: data.dob || '',
-          sex: data.sex !== null ? (data.sex ? 'Male' : 'Female') : ''
-        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+          setEditData({
+            fullName: data.fullName || '',
+            address: data.address || '',
+            dob: data.dob || '',
+            sex: data.sex !== null ? (data.sex ? 'Male' : 'Female') : ''
+          });
+          console.log('Fetched user data:', data); // Log user data
+        } else {
+          console.error('Failed to fetch user data:', response.statusText);
+        }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -50,6 +55,7 @@ function ViewProfile() {
     event.preventDefault();
     setError(null); // Reset error state
     try {
+      console.log('Updating user:', userData.userName); // Log userName before update
       const response = await fetch(`http://localhost:8088/account/update/${userData.userName}`, {
         method: 'PUT',
         headers: {
@@ -64,11 +70,18 @@ function ViewProfile() {
         })
       });
 
+      const text = await response.text(); // Read the response body as text
+      console.log('Response text:', text); // Log response text
+
       if (response.ok) {
-        const updatedData = await response.json();
-        setUserData(updatedData);
+        if (text) {
+          const updatedData = JSON.parse(text); // Parse the JSON if it exists
+          setUserData(updatedData);
+        }
         alert('Profile updated successfully');
         setIsEditing(false);
+        window.location.reload(); // Reload the page after successful update
+
       } else {
         const errorText = await response.text();
         setError(`Failed to update profile: ${errorText}`);

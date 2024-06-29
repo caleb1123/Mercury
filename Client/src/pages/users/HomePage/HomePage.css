@@ -81,13 +81,10 @@ body {
 }
 
 .Footer {
-    margin-top: 30px;
-    background-color: rgb(156, 145, 145);
-    color: white;
-    padding-left: 10px;
-    padding-top: 30px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
     width: 100%;
-    margin-right: 1000000px;
+    justify-content: center;
 }
 
 .Footer_Small {
@@ -95,9 +92,12 @@ body {
     padding-left: 150px;
 }
 
-.Footer_Style {
-    font-size: 24px;
-    padding: 30px;
+.Footer_style {
+    color: rgb(255, 255, 255);
+    padding-left: 650px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
 }
 
 .Footer_Info {
@@ -177,5 +177,29 @@ body {
   .auction-section p {
     font-size: 1em;
     margin-top: 10px;
+  }
+  .Header .Down_Header .world_bar_style {
+    position: relative;
+  }
+  
+  .CategoryList {
+    position: absolute;
+    margin-top: 10px;
+    margin-left: -89px;
+    background-color: #ffffff;
+    border: 1px solid #f9e9e9;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000; /* Đảm bảo CategoryList luôn ở trên cùng */
+  }
+  
+  .CategoryItem {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .CategoryItem:last-child {
+    border-bottom: none;
   }
   
