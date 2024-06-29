@@ -62,7 +62,7 @@ public class JewelryServiceImpl implements JewelryService {
                 .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
             jewelry.setDesigner(jewelryDTO.getDesigner());
             jewelry.setGemstone(jewelryDTO.getGemstone());
-            jewelry.setImage(jewelryDTO.getImage());
+
             jewelry.setDescription(jewelryDTO.getDescription());
             jewelry.setCondition(jewelryDTO.getCondition());
             jewelry.setEstimate(jewelryDTO.getEstimate());

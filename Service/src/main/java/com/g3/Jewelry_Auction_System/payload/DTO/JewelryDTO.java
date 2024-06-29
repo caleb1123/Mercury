@@ -16,7 +16,6 @@ public class JewelryDTO {
     private String jewelryName;
     private String designer;
     private String gemstone;
-    private String image;
     private String description;
     private String condition;
     private double estimate;
