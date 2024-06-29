@@ -36,6 +36,9 @@ public class Auction {
     @Column
     private String status;
 
+    @Column
+    private int winnerId;
+
     @ManyToOne
     @JoinColumn(name = "jewelryId")
     private Jewelry jewelry;
