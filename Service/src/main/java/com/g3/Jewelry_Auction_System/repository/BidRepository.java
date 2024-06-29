@@ -29,4 +29,10 @@ public interface BidRepository extends JpaRepository<Bid, Integer> {
             "WHERE [auction_id] = :auctionId " +
             "ORDER BY [bid_amount] DESC", nativeQuery = true)
     Integer findHighestBidAmountByAuctionId(int auctionId);
+
+    @Query(value = "SELECT TOP 1 b.account_id " +
+            "FROM bid b " +
+            "WHERE b.auction_id = :auctionId " +
+            "ORDER BY b.bid_amount DESC", nativeQuery = true)
+    Integer findHighestBidderId(int auctionId);
 }

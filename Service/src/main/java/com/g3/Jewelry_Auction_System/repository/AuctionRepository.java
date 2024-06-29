@@ -62,4 +62,6 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
             "ORDER BY " +
             "    days_to_end ASC", nativeQuery = true)
     List<Object[]> findAuctionsWithDaysToEnd();
+
+    List<Auction> findByEndDateBeforeAndWinnerIdIsNull(LocalDateTime endDate);
 }
