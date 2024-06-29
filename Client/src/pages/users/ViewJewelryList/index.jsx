@@ -14,8 +14,6 @@ function ViewJewelryList() {
   const navigate = useNavigate();
 
 
-
-
   // Handle input change
   const handleChange = (event) => {
     setInputValue(event.target.value);

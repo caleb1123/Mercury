@@ -22,10 +22,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               <IconButton onClick={handleProfileClick} sx={{ color: 'white' }}>
                 <Avatar alt="User Icon" />
               </IconButton>
+              <button onClick={handleLogout} className="LogoutButton">Logout</button>
             </>
           ) : (
             <>
-              <NavLink to="./SignUp" className="NavLink_Style">CREATE ACCOUNT</NavLink>
               <NavLink to="./Login" className="LoginStyle">LOGIN</NavLink>
             </>
           )}
@@ -42,7 +42,6 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           <NavLink to="./Category" className="world_bar_style">CATEGORY</NavLink>
           <div className="world_bar_style">BLOG</div>
         </div>
-        <input className="Search" type="text" placeholder="Search" />
       </div>
     </div>
   );

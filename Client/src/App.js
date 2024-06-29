@@ -10,6 +10,8 @@ import Admin from './pages/admin';
 import ViewJewelry from './pages/users/ViewJewelry';
 import ViewAuction from './pages/users/ViewAuction';
 import StaffPage from './pages/staff/staff';
+import ViewProfile from './pages/users/ViewProfile';
+import ManagerPage from './pages/manager/manager';
 
 
 
@@ -28,7 +30,8 @@ function App() {
         <Route path="/ViewJewelry/:id" element={<ViewJewelry/>} />
         <Route path="/ViewAuction" element={<ViewAuction/>} />
         <Route path="/Staff" element={<StaffPage/>} />
-
+        <Route path="/viewProfile" element={<ViewProfile/>} />
+        <Route path="/manager" element={<ManagerPage/>} />
 
 
 

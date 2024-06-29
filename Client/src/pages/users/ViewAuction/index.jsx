@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import line from './image/line-3.svg';
 import "./ViewAuction.css";
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const categoryMapping = {
   1: 'RINGS',
@@ -25,10 +25,7 @@ const bidIncrements = [
   { price: 1000, increment: 100 },
   { price: 5000, increment: 250 },
   { price: 25000, increment: 500 },
-  { price: 50000, increment: 500 },
-  { price: 100000, increment: 2500 },
-  { price: 250000, increment: 5000 },
-  { price: 1000000, increment: 10000 }
+  { price: 50000, increment: 500 }
 ];
 
 const getNextBids = (startingPrice) => {
@@ -37,7 +34,8 @@ const getNextBids = (startingPrice) => {
 
   for (let i = 0; i < 10; i++) {
     nextBids.push(currentPrice);
-    const increment = bidIncrements.find(b => currentPrice < b.price).increment;
+    const incrementObj = bidIncrements.find(b => currentPrice < b.price) || bidIncrements[bidIncrements.length - 1];
+    const increment = incrementObj.increment;
     currentPrice += increment;
   }
 
@@ -100,8 +98,9 @@ function ViewAuction() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      setAuction(response.data);
-      fetchBidsData(response.data.auctionId);
+      const auctionData = response.data;
+      setAuction(auctionData);
+      fetchBidsData(auctionData.auctionId);
     } catch (error) {
       console.error('Error fetching auction data:', error);
       console.error(error.response ? error.response.data : error.message);
@@ -123,7 +122,16 @@ function ViewAuction() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      setBids(response.data);
+      const bidsData = response.data;
+      setBids(bidsData);
+
+      // Update current price based on bids
+      if (bidsData.length > 0) {
+        const highestBid = Math.max(...bidsData.map(bid => bid.bidAmount));
+        setAuction(prevState => ({ ...prevState, currentPrice: highestBid }));
+      } else if (jewelry) {
+        setAuction(prevState => ({ ...prevState, currentPrice: jewelry.startingPrice }));
+      }
     } catch (error) {
       console.error('Error fetching bids data:', error);
       console.error(error.response ? error.response.data : error.message);
@@ -190,19 +198,14 @@ function ViewAuction() {
         }
       });
 
-      // Update currentPrice with the new bid amount
-      // await axios.put(`http://localhost:8088/auction/update/${auctionId}`, {
-      //   auctionId: auctionId,
-      //   currentPrice: selectedBid
-      // }, {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   }
-      // });
-
-      // Fetch auction data again to update the state
-      fetchAuctionData();
+      // Update bids and current price without reloading
+      const newBid = {
+        bidAmount: selectedBid,
+        username: username,
+        bidTime: new Date().toISOString(),
+      };
+      setBids(prevBids => [newBid, ...prevBids]);
+      setAuction(prevState => ({ ...prevState, currentPrice: selectedBid }));
 
       setNotification({ type: 'success', message: 'Bid placed successfully!' });
     } catch (error) {
@@ -210,6 +213,28 @@ function ViewAuction() {
       console.error(error.response ? error.response.data : error.message);
       const errorMessage = error.response?.data || 'Unknown error occurred';
       setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
+    }
+  };
+
+  const fetchHighestBid = async (auctionId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:8088/auction/${auctionId}/highestBid`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.data.bidAmount;
+    } catch (error) {
+      console.error('Error fetching highest bid:', error);
+      console.error(error.response ? error.response.data : error.message);
+      setNotification({ type: 'error', message: `Error fetching highest bid: ${error.message}` });
     }
   };
 
