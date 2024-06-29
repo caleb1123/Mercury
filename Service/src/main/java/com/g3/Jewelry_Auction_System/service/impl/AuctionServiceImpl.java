@@ -13,6 +13,7 @@ import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
+import com.g3.Jewelry_Auction_System.payload.response.UpcomingAuctionResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
@@ -128,7 +129,7 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionDTOList;
     }
     @Override
-    public List<AuctionDTO> getAuctionByStatus(boolean status) {
+    public List<AuctionDTO> getAuctionByStatus(String status) {
         List<AuctionDTO> auctionDTOList = getAuctionList();
         auctionDTOList.removeIf(auctionDTO -> !auctionDTO.getStatus().equals(status));
         return auctionDTOList;
@@ -142,20 +143,25 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionDTOList;
     }
     @Override
-    public List<AuctionDTO> getUpcomingAuctionList() {
-        List<AuctionDTO> allAuctions = getAuctionList();
-        LocalDateTime now = LocalDateTime.now();
-
-        List<AuctionDTO> liveAuctions = getLiveAuctionList();
-
-        List<AuctionDTO> upcomingAuctions = allAuctions.stream()
-                .filter(auction -> now.isBefore(auction.getStartDate()))
-                .sorted(Comparator.comparing(AuctionDTO::getStartDate))
-                .toList();
-        // Combine live auctions and upcoming auctions
-        liveAuctions.addAll(upcomingAuctions);
-
-        return liveAuctions;
+    public List<UpcomingAuctionResponse> getUpcomingAuctionList() {
+        List<Object[]> list = auctionRepository.getUpcomingAuctions();
+        List<UpcomingAuctionResponse> upcomingAuctionResponseList = new ArrayList<>();
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_EMPTY);
+        } else {
+            for (Object[] row : list) {
+                upcomingAuctionResponseList.add(new UpcomingAuctionResponse(
+                        (int) row[0],
+                        (double) row[1],
+                        (Timestamp) row[2],
+                        (Timestamp) row[3],
+                        (String) row[4],
+                        (int) row[6],
+                        (int) row[7]
+                ));
+            }
+            return upcomingAuctionResponseList;
+        }
     }
     @Override
     public BidDTO getHighestBid(int auctionId) {

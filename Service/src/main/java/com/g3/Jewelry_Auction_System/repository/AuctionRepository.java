@@ -38,4 +38,10 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
     List<Auction> findByStartDateBeforeAndEndDateAfterAndStatus(LocalDateTime startDate, LocalDateTime endDate, String status);
     List<Auction> findByEndDateBeforeAndStatus(LocalDateTime endDate, String status);
+    @Query(value="SELECT a.*,\n" +
+            "  DATEDIFF(hour, CURRENT_TIMESTAMP, a.start_date) AS time_difference_hours\n" +
+            "FROM Auction a\n" +
+            "WHERE a.start_date > CURRENT_TIMESTAMP\n" +
+            "ORDER BY a.start_date ASC", nativeQuery = true)
+    List<Object[]> getUpcomingAuctions();
 }

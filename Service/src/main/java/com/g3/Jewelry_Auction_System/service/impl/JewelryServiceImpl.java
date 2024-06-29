@@ -132,7 +132,9 @@ public class JewelryServiceImpl implements JewelryService {
         List<JewelryDTO> list = new ArrayList<>();
         for (Jewelry j : allJewelries) {
             List<Auction> auctions = auctionRepository.findByJewelry(j);
-            if (auctions.isEmpty() || auctions.stream().allMatch(auction -> "Deleted".equals(auction.getStatus()))) {
+            if (auctions.isEmpty() || auctions.stream().allMatch(
+                    auction -> "Deleted".equals(auction.getStatus())
+                            || ("Ended".equals(auction.getStatus()) && auction.getBids().isEmpty()))) {
                 list.add(jewelryConverter.toDTO(j));
             }
         }

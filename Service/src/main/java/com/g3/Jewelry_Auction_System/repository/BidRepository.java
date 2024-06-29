@@ -23,4 +23,5 @@ public interface BidRepository extends JpaRepository<Bid, Integer> {
             "JOIN account AS a\n" +
             "ON b.account_id = a.account_id WHERE auction_id = :auctionId", nativeQuery = true)
     List<Object[]> getBidResponseListByAuctionId(int auctionId);
+
 }
