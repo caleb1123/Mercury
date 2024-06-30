@@ -27,6 +27,7 @@ public class SercutiryConfig {
             "/posts/**",
             "/postCategory/**",
             "/jewelryCategory/**",
+            "/payment/**"
     };
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
