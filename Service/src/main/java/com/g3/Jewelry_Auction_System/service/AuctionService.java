@@ -23,4 +23,5 @@ public interface AuctionService {
     WinnerResponse getWinner(int auctionId);
     BidDTO getHighestBid(int auctionId);
 
+    void sendEmailToWinner(int auctionId);
 }

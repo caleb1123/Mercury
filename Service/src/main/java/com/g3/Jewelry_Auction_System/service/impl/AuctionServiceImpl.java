@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.service.impl;
 import com.g3.Jewelry_Auction_System.converter.AccountConverter;
 import com.g3.Jewelry_Auction_System.converter.AuctionConverter;
 import com.g3.Jewelry_Auction_System.converter.BidConverter;
+import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 
 import com.g3.Jewelry_Auction_System.entity.Bid;
@@ -12,13 +13,17 @@ import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 
+import com.g3.Jewelry_Auction_System.payload.request.WinnerRequest;
 import com.g3.Jewelry_Auction_System.payload.response.AuctionToEndResponse;
 import com.g3.Jewelry_Auction_System.payload.response.UpcomingAuctionResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
+import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
+import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.AuctionService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +49,10 @@ public class AuctionServiceImpl implements AuctionService {
     BidConverter bidConverter;
     @Autowired
     BidRepository bidRepository;
+    @Autowired
+    EmailService emailService;
+    @Autowired
+    AccountRepository accountRepository;
 
     @Override
     public AuctionDTO createAuction(AuctionDTO auctionDTO) {
@@ -175,6 +184,34 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public void sendEmailToWinner(int auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(
+                () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
+        );
+
+
+                var account =accountRepository.findById(auction.getWinnerId()).orElseThrow(
+                        ()-> new AppException(ErrorCode.USER_NOT_EXISTED)
+                );
+                Bid highestBid = bidRepository
+                        .getHighestBidAmount(auctionId)
+                        .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
+                WinnerRequest response = new WinnerRequest();
+                response.setTo(account.getEmail());
+                response.setFullname(account.getFullName());
+                response.setAuctionName(auction.getJewelry().getJewelryName());
+                response.setWinningBid(highestBid.getBidAmount());
+                try{
+                    emailService.sendAuctionWinnerEmail(response.getTo(), response.getAuctionName(), response.getWinningBid(), response.getFullname());
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+
+
+
+    }
+
+    @Override
     public List<AuctionToEndResponse> getAuctionsWithDaysToEnd() {
         List<Object[]> results = auctionRepository.findAuctionsWithDaysToEnd();
         return results.stream().map(result -> AuctionToEndResponse.builder()
@@ -209,6 +246,7 @@ public class AuctionServiceImpl implements AuctionService {
                         (Integer) firstWinner[3],
                         (String) firstWinner[4],
                         (Integer) firstWinner[5]
+
                 );
             } else {
                 throw new AppException(ErrorCode.BID_NOT_FOUND);

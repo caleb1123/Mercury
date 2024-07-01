@@ -91,4 +91,9 @@ public class AuctionController {
     public List<AuctionToEndResponse> getAuctionsWithDaysToEnd() {
         return auctionService.getAuctionsWithDaysToEnd();
     }
+    @PostMapping("/{auctionId}/sendWinnerEmail")
+    public ResponseEntity<Void> sendEmailToWinner(@PathVariable int auctionId) {
+        auctionService.sendEmailToWinner(auctionId);
+        return ResponseEntity.ok().build();
+    }
 }

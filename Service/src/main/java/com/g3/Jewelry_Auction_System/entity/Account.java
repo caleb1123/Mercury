@@ -77,4 +77,26 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private Collection<Request> requests;
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId=" + accountId +
+                ", fullName='" + fullName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
+                ", dob=" + dob +
+                ", email='" + email + '\'' +
+                ", sex=" + sex +
+                ", phone='" + phone + '\'' +
+                ", resetPasswordToken='" + resetPasswordToken + '\'' +
+                ", status=" + status +
+                ", bids=" + bids +
+                ", payments=" + payments +
+                ", posts=" + posts +
+                ", role=" + role +
+                ", requests=" + requests +
+                '}';
+    }
 }

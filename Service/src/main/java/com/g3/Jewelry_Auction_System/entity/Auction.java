@@ -50,4 +50,17 @@ public class Auction {
     @OneToMany
     @JoinColumn(name = "auction")
     private Collection<Payment> payments;
+
+    @Override
+    public String toString() {
+        return "Auction{" +
+                "auctionId=" + auctionId +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", currentPrice=" + currentPrice +
+                ", status='" + status + '\'' +
+                ", winnerId=" + winnerId +
+                // do not call toString() on the other side of bidirectional relationships
+                '}';
+    }
 }

@@ -57,4 +57,19 @@ public class EmailService {
 
         sendNewMail(to, subject, body, fullname);
     }
+    public void sendAuctionWinnerEmail(String to, String auctionName, double winningBid, String fullname) throws MessagingException {
+        String subject = "Congratulations - You've Won the Auction - Mercury Jewelry Auction";
+        String body = "<html>" +
+                "<body>" +
+                "<h2 style=\"color: #0D6EFD;\">Congratulations on Winning the Auction!</h2>" +
+                "<p>Dear " + fullname + ",</p>" +
+                "<p>We are pleased to inform you that you have won the auction for <strong>" + auctionName + "</strong>. Your winning bid was <strong>" + winningBid + "</strong>.</p>" +
+                "<p>Please proceed to payment and shipping arrangements. If you have any questions, feel free to contact us.</p>" +
+                "<p>Thank you for participating in Mercury Jewelry Auction!</p>" +
+                "<p>Best regards,<br/>Mercury</p>" +
+                "</body>" +
+                "</html>";
+
+        sendNewMail(to, subject, body, fullname);
+    }
 }
