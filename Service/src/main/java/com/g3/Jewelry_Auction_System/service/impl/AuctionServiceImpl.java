@@ -205,7 +205,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<AuctionToEndResponse> getAuctionsWithDaysToEnd() {
-        List<Object[]> results = auctionRepository.findAuctionsWithDaysToEnd();
+        List<Object[]> results = auctionRepository.findOngoingAuctionsOrderByDaysToEnd();
         return results.stream().map(result -> AuctionToEndResponse.builder()
                         .auctionId((Integer) result[0])
                         .currentPrice((Double) result[1])
