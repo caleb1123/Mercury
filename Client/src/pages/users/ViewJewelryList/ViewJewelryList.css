@@ -161,7 +161,36 @@ body {
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
-    margin-top: 150px;
+    margin-top: 50px;
     max-width: 1500px; /* Limit the width of the container */
     margin-right: auto;
 }
+.search-container {
+    padding-top: 150px;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .search-container input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+  
+  .search-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .search-container button:hover {
+    background-color: #555;
+  }
+  

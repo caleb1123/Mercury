@@ -67,6 +67,8 @@ public class JewelryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @GetMapping("/search/{name}")
     public ResponseEntity<List<JewelryDTO>> searchJewelriesByName(@PathVariable String name){
         List<JewelryDTO> result = jewelryService.searchName(name);

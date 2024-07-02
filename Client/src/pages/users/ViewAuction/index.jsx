@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
-import line from './image/line-3.svg';
 import "./ViewAuction.css";
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import Header from "./Header";
 
 const categoryMapping = {
   1: 'RINGS',
@@ -52,6 +52,9 @@ function ViewAuction() {
   const [selectedBid, setSelectedBid] = useState(null);
   const [notification, setNotification] = useState({ type: '', message: '' });
   const [winner, setWinner] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,6 +64,14 @@ function ViewAuction() {
       fetchAuctionData();
     }
   }, [jewelryId]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    fetchJewelryData();
+  }, []);
 
   const fetchJewelryData = async () => {
     try {
@@ -164,6 +175,9 @@ function ViewAuction() {
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
+  const handleProfileClick = () => {
+    navigate('/viewProfile');
+  };
 
   const handleBidSubmit = async () => {
     try {
@@ -244,6 +258,11 @@ function ViewAuction() {
 
   const handleViewResultClick = () => {
     fetchWinnerData(auction.auctionId);
+    setIsModalOpen(true); // Open the modal
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
   };
 
   if (!jewelry || !auction) {
@@ -254,27 +273,8 @@ function ViewAuction() {
 
   return (
     <>
-      <div className="Header">
-        <div className="UpHeader">
-          <div className="Mercury">MERCURY</div>
-          <div className="Login_CreaAccount">CREATE ACCOUNT
-            <div className="LoginStyle">LOGIN</div>
-          </div>
-        </div>
-        <div className="Line">
-          <img src={line} alt="line" />
-        </div>
-        <div className="Down_Header">
-          <div className="Bar_Home">
-            CATEGORY
-            <div className="world_bar_style">SELL</div>
-            <div className="world_bar_style">RESULT</div>
-            <div className="world_bar_style">CATEGORY</div>
-            <div className="world_bar_style">BLOG</div>
-          </div>
-          <input className="Search" type="text" value={inputValue} onChange={handleChange} placeholder="Search" />
-        </div>
-      </div>
+      <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
+
       <div className="ViewAuction">
         <div className="PageName_ViewAuction">View Auction</div>
         {notification.message && (
@@ -347,7 +347,7 @@ function ViewAuction() {
               <div>No bids yet</div>
             )}
           </div>
-          {winner && (
+          {/* {winner && (
             <div className="WinnerInfo">
               <h3>Winner Information</h3>
               <div className="info_WordStyle"><strong>Winner ID:</strong> {winner.winnerId}</div>
@@ -357,29 +357,34 @@ function ViewAuction() {
               <div className="info_WordStyle"><strong>Jewelry Name:</strong> {winner.jewelryName}</div>
               <div className="info_WordStyle"><strong>Auction ID:</strong> {winner.auctionId}</div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
-      <div className="Footer">
-        <div className="Mercury">MERCURY</div>
-        <div className="Footer_Info">
-          <div className="Footer_Small">
-            <div className="Footer_Style">Privacy Policy</div>
-            <div className="Footer_Style">How to buy</div>
-            <div className="Footer_Style">Modern Slavery</div>
-            <div className="Footer_Style">Cookie settings</div>
-          </div>
-          <div className="Footer_Small">
-            <div className="Footer_Style">Contacts</div>
-            <div className="Footer_Style">Help</div>
-            <div className="Footer_Style">About Us</div>
-          </div>
-          <div className="Footer_Small">
-            <div className="Footer_Style">Careers</div>
-            <div className="Footer_Style">Terms & Conditions</div>
-            <div className="Footer_Style">Press</div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-button" onClick={closeModal}>
+              &times;
+            </button>
+            {winner && (
+              <div className="WinnerInfo">
+                <h3>Winner Information</h3>
+                <div className="info_WordStyle"><strong>Winner ID:</strong> {winner.winnerId}</div>
+                <div className="info_WordStyle"><strong>Username:</strong> {winner.username}</div>
+                <div className="info_WordStyle"><strong>Bid Amount:</strong> ${winner.bidAmount}</div>
+                <div className="info_WordStyle"><strong>Jewelry ID:</strong> {winner.jewelryId}</div>
+                <div className="info_WordStyle"><strong>Jewelry Name:</strong> {winner.jewelryName}</div>
+                <div className="info_WordStyle"><strong>Auction ID:</strong> {winner.auctionId}</div>
+              </div>
+            )}
           </div>
         </div>
+      )}
+
+      <div className="Footer">
+        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
       </div>
     </>
   );
