@@ -77,4 +77,13 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private Collection<Request> requests;
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId=" + accountId +
+                ", username=" + userName +
+                // other fields, but don't include the ones that cause circular references
+                '}';
+    }
 }

@@ -43,7 +43,6 @@ public class JewelryServiceImpl implements JewelryService {
         newJewelry.setStatus(false);
         Jewelry newJewelrySaved = jewelryRepository.save(newJewelry);
         return jewelryConverter.toDTO(newJewelrySaved);
-
     }
 
     @Override
@@ -62,7 +61,7 @@ public class JewelryServiceImpl implements JewelryService {
                 .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
             jewelry.setDesigner(jewelryDTO.getDesigner());
             jewelry.setGemstone(jewelryDTO.getGemstone());
-            jewelry.setImage(jewelryDTO.getImage());
+
             jewelry.setDescription(jewelryDTO.getDescription());
             jewelry.setCondition(jewelryDTO.getCondition());
             jewelry.setEstimate(jewelryDTO.getEstimate());
@@ -123,7 +122,6 @@ public class JewelryServiceImpl implements JewelryService {
                 return auctionConverter.toDTO(auction);
             }
         }
-
         throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
     }
     @Override
@@ -132,7 +130,9 @@ public class JewelryServiceImpl implements JewelryService {
         List<JewelryDTO> list = new ArrayList<>();
         for (Jewelry j : allJewelries) {
             List<Auction> auctions = auctionRepository.findByJewelry(j);
-            if (auctions.isEmpty() || auctions.stream().allMatch(auction -> "Deleted".equals(auction.getStatus()))) {
+            if (auctions.isEmpty() || auctions.stream().allMatch(
+                    auction -> "Deleted".equals(auction.getStatus())
+                            || ("Ended".equals(auction.getStatus()) && auction.getBids().isEmpty()))) {
                 list.add(jewelryConverter.toDTO(j));
             }
         }

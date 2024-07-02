@@ -22,17 +22,17 @@ public class Payment {
 
     @Column
     private LocalDate paymentDate;
+    @Column
+    private String paymentStatus;
 
     @Column
     private double amount;
-
-    @Enumerated(EnumType.STRING)
     @Column
-    @NotBlank(message = "Payment method is required")
-    private EPaymentMethod paymentMethod;
+    private int paymentCode;
 
     @Column
     private String address;
+
 
     @ManyToOne
     @JoinColumn(name = "auctionId")

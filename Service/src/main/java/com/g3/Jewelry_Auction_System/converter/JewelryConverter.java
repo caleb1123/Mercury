@@ -29,7 +29,7 @@ public class JewelryConverter {
         entity.setJewelryName(dto.getJewelryName());
         entity.setDesigner(dto.getDesigner());
         entity.setGemstone(dto.getGemstone());
-        entity.setImage(dto.getImage());
+
         entity.setDescription(dto.getDescription());
         entity.setStartingPrice(dto.getStartingPrice());
         entity.setStatus(dto.getStatus());
@@ -46,7 +46,7 @@ public class JewelryConverter {
         dto.setJewelryName(entity.getJewelryName());
         dto.setDesigner(entity.getDesigner());
         dto.setGemstone(entity.getGemstone());
-        dto.setImage(entity.getImage());
+
         dto.setDescription(entity.getDescription());
         dto.setStartingPrice(entity.getStartingPrice());
         dto.setStatus(entity.getStatus());
@@ -63,15 +63,4 @@ public class JewelryConverter {
         }
         return jewelryDTOList;
     }
-
-    public WinnerResponse toWinnerResponse(Jewelry jewelry) {
-        if (jewelry == null) {
-            return null;
-        }
-        WinnerResponse dto = new WinnerResponse();
-        dto.setJewelryId(jewelry.getJewelryId());
-        dto.setJewelryName(jewelry.getJewelryName());
-        return dto;
-    }
-
 }

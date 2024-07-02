@@ -18,9 +18,9 @@ public class PostConverter {
     @Autowired
     AccountRepository accountRepository;
     @Autowired
-    private PostCategoryConverter postCategoryConverter;
+    PostCategoryConverter postCategoryConverter;
     @Autowired
-    private PostCategoryRepository postCategoryRepository;
+    PostCategoryRepository postCategoryRepository;
 
     public Post toEntity(PostDTO dto){
         if (dto==null) return null;

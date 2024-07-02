@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity
 @Table(name = "Post")
@@ -45,4 +46,7 @@ public class Post {
     @JoinColumn(name = "postCategoryId")
     @NotNull(message = "Post category is required")
     private PostCategory postCategory;
+
+    @OneToMany(mappedBy = "post")
+    private Collection<PostImage> postImages;
 }

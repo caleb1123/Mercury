@@ -38,4 +38,34 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
     List<Auction> findByStartDateBeforeAndEndDateAfterAndStatus(LocalDateTime startDate, LocalDateTime endDate, String status);
     List<Auction> findByEndDateBeforeAndStatus(LocalDateTime endDate, String status);
+    @Query(value="SELECT a.*,\n" +
+            "  DATEDIFF(hour, CURRENT_TIMESTAMP, a.start_date) AS time_difference_hours\n" +
+            "FROM Auction a\n" +
+            "WHERE a.start_date > CURRENT_TIMESTAMP\n" +
+            "ORDER BY time_difference_hours ASC", nativeQuery = true)
+    List<Object[]> getUpcomingAuctions();
+
+    @Query(value="SELECT " +
+            "    auction_id, " +
+            "    current_price, " +
+            "    end_date, " +
+            "    start_date, " +
+            "    status, " +
+            "    winner_id, " +
+            "    jewelry_id, " +
+            "    CASE " +
+            "        WHEN DATEDIFF(day, GETDATE(), end_date) < 0 THEN 0 " +
+            "        ELSE DATEDIFF(day, GETDATE(), end_date) " +
+            "    END AS days_to_end " +
+            "FROM " +
+            "    JewelryAuctionSystem.dbo.auction " +
+            "WHERE " +
+            "    status = 'On Going' " +
+            "ORDER BY " +
+            "    days_to_end ASC", nativeQuery = true)
+    List<Object[]> findOngoingAuctionsOrderByDaysToEnd();
+
+
+    List<Auction> findByEndDateBeforeAndWinnerIdIsNull(LocalDateTime endDate);
+    List<Auction> getAuctionByStatus(String status);
 }

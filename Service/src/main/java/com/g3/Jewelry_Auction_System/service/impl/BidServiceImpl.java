@@ -9,7 +9,9 @@ import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.response.AuctionToEndResponse;
 import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
+import com.g3.Jewelry_Auction_System.payload.response.IncrementResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
@@ -43,10 +45,10 @@ public class BidServiceImpl implements BidService {
     public BidDTO createBid(BidDTO bidDTO) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        Account account  = accountRepository.findByUserName(name).orElse(null);
+        Account account = accountRepository.findByUserName(name).orElse(null);
         if (name.equals("anonymousUser")) {
             throw new AppException(ErrorCode.NOT_LOGGED_IN);
-        } else if (account ==null ) {
+        } else if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
         bidDTO.setAccountId(account.getAccountId());
@@ -70,10 +72,8 @@ public class BidServiceImpl implements BidService {
         {
             Bid highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId()).orElse(null);
-            double currentPrice = auction.getCurrentPrice();
-            if (highestBid != null && highestBid.getBidAmount() > currentPrice) {
-                currentPrice = highestBid.getBidAmount();
-            }
+            double currentPrice = highestBid != null && highestBid.getBidAmount() > auction.getCurrentPrice() ?
+                    highestBid.getBidAmount() : auction.getCurrentPrice();
             if (bidDTO.getBidAmount() > currentPrice) {
                 bidDTO.setBidTime(LocalDateTime.now());
                 Bid bid = bidConverter.toEntity(bidDTO);
@@ -84,6 +84,7 @@ public class BidServiceImpl implements BidService {
             }
         }
     }
+
     @Override
     public void updateBid(BidDTO bidDTO, int id) {
         if (bidDTO.getBidId() != id) {
@@ -99,21 +100,19 @@ public class BidServiceImpl implements BidService {
         bid.setBidTime(LocalDateTime.now());
         bidRepository.save(bid);
     }
+
     @Override
     public void deleteBid(int id) {
         Bid bid = bidRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BID_NOT_FOUND));
     }
+
     @Override
     public List<BidDTO> getAllBid() {
-        List<Bid> bids = bidRepository.findAll();
-        List<BidDTO> bidDTOList = new ArrayList<>();
-        for (Bid bid : bids) {
-            bidDTOList.add(bidConverter.toDTO(bid));
-        }
-        return bidDTOList;
+        return bidConverter.toDTOList(bidRepository.findAll());
     }
+
     @Override
     public List<BidResponse> getBidByAuction(int auctionId) {
         List<Object[]> bidData = bidRepository.getBidResponseListByAuctionId(auctionId);
@@ -123,6 +122,7 @@ public class BidServiceImpl implements BidService {
                 (Timestamp) data[2]
         )).collect(Collectors.toList());
     }
+
     @Override
     public AccountDTO getAccountByBid(int bidId) {
         Bid bid = bidRepository
@@ -131,4 +131,41 @@ public class BidServiceImpl implements BidService {
         Account account = bid.getAccount();
         return accountConverter.toDTO(account);
     }
+
+    @Override
+    public List<IncrementResponse> incrementList(int auctionId) {
+        Integer highestBidAmount = bidRepository.findHighestBidAmountByAuctionId(auctionId);
+        List<IncrementResponse> incrementResponses = new ArrayList<>();
+
+        if (highestBidAmount != null) {
+            int incrementValue = 1;
+            for (int i = 0; i < 10; i++) {
+                incrementResponses.add(new IncrementResponse(auctionId, highestBidAmount + incrementValue));
+                incrementValue += getIncrementValue(highestBidAmount);
+            }
+        }
+
+        return incrementResponses;
+    }
+
+    private int getIncrementValue(int highestBidAmount) {
+        if (highestBidAmount < 20) {
+            return 1;
+        } else if (highestBidAmount < 99) {
+            return 5;
+        } else if (highestBidAmount < 249) {
+            return 10;
+        } else if (highestBidAmount < 499) {
+            return 25;
+        } else if (highestBidAmount < 999) {
+            return 50;
+        } else if (highestBidAmount < 4999) {
+            return 100;
+        } else if (highestBidAmount < 24999) {
+            return 250;
+        } else {
+            return 500;
+        }
+    }
 }
+

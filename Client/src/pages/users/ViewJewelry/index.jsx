@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from "react";
 import "./ViewJewelry.css";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import line from './image/line-3.svg';
 import Header from "./Header";
@@ -21,14 +21,15 @@ const ViewJewelry = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
   const [jewelry, setJewelry] = useState(null);
+  const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
     }
-
-    
   }, []);
 
   useEffect(() => {
@@ -50,7 +51,22 @@ const ViewJewelry = () => {
       }
     };
 
+    const fetchImagesData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8088/jewelryImage/list/${id}`);
+        if (response.status !== 200) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        setImages(response.data);
+        setSelectedImage(response.data[0]?.jewelryImageURL);
+      } catch (error) {
+        console.error('Error fetching images data:', error);
+      }
+    };
+
     fetchJewelryData();
+    fetchImagesData();
   }, [id]);
 
   const handleChange = (event) => {
@@ -65,6 +81,10 @@ const ViewJewelry = () => {
     navigate('/viewProfile');
   };
 
+  const handleThumbnailClick = (url) => {
+    setSelectedImage(url);
+  };
+
   if (!jewelry) {
     return <div>Loading...</div>;
   }
@@ -75,14 +95,23 @@ const ViewJewelry = () => {
 
   return (
     <>
-            <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
-
-
+      <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
       <div className="ViewJewelry">
         <div><h3 className="PageName_ViewJewelry">VIEW JEWELRY</h3></div>
         <div className="Jewelry">
           <div className="ImageFrame">
-            <img className="Image" src={jewelry.image} alt={jewelry.jewelryName} />
+            <img className="Image" src={selectedImage} alt={jewelry.jewelryName} />
+            <div className="Thumbnails">
+              {images.map((image, index) => (
+                <img
+                  key={index}
+                  className={`Thumbnail ${selectedImage === image.jewelryImageURL ? 'selected' : ''}`}
+                  src={image.jewelryImageURL}
+                  alt={`${jewelry.jewelryName} ${index + 1}`}
+                  onClick={() => handleThumbnailClick(image.jewelryImageURL)}
+                />
+              ))}
+            </div>
           </div>
           <div className="info_ViewJewelry">
             <div className="JewelryName">{jewelry.jewelryName}</div>
@@ -118,8 +147,6 @@ const ViewJewelry = () => {
       <div className="Footer">
         <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
       </div>
-
-      
     </>
   );
 };

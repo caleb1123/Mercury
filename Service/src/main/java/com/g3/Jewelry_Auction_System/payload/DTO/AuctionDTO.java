@@ -21,5 +21,4 @@ public class AuctionDTO {
     private double currentPrice;
     private String status;
     private int jewelryId;
-
 }

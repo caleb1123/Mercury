@@ -21,11 +21,11 @@ public class AuctionStatusUpdater {
 
         // Tìm các phiên đấu giá cần cập nhật trạng thái
         List<Auction> auctionsToStart = auctionRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now, now, "Pending");
-        List<Auction> auctionsToEnd = auctionRepository.findByEndDateBeforeAndStatus(now, "On Going");
+        List<Auction> auctionsToEnd = auctionRepository.findByEndDateBeforeAndStatus(now, "Ongoing");
 
         // Cập nhật trạng thái các phiên đấu giá bắt đầu
         for (Auction auction : auctionsToStart) {
-            auction.setStatus("On Going");
+            auction.setStatus("Ongoing");
             auctionRepository.save(auction);
         }
 
