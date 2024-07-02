@@ -33,7 +33,7 @@ public class VnPayConfig {
     private String vnpCommand;
     @Value("${payment.vnPay.orderType}")
     private String orderType;
-    public Map<String, String> getVNPayConfig(String auctionId, String username, Integer transactionId) {
+    public Map<String, String> getVNPayConfig(int auctionId, String username, Integer transactionId) {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_Version", this.vnpVersion);
         vnpParamsMap.put("vnp_Command", this.vnpCommand);

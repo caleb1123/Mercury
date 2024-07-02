@@ -22,6 +22,7 @@ public class Payment {
 
     @Column
     private LocalDate paymentDate;
+
     @Column
     private String paymentStatus;
 
@@ -29,10 +30,6 @@ public class Payment {
     private double amount;
     @Column
     private int paymentCode;
-
-    @Column
-    private String address;
-
 
     @ManyToOne
     @JoinColumn(name = "auctionId")
