@@ -16,4 +16,6 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findByJewelryId(int id);
     @Query(value = "SELECT * FROM Request WHERE seller_id = :id", nativeQuery = true)
     List<Request> getRequestsBySellerId(int id);
+    @Query(value = "SELECT * FROM Request where status = :status", nativeQuery = true)
+    List<Request> getRequestByStatus(String status);
 }

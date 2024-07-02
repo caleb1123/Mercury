@@ -38,12 +38,12 @@ public class AccountServiceImpl implements AccountService {
     //@PreAuthorize("hasRole('ADMIN')")
     @Override
     public AccountDTO createAccount(CreateAccountRequest createAccountRequest) {
-        Optional<Account> existingUserEmail = accountRepository.findByEmail(createAccountRequest.getEmail());
-        Optional<Account> existingUserPhone = accountRepository.findByPhone(createAccountRequest.getPhone());
-        if (existingUserEmail.isPresent()) {
+        Account existingUserEmail = accountRepository.findByEmail(createAccountRequest.getEmail()).orElse(null);
+        Account existingUserPhone = accountRepository.findByPhone(createAccountRequest.getPhone()).orElse(null);
+        if (existingUserEmail != null) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
-        if (existingUserPhone.isPresent()) {
+        if (existingUserPhone != null) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
         Account createAccount = accountConverter.toEntity(createAccountRequest);
@@ -191,12 +191,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO createAccountByUser(SignUpRequest signUpRequest) {
-        Optional<Account> existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail());
-        Optional<Account> existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone());
-        if (existingUserEmail.isPresent()) {
+        Account existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail()).orElse(null);
+        Account existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone()).orElse(null);
+        if (existingUserEmail != null) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
-        if (existingUserPhone.isPresent()) {
+        if (existingUserPhone != null) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
         }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);

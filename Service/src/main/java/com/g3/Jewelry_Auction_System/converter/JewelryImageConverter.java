@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 public class JewelryImageConverter {
     @Autowired
     JewelryRepository jewelryRepository;
-
-
     public JewelryImage toEntity(JewelryImageDTO jewelryImageDTO) {
         if (jewelryImageDTO == null) return null;
         JewelryImage entity = new JewelryImage();

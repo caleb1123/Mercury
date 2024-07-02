@@ -69,10 +69,8 @@ public class BidServiceImpl implements BidService {
         {
             Bid highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId()).orElse(null);
-            double currentPrice = auction.getCurrentPrice();
-            if (highestBid != null && highestBid.getBidAmount() > currentPrice) {
-                currentPrice = highestBid.getBidAmount();
-            }
+            double currentPrice = highestBid != null && highestBid.getBidAmount() > auction.getCurrentPrice() ?
+                    highestBid.getBidAmount() : auction.getCurrentPrice();
             if (bidDTO.getBidAmount() > currentPrice) {
                 bidDTO.setBidTime(LocalDateTime.now());
                 Bid bid = bidConverter.toEntity(bidDTO);
@@ -109,12 +107,7 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public List<BidDTO> getAllBid() {
-        List<Bid> bids = bidRepository.findAll();
-        List<BidDTO> bidDTOList = new ArrayList<>();
-        for (Bid bid : bids) {
-            bidDTOList.add(bidConverter.toDTO(bid));
-        }
-        return bidDTOList;
+        return bidConverter.toDTOList(bidRepository.findAll());
     }
 
     @Override

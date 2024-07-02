@@ -133,18 +133,11 @@ public class RequestServiceImpl implements RequestService {
     }
     @Override
     public List<RequestDTO> getRequestList() {
-        List<Request> requestList = requestRepository.findAll();
-        List<RequestDTO> requestDTOList = new ArrayList<>();
-        for (Request request : requestList) {
-            requestDTOList.add(requestConverter.toDTO(request));
-        }
-        return requestDTOList;
+        return requestConverter.toDTOList(requestRepository.findAll());
     }
     @Override
     public List<RequestDTO> getRequestByStatus(String status) {
-        List<RequestDTO> requestDTOList = getRequestList();
-        requestDTOList.removeIf(requestDTO -> !Objects.equals(requestDTO.getStatus(), status));
-        return requestDTOList;
+        return requestConverter.toDTOList(requestRepository.getRequestByStatus(status));
     }
     @Override
     public List<RequestDTO> getRequestByToken() {
@@ -157,14 +150,7 @@ public class RequestServiceImpl implements RequestService {
                     .findByUserName(name)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             List<Request> requestList = requestRepository.getRequestsBySellerId(account.getAccountId());
-            List<RequestDTO> requestDTOList = new ArrayList<>();
-            for (Request request : requestList) {
-                requestDTOList.add(requestConverter.toDTO(request));
-            }
-            if (requestDTOList.isEmpty()) {
-                throw new AppException(ErrorCode.LIST_EMPTY);
-            }
-            return requestDTOList;
+            return requestConverter.toDTOList(requestList);
         }
     }
 
@@ -179,7 +165,7 @@ public class RequestServiceImpl implements RequestService {
 
         emailService.  sendPreliminaryValuationCompleteEmail(
                 account.getEmail(),
-                ((Jewelry) jewelry).getJewelryName(),
+                jewelry.getJewelryName(),
                 String.valueOf(requestDTO.getPreliminaryPrice()),
                 requestDTO.getDeliveryDate(),
                 account.getFullName()
@@ -192,7 +178,6 @@ public class RequestServiceImpl implements RequestService {
        Request request = requestRepository.findByRequestId(id).orElseThrow(
                () -> new AppException(ErrorCode.REQUEST_NOT_FOUND)
        );
-
         return requestConverter.toDTO(request);
     }
 }
