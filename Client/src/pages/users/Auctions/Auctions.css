@@ -1,0 +1,42 @@
+.auction-data-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Header for the auction data page */
+  .auction-data-header {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* List of auctions */
+  .auction-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  /* Individual auction item */
+  .auction-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  /* Auction item on hover */
+  .auction-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Loading and error messages */
+  .loading-message,
+  .error-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: #777;
+  }
+  

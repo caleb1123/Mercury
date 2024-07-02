@@ -1,12 +1,4 @@
-body {
-  background-color: #fff;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  width: 100%;
-}
+
 .container {
     background-color: #fff;
     display: flex;

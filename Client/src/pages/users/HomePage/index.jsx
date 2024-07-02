@@ -13,9 +13,6 @@ import pic3 from './image/pic3.jpg'
 function HomePage() {
   const [inputValue, setInputValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [upcomingAuctions, setUpcomingAuctions] = useState([]);
-  const [recommendedAuctions, setRecommendedAuctions] = useState([]);
-  const [bidNowItems, setBidNowItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,10 +23,6 @@ function HomePage() {
 
     
   }, []);
-
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
-  };
 
   const handleClick = () => {
     window.location.href = '/ViewJewelryList';

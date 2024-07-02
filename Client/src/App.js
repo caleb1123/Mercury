@@ -12,7 +12,7 @@ import ViewAuction from './pages/users/ViewAuction';
 import StaffPage from './pages/staff/staff';
 import ViewProfile from './pages/users/ViewProfile';
 import ManagerPage from './pages/manager/manager';
-
+import ViewPost from './pages/users/ViewPost';
 
 
 
@@ -32,7 +32,7 @@ function App() {
         <Route path="/Staff" element={<StaffPage/>} />
         <Route path="/viewProfile" element={<ViewProfile/>} />
         <Route path="/manager" element={<ManagerPage/>} />
-
+        <Route path="/ViewPost" element={<ViewPost/>} />
 
 
 

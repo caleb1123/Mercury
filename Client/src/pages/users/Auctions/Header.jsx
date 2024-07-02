@@ -3,9 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
-import "./Header.css";
 
-// Dữ liệu tĩnh cho các category, bạn có thể thay thế bằng API call để lấy dữ liệu từ backend
 const categories = [
   { id: 1, name: "RINGS" },
   { id: 2, name: "BRACELETS" },
@@ -17,7 +15,7 @@ const categories = [
   { id: 8, name: "WATCHES" },
 ];
 
-const auction_op = [
+const auction_choices = [
   { id: 1, name: "Live Auctions" },
   { id: 2, name: "Upcoming Auctions" },
   { id: 3, name: "Past Auctions" },
@@ -26,7 +24,7 @@ const auction_op = [
 const Header = ({ isLoggedIn, handleProfileClick }) => {
   const navigate = useNavigate();
   const [showCategories, setShowCategories] = useState(false);
-  const [showAuctionOp, setShowAuctionOp] = useState(false);
+  const [showAuctions, setShowAuctions] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -36,15 +34,17 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
   const handleCategoryMouseEnter = () => {
     setShowCategories(true);
   };
-  const handleAuctionMouseEnter = () => {
-    setShowAuctionOp(true);
-  };
 
   const handleCategoryMouseLeave = () => {
     setShowCategories(false);
   };
-  const handleAuctionMouseLeave = () => {
-    setShowAuctionOp(false);
+
+  const handleAuctionsMouseEnter = () => {
+    setShowAuctions(true);
+  };
+
+  const handleAuctionsMouseLeave = () => {
+    setShowAuctions(false);
   };
 
   return (
@@ -78,24 +78,25 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
       <div className="Down_Header">
         <div className="Bar_Home">
           <div
-            onMouseEnter={handleAuctionMouseEnter}
-            onMouseLeave={handleAuctionMouseLeave}
+            onMouseEnter={handleAuctionsMouseEnter}
+            onMouseLeave={handleAuctionsMouseLeave}
             className="world_bar_style"
+            style={{ cursor: "pointer" }}
           >
             AUCTIONS
-            {showAuctionOp && (
+            {showAuctions && (
               <div
-                className="CategoryList"
-                onMouseEnter={handleAuctionMouseEnter}
-                onMouseLeave={handleAuctionMouseLeave}
+                className="AuctionsList"
+                onMouseEnter={handleAuctionsMouseEnter}
+                onMouseLeave={handleAuctionsMouseLeave}
               >
-                {auction_op.map((category) => (
+                {auction_choices.map((choice) => (
                   <div
-                    key={category.id}
-                    className="CategoryItem"
-                    onClick={() => navigate(`/auctions/${category.id}`)}
+                    key={choice.id}
+                    className="AuctionItem"
+                    onClick={() => navigate(`/auctions/${choice.id}`)}
                   >
-                    {category.name}
+                    {choice.name}
                   </div>
                 ))}
               </div>
@@ -108,6 +109,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             onMouseEnter={handleCategoryMouseEnter}
             onMouseLeave={handleCategoryMouseLeave}
             className="world_bar_style"
+            style={{ cursor: "pointer" }}
           >
             CATEGORY
             {showCategories && (
@@ -128,7 +130,9 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </div>
             )}
           </div>
-          <NavLink to="./ViewPost" className="world_bar_style">BLOG</NavLink>
+          <NavLink to="./ViewPost" className="world_bar_style">
+            BLOG
+          </NavLink>
         </div>
       </div>
     </div>
