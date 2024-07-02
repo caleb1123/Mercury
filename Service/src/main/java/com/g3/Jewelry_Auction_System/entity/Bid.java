@@ -32,4 +32,12 @@ public class Bid {
     @ManyToOne
     @JoinColumn(name = "accountId")
     private Account account;
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "bidId=" + bidId +
+                ", bidAmount=" + bidAmount +
+                // other fields, but don't include the ones that cause circular references
+                '}';
+    }
 }

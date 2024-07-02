@@ -82,21 +82,8 @@ public class Account {
     public String toString() {
         return "Account{" +
                 "accountId=" + accountId +
-                ", fullName='" + fullName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
-                ", dob=" + dob +
-                ", email='" + email + '\'' +
-                ", sex=" + sex +
-                ", phone='" + phone + '\'' +
-                ", resetPasswordToken='" + resetPasswordToken + '\'' +
-                ", status=" + status +
-                ", bids=" + bids +
-                ", payments=" + payments +
-                ", posts=" + posts +
-                ", role=" + role +
-                ", requests=" + requests +
+                ", username=" + userName +
+                // other fields, but don't include the ones that cause circular references
                 '}';
     }
 }
