@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./ViewPost.css";
-import { NavLink } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import line from './image/line-3.svg';
+import "./ViewAuction.css";
+import {jwtDecode} from 'jwt-decode';
 
 const NavItem = ({ children }) => (
   <div className="nav-item">{children}</div>
@@ -85,7 +87,19 @@ function ViewPost() {
     return rows;
   };
 
-  const postRows = createRows(posts, 2);
+  const handleBidChange = (event) => {
+    setSelectedBid(event.target.value);
+  };
+
+  const handleViewResultClick = () => {
+    fetchWinnerData(auction.auctionId);
+  };
+
+  if (!jewelry || !auction) {
+    return <div>Loading...</div>;
+  }
+
+  const nextBids = getNextBids(auction.currentPrice);
 
   return (
     <div className="container">
@@ -121,7 +135,20 @@ function ViewPost() {
                     excerpt={post.content}
                   />
                 </div>
-              ))}
+              ))
+            ) : (
+              <div>No bids yet</div>
+            )}
+          </div>
+          {winner && (
+            <div className="WinnerInfo">
+              <h3>Winner Information</h3>
+              <div className="info_WordStyle"><strong>Winner ID:</strong> {winner.winnerId}</div>
+              <div className="info_WordStyle"><strong>Username:</strong> {winner.username}</div>
+              <div className="info_WordStyle"><strong>Bid Amount:</strong> ${winner.bidAmount}</div>
+              <div className="info_WordStyle"><strong>Jewelry ID:</strong> {winner.jewelryId}</div>
+              <div className="info_WordStyle"><strong>Jewelry Name:</strong> {winner.jewelryName}</div>
+              <div className="info_WordStyle"><strong>Auction ID:</strong> {winner.auctionId}</div>
             </div>
           ))}
         </section>
@@ -130,4 +157,4 @@ function ViewPost() {
   );
 }
 
-export default ViewPost;
+export default ViewAuction;

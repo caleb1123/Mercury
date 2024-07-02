@@ -60,6 +60,8 @@ export default function SignIn() {
           window.location.href = '/';
         }else if(decodedToken.scope === 'STAFF'){
           window.location.href='/Staff'
+        }else if(decodedToken.scope === 'MANAGER'){
+          window.location.href='/Manager'
         }
 
         setMessage('Login successfully');

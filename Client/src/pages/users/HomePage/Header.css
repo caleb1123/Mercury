@@ -1,0 +1,46 @@
+.Header {
+    background-color: #F2EAD3;
+    color: #3F2305;
+  }
+  
+  .UpHeader,
+  .Down_Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  .Mercury {
+    color: #3F2305;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .Login_CreaAccount {
+    display: flex;
+    align-items: center;
+  }
+  
+  .NavLink_Style, .LoginStyle, .LogoutButton, .world_bar_style {
+    color: #3F2305;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  
+  .Line img {
+    width: 100%;
+  }
+  
+  .Bar_Home {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .Search {
+    padding: 5px;
+    font-size: 16px;
+  }
+  

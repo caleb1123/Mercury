@@ -81,7 +81,10 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository
                 .findById(auctionId)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
-        auction.setStatus("Delete");
+        auction.setStatus("Deleted");
+        Jewelry jewelry = auction.getJewelry();
+        jewelry.setStatus(false);
+        jewelryRepository.save(jewelry);
         auctionRepository.save(auction);
     }
     @Override
@@ -92,28 +95,23 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
-
-        if (auctionDTO.getStartDate() != null) {
-            if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
-                throw new AppException(ErrorCode.INVALID_STARTDATE);
-            } else {
-                auction.setStartDate(auctionDTO.getStartDate());
+        if(auction.getStatus() == "Pending"){
+            if (auctionDTO.getStartDate() != null) {
+                if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
+                    throw new AppException(ErrorCode.INVALID_STARTDATE);
+                } else {
+                    auction.setStartDate(auctionDTO.getStartDate());
+                }
             }
-        }
-        if (auctionDTO.getEndDate() != null) {
-            if (LocalDateTime.now().isAfter(auctionDTO.getEndDate())) {
-                throw new AppException(ErrorCode.INVALID_ENDDATE);
-            } else {
-                auction.setEndDate(auctionDTO.getEndDate());
+            if (auctionDTO.getEndDate() != null) {
+                if (LocalDateTime.now().isAfter(auctionDTO.getEndDate())) {
+                    throw new AppException(ErrorCode.INVALID_ENDDATE);
+                } else {
+                    auction.setEndDate(auctionDTO.getEndDate());
+                }
             }
-        }
-        if (auctionDTO.getCurrentPrice() > auction.getCurrentPrice()) {
-            auction.setCurrentPrice(auctionDTO.getCurrentPrice());
-        }
-        if (auctionDTO.getStatus() != null) {
-            auction.setStatus(auctionDTO.getStatus());
-        }
-        auctionRepository.save(auction);
+            auctionRepository.save(auction);
+        }else  throw  new AppException(ErrorCode.INVALID_STATUS);
     }
     @Override
     public List<AuctionDTO> getAuctionList() {

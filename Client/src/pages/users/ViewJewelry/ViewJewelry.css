@@ -7,8 +7,8 @@
   flex-wrap: wrap; 
   align-items: center; 
   text-align: center;
-  background-color: #000000;
-  color: white;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
 }
 .PageName_ViewJewelry{
   padding: 0 25px 0;
@@ -30,13 +30,18 @@ body{
   width: 100%; 
   margin: 0 auto;
   display: flex;
+  border-style: solid;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 .ImageFrame{
+  margin-top: 20px;
   display: flex;
   background-color: #5f4a3a;
   flex-direction: column;
   padding: 50px;
   gap: 84px;
+  border-radius: 20px;
 
 }
 .Image{
@@ -52,6 +57,7 @@ top: 72px;
   padding: 5px 105px 0;
   min-width: 539px;
   width: 0;
+  border: black;
 
 }
 .JewelryName{
@@ -107,12 +113,4 @@ top: 72px;
   top: 10px;
   right: 10px;
   cursor: pointer;
-}
-.PlaceBidNextButton{
-  font-size: 24px; 
-  background-color: rgb(99 186 238);
-  color: white;
-  cursor: pointer;
-  border-radius:5px ;
-  margin: 15px 0 0 5px;
 }

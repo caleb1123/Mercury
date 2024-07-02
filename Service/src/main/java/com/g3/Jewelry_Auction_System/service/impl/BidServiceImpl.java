@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,23 +43,21 @@ public class BidServiceImpl implements BidService {
     public BidDTO createBid(BidDTO bidDTO) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        Optional<Account> account  = accountRepository.findByUserName(name);
+        Account account  = accountRepository.findByUserName(name).orElse(null);
         if (name.equals("anonymousUser")) {
             throw new AppException(ErrorCode.NOT_LOGGED_IN);
-        } else if (account.isEmpty()) {
+        } else if (account ==null ) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
-        bidDTO.setAccountId(account.get().getAccountId());
-        if (bidRepository.findById(bidDTO.getBidId()).isPresent()) {
-            throw new AppException(ErrorCode.ID_EXISTED);
-        }
+        bidDTO.setAccountId(account.getAccountId());
         if (bidDTO.getBidAmount() < 1) {
             throw new AppException(ErrorCode.INVALID_VALUE);
         }
         Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
-        if (auction.getEndDate().isBefore(LocalDateTime.now())) {
+        if (auction.getEndDate().isBefore(LocalDateTime.now()) ||
+                Objects.equals(auction.getStatus(), "Pending")) {
             throw new AppException(ErrorCode.AUCTION_CLOSED);
         } else
 //        if
@@ -69,11 +68,11 @@ public class BidServiceImpl implements BidService {
 //            return bidConverter.toDTO(bid);
 //        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
         {
-            Optional<Bid> highestBid = bidRepository
-                    .getHighestBidAmount(auction.getAuctionId());
+            Bid highestBid = bidRepository
+                    .getHighestBidAmount(auction.getAuctionId()).orElse(null);
             double currentPrice = auction.getCurrentPrice();
-            if (highestBid.isPresent() && highestBid.get().getBidAmount() > currentPrice) {
-                currentPrice = highestBid.get().getBidAmount();
+            if (highestBid != null && highestBid.getBidAmount() > currentPrice) {
+                currentPrice = highestBid.getBidAmount();
             }
             if (bidDTO.getBidAmount() > currentPrice) {
                 bidDTO.setBidTime(LocalDateTime.now());

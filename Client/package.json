@@ -1,7 +1,7 @@
 {
-  "scripts": {
-    "start": "cross-env PORT=3001 react-scripts start"
-  },
+  "name": "react_fe_mercury",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.21",
@@ -35,5 +35,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.24.6",
+    "cross-env": "^7.0.3"
   }
 }
