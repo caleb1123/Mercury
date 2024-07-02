@@ -25,8 +25,6 @@ public class JewelryImageController {
             String imageUrl = jewelryImageService.uploadImageToGoogleDrive(file,jewelryId);
             String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
             jewelryImageService.setFilePublic(fileId);
-             var jewelry = jewelryImageRepository.findByFileId(fileId);
-            jewelry.setFileId(fileId);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image: " + e.getMessage());
