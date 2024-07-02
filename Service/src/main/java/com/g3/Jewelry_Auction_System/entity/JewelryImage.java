@@ -20,6 +20,8 @@ public class JewelryImage {
     private int jewelryImageId;
 
     @Column
+    private String fileId;
+    @Column
     private String jewelryImageURL;
 
     @ManyToOne

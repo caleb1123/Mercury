@@ -10,9 +10,16 @@ import com.g3.Jewelry_Auction_System.repository.JewelryImageRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import com.g3.Jewelry_Auction_System.repository.PostImageRepository;
 import com.g3.Jewelry_Auction_System.service.JewelryImageService;
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File; // Ensure this import is correct
+
+import com.google.api.services.drive.model.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,15 +33,18 @@ public class JewelryImageServiceImpl implements JewelryImageService {
     PostImageRepository postImageRepository;
     @Autowired
     JewelryImageConverter jewelryImageConverter;
+    @Autowired
+    Drive drive;
 
     @Override
     public JewelryImageDTO addJewelryImage(JewelryImageDTO jewelryImageDTO) {
-        Jewelry jewelry = jewelryRepository.findById(jewelryImageDTO.getJewelryId())
+        jewelryRepository.findById(jewelryImageDTO.getJewelryId())
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
         if (jewelryImageDTO.getJewelryImageURL().isEmpty()) {
             throw new IllegalArgumentException("Jewelry image URL is empty");
         }
-        JewelryImage image = jewelryImageRepository.save(jewelryImageConverter.toEntity(jewelryImageDTO));
+        JewelryImage image = jewelryImageConverter.toEntity(jewelryImageDTO);
+        jewelryImageRepository.save(image);
         return jewelryImageConverter.toDTO(image);
     }
 
@@ -50,5 +60,54 @@ public class JewelryImageServiceImpl implements JewelryImageService {
             }
         }
         return dtoList;
+    }
+    @Override
+    public String uploadImageToGoogleDrive(MultipartFile file, int id) throws IOException {
+        Jewelry jewelry = jewelryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
+        if(jewelry!= null){
+            com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
+            fileMetadata.setName(file.getOriginalFilename());
+
+            ByteArrayContent mediaContent = new ByteArrayContent(file.getContentType(), file.getBytes());
+
+            com.google.api.services.drive.model.File uploadedFile = drive.files().create(fileMetadata, mediaContent)
+                    .setFields("id")
+                    .execute();
+            JewelryImage jewelryImage = new JewelryImage();
+            jewelryImage.setJewelry(jewelry);
+            String imageUrl = "https://drive.google.com/uc?id=" + uploadedFile.getId();
+            jewelryImage.setJewelryImageURL(imageUrl);
+            String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
+            jewelryImage.setFileId(fileId); // Assuming you have a setFileId method in JewelryImage class
+            jewelryImageRepository.save(jewelryImage);
+            return imageUrl;
+        }else {
+            return "upload fail";
+        }
+    }
+
+
+    @Override
+    public void setFilePublic(String fileId) throws IOException {
+        // Create a permission object with 'anyone' type and 'reader' role
+        Permission permission = new Permission()
+                .setType("anyone")
+                .setRole("reader");
+
+        // Create a permission request
+        Drive.Permissions.Create permissionRequest = drive.permissions().create(fileId, permission);
+
+        // Execute the request
+        permissionRequest.execute();
+    }
+
+    @Override
+    public boolean deleteImage(String fileId) throws IOException {
+        if(jewelryImageRepository.findByFileId(fileId) != null){
+            drive.files().delete(fileId).execute();
+            return true;
+        }
+        return false;
     }
 }
