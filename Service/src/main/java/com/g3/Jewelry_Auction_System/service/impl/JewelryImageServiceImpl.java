@@ -100,4 +100,13 @@ public class JewelryImageServiceImpl implements JewelryImageService {
         // Execute the request
         permissionRequest.execute();
     }
+
+    @Override
+    public boolean deleteImage(String fileId) throws IOException {
+        if(jewelryImageRepository.findByFileId(fileId) != null){
+            drive.files().delete(fileId).execute();
+            return true;
+        }
+        return false;
+    }
 }

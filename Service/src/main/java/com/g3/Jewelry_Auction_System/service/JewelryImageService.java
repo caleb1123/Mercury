@@ -12,4 +12,6 @@ public interface JewelryImageService {
     List<JewelryImageDTO> getImagesByJewelryId(int id);
     String uploadImageToGoogleDrive(MultipartFile file,int id) throws IOException;
     void setFilePublic(String fileId) throws IOException;
+
+    boolean deleteImage(String fileId) throws IOException;
 }

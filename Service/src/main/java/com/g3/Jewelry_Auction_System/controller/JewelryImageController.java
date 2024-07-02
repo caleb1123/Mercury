@@ -43,4 +43,20 @@ public class JewelryImageController {
         List<JewelryImageDTO> list = jewelryImageService.getImagesByJewelryId(jewelryId);
         return new ResponseEntity<>(list , HttpStatus.OK);
     }
+
+
+    @DeleteMapping("/delete/{fileId}")
+    public ResponseEntity<String> deleteImage(@PathVariable String fileId) {
+        try {
+            boolean isDeleted = jewelryImageService.deleteImage(fileId);
+            if (isDeleted) {
+                return ResponseEntity.ok("Image deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image not found");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete image: " + e.getMessage());
+        }
+    }
+
 }
