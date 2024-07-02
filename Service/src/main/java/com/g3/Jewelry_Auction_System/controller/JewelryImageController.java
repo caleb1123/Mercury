@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryImageDTO;
+import com.g3.Jewelry_Auction_System.repository.JewelryImageRepository;
 import com.g3.Jewelry_Auction_System.service.JewelryImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,16 @@ import java.util.List;
 public class JewelryImageController {
     @Autowired
     JewelryImageService jewelryImageService;
+    @Autowired
+    JewelryImageRepository jewelryImageRepository;
     @PostMapping("/upload/{jewelryId}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,@PathVariable int jewelryId) {
         try {
             String imageUrl = jewelryImageService.uploadImageToGoogleDrive(file,jewelryId);
             String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
             jewelryImageService.setFilePublic(fileId);
+             var jewelry = jewelryImageRepository.findByFileId(fileId);
+            jewelry.setFileId(fileId);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image: " + e.getMessage());
