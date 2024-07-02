@@ -134,9 +134,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public List<AuctionDTO> getAuctionByStatus(String status) {
-        List<AuctionDTO> auctionDTOList = getAuctionList();
-        auctionDTOList.removeIf(auctionDTO -> !auctionDTO.getStatus().equals(status));
-        return auctionDTOList;
+        //List<AuctionDTO> auctionDTOList = getAuctionList();
+        //auctionDTOList.removeIf(auctionDTO -> !auctionDTO.getStatus().equals(status.toUpperCase()));
+        return auctionConverter.toDTO(auctionRepository.getAuctionByStatus(status));
     }
     @Override
     public List<AuctionDTO> getLiveAuctionList() {
@@ -183,8 +183,6 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
-
-
                 var account =accountRepository.findById(auction.getWinnerId()).orElseThrow(
                         ()-> new AppException(ErrorCode.USER_NOT_EXISTED)
                 );

@@ -74,7 +74,6 @@ public class BidController {
         }
     }
 
-
     @PostMapping("/submitBid")
     public ResponseEntity<BidResponse> submitBid(@RequestBody BidDTO bidDTO) {
         BidDTO newBid = bidService.createBid(bidDTO);
