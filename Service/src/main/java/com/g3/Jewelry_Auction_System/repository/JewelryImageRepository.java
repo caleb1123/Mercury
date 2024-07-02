@@ -11,4 +11,5 @@ import java.util.List;
 public interface JewelryImageRepository extends JpaRepository<JewelryImage, Integer> {
     @Query(value = "SELECT * FROM Jewelry_Image where jewelry_id = :id" , nativeQuery = true)
     List<JewelryImage> getByJewelryId(int id);
+    JewelryImage findByFileId(String fileId);
 }
