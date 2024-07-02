@@ -63,15 +63,4 @@ public class JewelryConverter {
         }
         return jewelryDTOList;
     }
-
-    public WinnerResponse toWinnerResponse(Jewelry jewelry) {
-        if (jewelry == null) {
-            return null;
-        }
-        WinnerResponse dto = new WinnerResponse();
-        dto.setJewelryId(jewelry.getJewelryId());
-        dto.setJewelryName(jewelry.getJewelryName());
-        return dto;
-    }
-
 }

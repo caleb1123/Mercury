@@ -130,12 +130,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public List<AuctionDTO> getAuctionList() {
-        List<Auction> auctions = auctionRepository.findAll();
-        List<AuctionDTO> auctionDTOList = new ArrayList<>();
-        for (Auction auction : auctions) {
-            auctionDTOList.add(auctionConverter.toDTO(auction));
-        }
-        return auctionDTOList;
+        return auctionConverter.toDTO(auctionRepository.findAll());
     }
     @Override
     public List<AuctionDTO> getAuctionByStatus(String status) {
@@ -174,8 +169,8 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public BidDTO getHighestBid(int auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(
-                ()-> new AppException(ErrorCode.AUCTION_NOT_FOUND)
+        auctionRepository.findById(auctionId).orElseThrow(
+                () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
         Bid highestBid = bidRepository
                 .getHighestBidAmount(auctionId)
@@ -206,9 +201,6 @@ public class AuctionServiceImpl implements AuctionService {
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
-
-
-
     }
 
     @Override

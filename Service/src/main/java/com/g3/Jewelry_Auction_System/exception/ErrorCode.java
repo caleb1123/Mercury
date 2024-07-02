@@ -39,7 +39,9 @@ public enum ErrorCode {
     INVALID_ENDDATE(1030,"End date cannot be before current date",HttpStatus.BAD_REQUEST),
     LIST_EMPTY(1031,"List is empty",HttpStatus.NOT_FOUND),
     REQUEST_NOT_FOUND(1032, "Request not found", HttpStatus.NOT_FOUND),
-    INVALID_STATUS(1033,"Invalid status",HttpStatus.BAD_REQUEST );
+    POST_NOT_FOUND(1033,"Post not found",HttpStatus.BAD_REQUEST ),
+    INVALID_STATUS(1034,"Invalid status",HttpStatus.BAD_REQUEST ),
+    NO_IMAGE_FOUND(1035,"Image not found",HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
