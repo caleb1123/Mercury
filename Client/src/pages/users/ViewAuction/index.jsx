@@ -212,7 +212,6 @@ function ViewAuction() {
         }
       });
 
-      // Update bids and current price without reloading
       const newBid = {
         bidAmount: selectedBid,
         username: username,
@@ -222,6 +221,7 @@ function ViewAuction() {
       setAuction(prevState => ({ ...prevState, currentPrice: selectedBid }));
 
       setNotification({ type: 'success', message: 'Bid placed successfully!' });
+      window.location.reload();
     } catch (error) {
       console.error('Error creating bid:', error);
       console.error(error.response ? error.response.data : error.message);

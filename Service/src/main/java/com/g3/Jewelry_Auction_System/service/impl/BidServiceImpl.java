@@ -80,7 +80,7 @@ public class BidServiceImpl implements BidService {
                 bidRepository.save(bid);
                 return bidDTO;
             } else {
-                throw new AppException(ErrorCode.INVALID_BID);
+                throw new RuntimeException("Bid amount exceeds current price");
             }
         }
     }
