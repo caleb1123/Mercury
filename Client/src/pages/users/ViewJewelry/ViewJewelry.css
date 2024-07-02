@@ -8,7 +8,7 @@
   align-items: center; 
   text-align: center;
   background-color: #ffffff;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .PageName_ViewJewelry{
   padding: 0 25px 0;
@@ -30,13 +30,18 @@ body{
   width: 100%; 
   margin: 0 auto;
   display: flex;
+  border-style: solid;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 .ImageFrame{
+  margin-top: 20px;
   display: flex;
   background-color: #5f4a3a;
   flex-direction: column;
   padding: 50px;
   gap: 84px;
+  border-radius: 20px;
 
 }
 .Image{
@@ -52,6 +57,7 @@ top: 72px;
   padding: 5px 105px 0;
   min-width: 539px;
   width: 0;
+  border: black;
 
 }
 .JewelryName{
