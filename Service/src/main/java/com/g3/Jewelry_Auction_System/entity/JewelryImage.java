@@ -23,6 +23,8 @@ public class JewelryImage {
     private String fileId;
     @Column
     private String jewelryImageURL;
+    @Column
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "jewelryId")

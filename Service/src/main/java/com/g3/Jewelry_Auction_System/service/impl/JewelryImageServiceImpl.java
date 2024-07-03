@@ -101,12 +101,23 @@ public class JewelryImageServiceImpl implements JewelryImageService {
         permissionRequest.execute();
     }
 
+
     @Override
     public boolean deleteImage(String fileId) throws IOException {
-        if(jewelryImageRepository.findByFileId(fileId) != null){
+       JewelryImage image =  jewelryImageRepository.findByFileId(fileId);
+        if(image != null){
             drive.files().delete(fileId).execute();
+            image.setStatus(false);
+            jewelryImageRepository.save(image);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JewelryImageDTO getImageByFileId(String fileId) {
+        JewelryImage image = jewelryImageRepository.findByFileId(fileId);
+
+        return jewelryImageConverter.toDTO(image);
     }
 }

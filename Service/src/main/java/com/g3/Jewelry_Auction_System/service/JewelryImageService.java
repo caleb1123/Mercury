@@ -14,4 +14,5 @@ public interface JewelryImageService {
     void setFilePublic(String fileId) throws IOException;
 
     boolean deleteImage(String fileId) throws IOException;
+    JewelryImageDTO getImageByFileId(String fileId);
 }
