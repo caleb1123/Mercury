@@ -51,7 +51,6 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             </>
           )}
         </div>
-        
       </div>
       <div className="Line">
         <img src={line} alt="line" />
@@ -68,15 +67,22 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           >
             CATEGORY
             {showCategories && (
-              <div className="CategoryList">
+              <div 
+                className="CategoryList"
+                onMouseEnter={handleCategoryMouseEnter}
+                onMouseLeave={handleCategoryMouseLeave}
+              >
                 {categories.map(category => (
-                  <div key={category.id} className="CategoryItem">
+                  <div 
+                    key={category.id} 
+                    className="CategoryItem"
+                    onClick={() => navigate(`/category/${category.id}`)}
+                  >
                     {category.name}
                   </div>
                 ))}
               </div>
             )}
-            
           </div>
           <div className="world_bar_style">BLOG</div>
         </div>

@@ -79,7 +79,6 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             
           </div>
           <div className="world_bar_style">BLOG</div>
-          <input className="Search" type="text" placeholder="Search" />
         </div>
       </div>
     </div>

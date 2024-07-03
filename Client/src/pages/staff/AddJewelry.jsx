@@ -23,6 +23,8 @@ const AddJewelry = ({ fetchJewelry }) => {
     jewelryCategoryId: ''
   });
 
+  const [imageFile, setImageFile] = useState(null);
+
   const categories = [
     { jewelry_category_id: 1, category_name: 'RINGS' },
     { jewelry_category_id: 2, category_name: 'BRACELETS' },
@@ -42,9 +44,25 @@ const AddJewelry = ({ fetchJewelry }) => {
     });
   };
 
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
   const handleAddJewelry = async () => {
     try {
-      console.log('Sending payload:', newJewelry);
+      // Upload image first
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        const imageUploadResponse = await axios.post('http://localhost:8088/jewelryImage/upload/101', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        newJewelry.image = imageUploadResponse.data.imageUrl; // Assuming the server returns the image URL in imageUrl field
+      }
+
+      // Add jewelry details
       const response = await axios.post('http://localhost:8088/jewelry/add', newJewelry);
       console.log('Server response:', response);
       fetchJewelry(); // Refresh the list
@@ -60,6 +78,7 @@ const AddJewelry = ({ fetchJewelry }) => {
         status: true,
         jewelryCategoryId: ''
       }); // Reset form
+      setImageFile(null); // Reset image file
     } catch (error) {
       console.error('Error adding jewelry:', error.response ? error.response.data : error.message);
     }
@@ -108,13 +127,11 @@ const AddJewelry = ({ fetchJewelry }) => {
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Image"
-        name="image"
-        value={newJewelry.image}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
+      <input
+        accept="image/*"
+        type="file"
+        onChange={handleFileChange}
+        style={{ margin: '20px 0' }}
       />
       <TextField
         label="Jewelry Name"

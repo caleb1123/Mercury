@@ -24,7 +24,6 @@ import {
   Gavel as AuctionIcon,
   Assignment as RequestIcon,
   ExitToApp as ExitToAppIcon,
-  Search as SearchIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
@@ -212,7 +211,7 @@ function ManagerPage() {
   };
 
   return (
-    <Grid container sx={{ height: '100vh', backgroundColor: '#000', color: '#fff' }}>
+    <Grid container sx={{ height: '100vh', width: '100vw', backgroundColor: '#000', color: '#fff' }}>
       <Grid item xs={2} container direction="column" justifyContent="space-between" alignItems="center">
         <Grid item>
           <List>
@@ -240,9 +239,6 @@ function ManagerPage() {
               </ListItemIcon>
               <ListItemText primary="Requests" />
             </ListItem>
-            <ListItem button selected={selectedIndex === 4} onClick={() => handleListItemClick(4)} sx={{ color: '#fff' }}>
-
-            </ListItem>
             <Divider sx={{ backgroundColor: '#fff' }} />
             <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }}>
               <ListItemIcon sx={{ color: '#fff' }}>
@@ -261,7 +257,7 @@ function ManagerPage() {
 
       <Grid item xs={10} sx={{ backgroundColor: '#000', padding: 2 }}>
         <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
-          <Box sx={{ width: '80%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
+          <Box sx={{ width: '100%', maxWidth: '1200px', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
             {selectedIndex === 0 && !showAddAuction && !showEditAuction && (
               <Paper sx={{ padding: 2 }}>
                 <Typography variant="h6">Profile</Typography>
