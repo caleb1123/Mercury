@@ -13,9 +13,9 @@ import java.time.LocalDate;
 public class PaymentDTO {
     private int paymentId;
     private LocalDate paymentDate;
+    private String paymentStatus;
     private double amount;
-    private String paymentMethod;
-    private String address;
+    private int paymentCode;
     private int auctionId;
     private int accountId;
 }

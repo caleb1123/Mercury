@@ -1,14 +1,17 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
 import com.g3.Jewelry_Auction_System.configuration.VnPayConfig;
+import com.g3.Jewelry_Auction_System.converter.PaymentConverter;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.entity.Bid;
 import com.g3.Jewelry_Auction_System.entity.Payment;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
+import com.g3.Jewelry_Auction_System.payload.DTO.PaymentDTO;
 import com.g3.Jewelry_Auction_System.payload.request.PaymentRequest2;
 import com.g3.Jewelry_Auction_System.payload.request.PaymentResquest;
+import com.g3.Jewelry_Auction_System.payload.response.PaymentResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
@@ -16,15 +19,10 @@ import com.g3.Jewelry_Auction_System.repository.PaymentRepository;
 import com.g3.Jewelry_Auction_System.service.PaymentService;
 import com.g3.Jewelry_Auction_System.vnpay.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -38,28 +36,28 @@ public class PaymentServiceImpl implements PaymentService {
     AccountRepository accountRepository;
     @Autowired
     PaymentRepository paymentRepository;
+    @Autowired
+    PaymentConverter paymentConverter;
 
     @Override
     public PaymentResquest createVnPayPayment(PaymentRequest2 paymentRequest2,HttpServletRequest request) {
-        Auction auction = auctionRepository.getReferenceById(Integer.valueOf(paymentRequest2.getAuctionId()));
+        Auction auction = auctionRepository.findById(paymentRequest2.getAuctionId()).orElse(null);
         if (auction == null) {
             throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
         }
 
-        Bid bid = bidRepository.getHighestBidAmount(Integer.parseInt(paymentRequest2.getAuctionId())).orElseThrow(
+        Bid bid = bidRepository.getHighestBidAmount(paymentRequest2.getAuctionId()).orElseThrow(
                 ()-> new AppException(ErrorCode.BID_NOT_FOUND)
         );
-
-        Account account = accountRepository.getReferenceById(bid.getAccount().getAccountId());
+        Account account = accountRepository.findById(bid.getAccount().getAccountId()).orElse(null);
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
 
-
         long amount = (long) bid.getBidAmount()*100;
         String bankCode = paymentRequest2.getBankCode();
-        String auctionId = paymentRequest2.getAuctionId();
-        String username = paymentRequest2.getUsername();
+        int auctionId = paymentRequest2.getAuctionId();
+        String username = account.getUserName();
         String transactionId = paymentRequest2.getTransactionId();
         Map<String, String> vnpParamsMap;
 
@@ -96,7 +94,21 @@ public class PaymentServiceImpl implements PaymentService {
                 .paymentUrl(paymentUrl).build();
     }
 
-
-
-
+    @Override
+    public PaymentResponse handleCallback(HttpServletRequest request) {
+        String status = request.getParameter("vnp_ResponseCode");
+        String paymentCode = request.getParameter("vnp_TxnRef");
+        Payment payment = paymentRepository.getPaymentByCode(paymentCode);
+        if (status.equals("00")) {
+            payment.setPaymentStatus("SUCCESSFUL");
+            payment.setPaymentDate(LocalDate.now());
+            paymentRepository.save(payment);
+            return new PaymentResponse(status, "SUCCESSFUL", paymentConverter.toDTO(payment));
+        }
+        else {
+            payment.setPaymentStatus("FAILED");
+            paymentRepository.save(payment);
+            return new PaymentResponse(status, "FAILED", paymentConverter.toDTO(payment));
+        }
+    }
 }

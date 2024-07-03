@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PaymentResponse {
-    private int code;
+    private String code;
     private String message;
     private Object data;
 }
