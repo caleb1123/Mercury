@@ -1,25 +1,19 @@
 .Header {
-  background-color: #f2ead3;
   color: #3f2305;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 10px;
 }
 
-.UpHeader {
+.UpHeader,
+.Down_Header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   max-width: 1200px;
-  background-color: #333;
   padding: 10px;
 }
 
 .Mercury {
-  color: white;
-  text-decoration: none;
+  color: #3f2305;
   font-size: 24px;
   font-weight: bold;
 }
@@ -31,44 +25,33 @@
 
 .LoginStyle,
 .LogoutButton {
-  color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
+  color: #3f2305;
+  text-decoration: none;
   margin-left: 10px;
+}
+
+.world_bar_style {
+  color: #3f2305;
+  position: relative;
+  padding: 10px;
+  cursor: pointer;
 }
 
 .Line img {
   width: 100%;
 }
 
-.Down_Header {
-  width: 100%;
-  max-width: 1200px;
-  background-color: #444;
-}
-
 .Bar_Home {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  padding: 10px 0;
-  position: relative;
+  gap: 15px;
 }
 
-.world_bar_style {
-  color: white;
-  text-decoration: none;
-  position: relative;
-  padding: 10px;
-}
-
-.CategoryList,
-.AuctionsList {
+.AuctionsList,
+.CategoryList {
+  background-color: white;
   position: absolute;
   top: 100%;
-  left: 0;
-  background-color: #444;
   border: 1px solid #333;
   display: flex;
   flex-direction: column;
@@ -76,12 +59,17 @@
 
 .CategoryItem,
 .AuctionItem {
-  padding: 10px;
-  color: white;
   cursor: pointer;
 }
 
-.CategoryItem:hover,
-.AuctionItem:hover {
+.AuctionsList {
+  padding: 10px;
+  width: 190px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.CategoryItem:hover {
   background-color: #555;
+  color: white;
 }

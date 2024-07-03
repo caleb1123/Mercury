@@ -23,7 +23,6 @@
   align-items: center;
 }
 
-.NavLink_Style,
 .LoginStyle,
 .LogoutButton {
   color: #3f2305;
@@ -48,12 +47,11 @@
   gap: 15px;
 }
 
-.CategoryList,
-.AuctionsList {
+.AuctionsList,
+.CategoryList {
+  background-color: white;
   position: absolute;
   top: 100%;
-  left: 0;
-  background-color: #444;
   border: 1px solid #333;
   display: flex;
   flex-direction: column;
@@ -61,12 +59,17 @@
 
 .CategoryItem,
 .AuctionItem {
-  padding: 10px;
   cursor: pointer;
 }
 
-.CategoryItem:hover,
-.AuctionItem:hover {
+.AuctionsList {
+  padding: 10px;
+  width: 190px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.CategoryItem:hover {
   background-color: #555;
   color: white;
 }

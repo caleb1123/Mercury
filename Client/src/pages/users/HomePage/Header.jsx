@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
 
-// Dữ liệu tĩnh cho các category, bạn có thể thay thế bằng API call để lấy dữ liệu từ backend
 const categories = [
   { id: 1, name: "RINGS" },
   { id: 2, name: "BRACELETS" },
@@ -18,9 +17,9 @@ const categories = [
 ];
 
 const auction_op = [
-  { id: 1, name: "Live Auctions" },
-  { id: 2, name: "Upcoming Auctions" },
-  { id: 3, name: "Past Auctions" },
+  { id: 1, name: "LIVE AUCTIONS" },
+  { id: 2, name: "UPCOMING AUCTIONS" },
+  { id: 3, name: "PAST AUCTIONS" },
 ];
 
 const Header = ({ isLoggedIn, handleProfileClick }) => {
@@ -85,7 +84,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             AUCTIONS
             {showAuctionOp && (
               <div
-                className="CategoryList"
+                className="AuctionsList"
                 onMouseEnter={handleAuctionMouseEnter}
                 onMouseLeave={handleAuctionMouseLeave}
               >
@@ -93,7 +92,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/auctions/${category.id}`)}
+                    onClick={() => navigate(`/Auctions/${category.id}`)}
                   >
                     {category.name}
                   </div>
