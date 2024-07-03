@@ -24,6 +24,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +58,8 @@ public class BidServiceImpl implements BidService {
         Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
-        if (auction.getEndDate().isBefore(LocalDateTime.now())) {
+        if (auction.getEndDate().isBefore(LocalDateTime.now()) ||
+                Objects.equals(auction.getStatus(), "Pending")) {
             throw new AppException(ErrorCode.AUCTION_CLOSED);
         } else
 //        if

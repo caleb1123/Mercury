@@ -15,7 +15,8 @@ public class WebSocketController {
     @Autowired
     BidService bidService;
 
-    @MessageMapping("/bid/list/{auctionId}")
+
+    @MessageMapping("/bid//list/{auctionId}")
     @SendTo("/topic/bid/{auctionId}")
     public List<BidResponse> getBidByAuction(int auctionId){
         return bidService.getBidByAuction(auctionId);

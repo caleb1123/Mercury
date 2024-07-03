@@ -31,6 +31,16 @@ public class BidController {
     @PostMapping("/create")
     public ResponseEntity<BidDTO> createBid(@RequestBody BidDTO bidDTO) {
         BidDTO bid = bidService.createBid(bidDTO);
+
+        // Send bid response to WebSocket topic
+        AccountDTO account = accountService.getAccountByAccountId(bid.getAccountId());
+        BidResponse bidResponse = BidResponse.builder()
+                .bidAmount(bid.getBidAmount())
+                .username(account.getUserName())
+                .bidTime(Timestamp.valueOf(bid.getBidTime()))
+                .build();
+        messagingTemplate.convertAndSend("/topic/bid/" + bid.getAuctionId(), bidResponse);
+
         return new ResponseEntity<>(bid, HttpStatus.CREATED);
     }
 
@@ -90,6 +100,26 @@ public class BidController {
         // Return the created bid response DTO to the client
         return new ResponseEntity<>(bidResponse, HttpStatus.CREATED);
     }
+
+
+
+//    @CrossOrigin(origins = "http://localhost:3001")
+//    @PostMapping("/create")
+//    public ResponseEntity<BidResponse> submitBid(@RequestBody BidDTO bidDTO) {
+//         BidDTO newBid = bidService.createBid(bidDTO);
+//        AccountDTO account = accountService.getAccountByAccountId(bidDTO.getBidId());
+//        BidResponse bidResponse = BidResponse.builder()
+//                .bidAmount(newBid.getBidAmount())
+//                .username(account.getUserName()) // Assuming Account has a getUsername method
+//                .bidTime(Timestamp.valueOf(newBid.getBidTime()))
+//                .build();
+//
+//        // Send bid response to WebSocket topic
+//        messagingTemplate.convertAndSend("/topic/bids/" + newBid.getAuctionId(), bidResponse);
+//
+//        // Return the created bid response DTO to the client
+//        return new ResponseEntity<>(bidResponse, HttpStatus.CREATED);
+//    }
 
     @GetMapping("/increment/{auctionId}")
     public ResponseEntity<List<IncrementResponse>> getIncrementList(@PathVariable int auctionId) {

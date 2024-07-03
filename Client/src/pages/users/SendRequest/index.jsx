@@ -8,7 +8,6 @@ import {
   Typography,
   Dialog,
   DialogActions,
-  DialogContent,
   DialogContentText,
   DialogTitle,
   Grid,
@@ -19,6 +18,7 @@ import {
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import ViewRequests from "./ViewRequests"; // Import the new component
 
 const defaultTheme = createTheme();
 
@@ -35,7 +35,7 @@ const categories = [
 
 export default function SendRequest() {
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState("");
+  const [requestsOpen, setRequestsOpen] = useState(false);
   const [newJewelry, setNewJewelry] = useState({
     condition: "",
     description: "",
@@ -129,6 +129,14 @@ export default function SendRequest() {
     handleClose();
   };
 
+  const handleViewRequestsOpen = () => {
+    setRequestsOpen(true);
+  };
+
+  const handleViewRequestsClose = () => {
+    setRequestsOpen(false);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -163,6 +171,14 @@ export default function SendRequest() {
               alignItems: "center",
             }}
           >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleViewRequestsOpen}
+              sx={{ mb: 2 }}
+            >
+              View My Requests
+            </Button>
             <Typography component="h1" variant="h2">
               Send Jewelry Valuation Request
             </Typography>
@@ -254,25 +270,6 @@ export default function SendRequest() {
                 }}
               >
                 <DialogTitle>Successfully</DialogTitle>
-                {/* <DialogContent>
-                  <DialogContentText>
-                    Please enter your email address here. We will send updates
-                    occasionally.
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="email"
-                    name="email"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </DialogContent> */}
                   <DialogContentText
                           sx={{
                             textAlign: 'center',
@@ -283,9 +280,9 @@ export default function SendRequest() {
                   </DialogContentText>
                 <DialogActions>
                   <Button onClick={handleClose}>Close</Button>
-                  {/* <Button type="submit">Submit</Button> */}
                 </DialogActions>
               </Dialog>
+              <ViewRequests open={requestsOpen} onClose={handleViewRequestsClose} />
             </Paper>
           </Box>
         </Grid>

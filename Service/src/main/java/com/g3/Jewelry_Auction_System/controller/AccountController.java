@@ -68,8 +68,8 @@ public class AccountController {
         return ResponseEntity.ok(accountResponse);
     }
     @CrossOrigin(origins = "http://localhost:3001")
-    @GetMapping("/search")
-    public ResponseEntity<List<AccountResponse>> searchAccountByName(@RequestParam String name) {
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<AccountResponse>> searchAccountByName(@PathVariable String name) {
         List<AccountResponse> accounts = accountService.searchAccountByName(name);
         return ResponseEntity.ok(accounts);
     }
@@ -97,6 +97,8 @@ public class AccountController {
         SecurityContext context = SecurityContextHolder.getContext();
         return ResponseEntity.ok(context);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @GetMapping("/id/{id}")
     public ResponseEntity<AccountDTO> getAccountByUsername(@PathVariable int id) {
         AccountDTO accountDTO = accountService.getAccountByAccountId(id);

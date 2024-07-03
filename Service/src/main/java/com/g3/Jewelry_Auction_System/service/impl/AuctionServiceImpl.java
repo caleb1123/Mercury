@@ -105,28 +105,27 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
+        if(auction.getStatus() == "Pending"){
+            if (auctionDTO.getStartDate() != null) {
+                if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
+                    throw new AppException(ErrorCode.INVALID_STARTDATE);
+                } else {
+                    auction.setStartDate(auctionDTO.getStartDate());
+                }
+            }
+            if (auctionDTO.getEndDate() != null) {
+                if (LocalDateTime.now().isAfter(auctionDTO.getEndDate())) {
+                    throw new AppException(ErrorCode.INVALID_ENDDATE);
+                } else {
+                    auction.setEndDate(auctionDTO.getEndDate());
+                }
+            }
+            auctionRepository.save(auction);
+        }else  throw  new AppException(ErrorCode.INVALID_STATUS);
 
-        if (auctionDTO.getStartDate() != null) {
-            if (auctionDTO.getStartDate().isAfter(auctionDTO.getEndDate())) {
-                throw new AppException(ErrorCode.INVALID_STARTDATE);
-            } else {
-                auction.setStartDate(auctionDTO.getStartDate());
-            }
-        }
-        if (auctionDTO.getEndDate() != null) {
-            if (LocalDateTime.now().isAfter(auctionDTO.getEndDate())) {
-                throw new AppException(ErrorCode.INVALID_ENDDATE);
-            } else {
-                auction.setEndDate(auctionDTO.getEndDate());
-            }
-        }
-        if (auctionDTO.getCurrentPrice() > auction.getCurrentPrice()) {
-            auction.setCurrentPrice(auctionDTO.getCurrentPrice());
-        }
-        if (auctionDTO.getStatus() != null) {
-            auction.setStatus(auctionDTO.getStatus());
-        }
-        auctionRepository.save(auction);
+
+
+
     }
     @Override
     public List<AuctionDTO> getAuctionList() {

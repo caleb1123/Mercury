@@ -23,6 +23,11 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
     { jewelry_category_id: 8, category_name: 'WATCHES' },
   ];
 
+  const statuses = [
+    { status_id: 0, status_name: 'Inactive' },
+    { status_id: 1, status_name: 'Active' },
+  ];
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedJewelry({
@@ -123,6 +128,23 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
         {categories.map((category) => (
           <MenuItem key={category.jewelry_category_id} value={category.jewelry_category_id}>
             {category.category_name}
+          </MenuItem>
+        ))}
+      </Select>
+      <Select
+        displayEmpty
+        fullWidth
+        name="status"
+        value={editedJewelry.status}
+        onChange={handleInputChange}
+        margin="normal"
+      >
+        <MenuItem value="">
+          <em>Select Status</em>
+        </MenuItem>
+        {statuses.map((status) => (
+          <MenuItem key={status.status_id} value={status.status_id}>
+            {status.status_name}
           </MenuItem>
         ))}
       </Select>

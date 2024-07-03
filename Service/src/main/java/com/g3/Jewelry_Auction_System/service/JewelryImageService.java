@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface JewelryImageService {
-    JewelryImageDTO addJewelryImage(JewelryImageDTO jewelryImageDTO);
 
     List<JewelryImageDTO> getImagesByJewelryId(int id);
     String uploadImageToGoogleDrive(MultipartFile file,int id) throws IOException;

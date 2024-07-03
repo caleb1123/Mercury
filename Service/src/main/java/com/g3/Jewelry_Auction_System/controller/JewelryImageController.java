@@ -31,12 +31,7 @@ public class JewelryImageController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3001")
-    @PostMapping("/add")
-    public ResponseEntity<JewelryImageDTO> addJewelryImage(@RequestBody JewelryImageDTO jewelryImageDTO) {
-        JewelryImageDTO newImage = jewelryImageService.addJewelryImage(jewelryImageDTO);
-        return new ResponseEntity<>(newImage , HttpStatus.CREATED);
-    }
+
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{jewelryId}")
     public ResponseEntity<List<JewelryImageDTO>> getImageByJewelryId(@PathVariable int jewelryId) {

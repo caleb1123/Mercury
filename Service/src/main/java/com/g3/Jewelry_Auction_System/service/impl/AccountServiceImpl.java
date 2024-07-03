@@ -75,10 +75,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateAccount(AccountDTO updateDTO, String username) {
-        if (!updateDTO.getUserName().equals(username)) {
-            throw new RuntimeException("Username does not match request");
-        }
+    public Account updateAccount(AccountDTO updateDTO, String username) {
+
         Account user = accountRepository
                 .findByUserName(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -119,6 +117,7 @@ public class AccountServiceImpl implements AccountService {
             user.setStatus(updateDTO.getStatus());
         }
         accountRepository.save(user);
+        return user;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

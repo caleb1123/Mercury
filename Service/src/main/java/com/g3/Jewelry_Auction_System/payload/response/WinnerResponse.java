@@ -19,3 +19,4 @@ public class WinnerResponse {
 
     private int auctionId;
 }
+

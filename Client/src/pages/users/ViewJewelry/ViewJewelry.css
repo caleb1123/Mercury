@@ -7,7 +7,7 @@
   flex-wrap: wrap; 
   align-items: center; 
   text-align: center;
-  background-color: #000000;
+  background-color: #ffffff;
   color: white;
 }
 .PageName_ViewJewelry{
@@ -107,12 +107,4 @@ top: 72px;
   top: 10px;
   right: 10px;
   cursor: pointer;
-}
-.PlaceBidNextButton{
-  font-size: 24px; 
-  background-color: rgb(99 186 238);
-  color: white;
-  cursor: pointer;
-  border-radius:5px ;
-  margin: 15px 0 0 5px;
 }

@@ -36,17 +36,7 @@ public class JewelryImageServiceImpl implements JewelryImageService {
     @Autowired
     Drive drive;
 
-    @Override
-    public JewelryImageDTO addJewelryImage(JewelryImageDTO jewelryImageDTO) {
-        jewelryRepository.findById(jewelryImageDTO.getJewelryId())
-                .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
-        if (jewelryImageDTO.getJewelryImageURL().isEmpty()) {
-            throw new IllegalArgumentException("Jewelry image URL is empty");
-        }
-        JewelryImage image = jewelryImageConverter.toEntity(jewelryImageDTO);
-        jewelryImageRepository.save(image);
-        return jewelryImageConverter.toDTO(image);
-    }
+
 
     @Override
     public List<JewelryImageDTO> getImagesByJewelryId(int id) {
@@ -80,6 +70,7 @@ public class JewelryImageServiceImpl implements JewelryImageService {
             jewelryImage.setJewelryImageURL(imageUrl);
             String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
             jewelryImage.setFileId(fileId); // Assuming you have a setFileId method in JewelryImage class
+            jewelryImage.setStatus(true);
             jewelryImageRepository.save(jewelryImage);
             return imageUrl;
         }else {
