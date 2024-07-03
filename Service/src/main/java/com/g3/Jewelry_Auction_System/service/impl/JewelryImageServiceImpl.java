@@ -38,12 +38,13 @@ public class JewelryImageServiceImpl implements JewelryImageService {
 
     @Override
     public JewelryImageDTO addJewelryImage(JewelryImageDTO jewelryImageDTO) {
-        Jewelry jewelry = jewelryRepository.findById(jewelryImageDTO.getJewelryId())
+        jewelryRepository.findById(jewelryImageDTO.getJewelryId())
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
         if (jewelryImageDTO.getJewelryImageURL().isEmpty()) {
             throw new IllegalArgumentException("Jewelry image URL is empty");
         }
-        JewelryImage image = jewelryImageRepository.save(jewelryImageConverter.toEntity(jewelryImageDTO));
+        JewelryImage image = jewelryImageConverter.toEntity(jewelryImageDTO);
+        jewelryImageRepository.save(image);
         return jewelryImageConverter.toDTO(image);
     }
 

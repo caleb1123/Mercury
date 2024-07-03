@@ -75,4 +75,23 @@ public class VNPayUtil {
                 .collect(Collectors.joining("&"));
     }
 
+    public static Map<String, String> convertParameterMap(Map<String, String[]> parameterMap) {
+        Map<String, String> params = new TreeMap<>();
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            params.put(entry.getKey(), entry.getValue()[0]);
+        }
+        return params;
+    }
+
+    // Utility method to build hash data
+    public static String buildHashData(Map<String, String> params) {
+        StringBuilder hashData = new StringBuilder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!hashData.isEmpty()) {
+                hashData.append('&');
+            }
+            hashData.append(entry.getKey()).append('=').append(entry.getValue());
+        }
+        return hashData.toString();
+    }
 }

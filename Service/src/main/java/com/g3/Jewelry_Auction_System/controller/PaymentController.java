@@ -1,8 +1,10 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.Payment;
+import com.g3.Jewelry_Auction_System.payload.DTO.PaymentDTO;
 import com.g3.Jewelry_Auction_System.payload.request.PaymentRequest2;
 import com.g3.Jewelry_Auction_System.payload.request.PaymentResquest;
+import com.g3.Jewelry_Auction_System.payload.response.PaymentResponse;
 import com.g3.Jewelry_Auction_System.repository.PaymentRepository;
 import com.g3.Jewelry_Auction_System.service.PaymentService;
 import com.g3.Jewelry_Auction_System.vnpay.ResponseObject;
@@ -30,4 +32,13 @@ public class PaymentController {
         return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(request, httpServletRequest));
     }
 
+    @GetMapping("/return")
+    public ResponseObject<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
+        PaymentResponse payment = paymentService.handleCallback(request);
+        if (payment.getCode().equals("00")) {
+            return new ResponseObject<>(HttpStatus.OK, "Success", payment);
+        } else {
+            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", payment);
+        }
+    }
 }

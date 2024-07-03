@@ -26,7 +26,7 @@ public class PostImageServiceImpl implements PostImageService {
 
     @Override
     public PostImageDTO addPostImage(PostImageDTO postImageDTO) {
-        Post post = postRepository.findById(postImageDTO.getPostId()).orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        postRepository.findById(postImageDTO.getPostId()).orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
         if (postImageDTO.getPostImageURL().isEmpty()) {
             throw new IllegalArgumentException("Post image URL is empty");
         }
