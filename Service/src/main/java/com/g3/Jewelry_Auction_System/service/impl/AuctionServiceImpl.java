@@ -186,4 +186,13 @@ public class AuctionServiceImpl implements AuctionService {
             throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
         }
     }
+
+    @Override
+    public LocalDateTime getTargetDate(int auctionId) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(auctionRepository.findById(auctionId).get().getStartDate())) {
+            return auctionRepository.findById(auctionId).get().getStartDate();
+        }
+        return auctionRepository.findById(auctionId).get().getEndDate();
+    }
 }
