@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect } from "react";
 import "./ViewJewelry.css";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -59,7 +59,10 @@ const ViewJewelry = () => {
         }
 
         setImages(response.data);
-        setSelectedImage(response.data[0]?.jewelryImageURL);
+        if (response.data.length > 0) {
+          setSelectedImage(response.data[0].jewelryImageURL);
+        }
+        console.log('Fetched images:', response.data);
       } catch (error) {
         console.error('Error fetching images data:', error);
       }

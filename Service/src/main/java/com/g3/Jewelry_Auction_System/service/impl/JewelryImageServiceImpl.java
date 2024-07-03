@@ -75,14 +75,18 @@ public class JewelryImageServiceImpl implements JewelryImageService {
                     .execute();
             JewelryImage jewelryImage = new JewelryImage();
             jewelryImage.setJewelry(jewelry);
-            jewelryImage.setJewelryImageURL("https://drive.google.com/uc?id=" + uploadedFile.getId());
+            String imageUrl = "https://drive.google.com/uc?id=" + uploadedFile.getId();
+            jewelryImage.setJewelryImageURL(imageUrl);
+            String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
+            jewelryImage.setFileId(fileId); // Assuming you have a setFileId method in JewelryImage class
             jewelryImageRepository.save(jewelryImage);
-            return "https://drive.google.com/uc?id=" + uploadedFile.getId();
+            return imageUrl;
         }else {
             return "upload fail";
         }
-
     }
+
+
     @Override
     public void setFilePublic(String fileId) throws IOException {
         // Create a permission object with 'anyone' type and 'reader' role
