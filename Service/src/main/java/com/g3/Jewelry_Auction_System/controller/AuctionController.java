@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -96,4 +97,13 @@ public class AuctionController {
         auctionService.sendEmailToWinner(auctionId);
         return ResponseEntity.ok().build();
     }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/{auctionId}/targetDate")
+    public ResponseEntity<String> getTargetDate(@PathVariable int auctionId) {
+        LocalDateTime targetDate = auctionService.getTargetDate(auctionId);
+        String formattedDate = targetDate.format(DateTimeFormatter.ISO_DATE_TIME);
+        return ResponseEntity.ok(formattedDate);
+    }
+
 }

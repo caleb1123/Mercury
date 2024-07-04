@@ -13,9 +13,6 @@ import pic3 from './image/pic3.jpg'
 function HomePage() {
   const [inputValue, setInputValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [upcomingAuctions, setUpcomingAuctions] = useState([]);
-  const [recommendedAuctions, setRecommendedAuctions] = useState([]);
-  const [bidNowItems, setBidNowItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,25 +21,8 @@ function HomePage() {
       setIsLoggedIn(true);
     }
 
-    fetch('http://localhost:8088/auctions/upcoming')
-      .then(response => response.json())
-      .then(data => setUpcomingAuctions(data))
-      .catch(error => console.error('Error fetching upcoming auctions:', error));
-
-    fetch('http://localhost:8088/auctions/recommended')
-      .then(response => response.json())
-      .then(data => setRecommendedAuctions(data))
-      .catch(error => console.error('Error fetching recommended auctions:', error));
-
-    fetch('http://localhost:8088/auctions/bidnow')
-      .then(response => response.json())
-      .then(data => setBidNowItems(data))
-      .catch(error => console.error('Error fetching bid now items:', error));
+    
   }, []);
-
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
-  };
 
   const handleClick = () => {
     window.location.href = '/ViewJewelryList';

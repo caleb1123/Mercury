@@ -92,7 +92,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/Auctions/${category.id}`)}
+                    onClick={() => navigate(`/auctions/${category.id}`)}
                   >
                     {category.name}
                   </div>

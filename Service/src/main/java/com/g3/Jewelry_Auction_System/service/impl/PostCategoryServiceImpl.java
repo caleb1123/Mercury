@@ -19,11 +19,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     private PostCategoryRepository postCategoryRepository;
 
     @Override
-    public List<PostCategoryDTO> getAllPosts() {
-        List<PostCategoryDTO> list = postCategoryConverter.convertToDTOList(postCategoryRepository.findAll());
-        if (list.isEmpty()) {
-            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
-        }
-        return list;
+    public List<PostCategoryDTO> getAllPostCategories() {
+        return postCategoryConverter.convertToDTOList();
     }
 }

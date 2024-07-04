@@ -10,5 +10,7 @@ public interface PostService {
     PostDTO deletePost(int id);
     List<PostDTO> getPostByTitleLike(String title);
     List<PostDTO> getPostByCategory(String cate);
+    List<PostDTO> getPostByCategoryId(int cateId);
     List<PostDTO> getAllPosts();
+    PostDTO getPostById(int id);
 }

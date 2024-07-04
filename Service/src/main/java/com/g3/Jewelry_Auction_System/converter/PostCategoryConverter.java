@@ -35,4 +35,13 @@ public class PostCategoryConverter {
         }
         return postCategoryDTOList;
     }
+
+    public List<PostCategoryDTO> convertToDTOList(){
+        List<PostCategoryDTO> postCategoryDTOList = new ArrayList<>();
+        for (EPostCategory postC : EPostCategory.values()){
+            PostCategoryDTO dto = new PostCategoryDTO(postC.getId(), postC.getDisplayName());
+            postCategoryDTOList.add(dto);
+        }
+        return postCategoryDTOList;
+    }
 }
