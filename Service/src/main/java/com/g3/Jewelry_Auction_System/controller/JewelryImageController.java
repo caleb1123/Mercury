@@ -22,6 +22,7 @@ public class JewelryImageController {
 
     @Autowired
     JewelryImageRepository jewelryImageRepository;
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/upload/{jewelryId}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,@PathVariable int jewelryId) {
         try {

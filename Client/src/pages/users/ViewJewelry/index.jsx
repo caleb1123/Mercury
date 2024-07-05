@@ -58,11 +58,17 @@ const ViewJewelry = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        setImages(response.data);
-        if (response.data.length > 0) {
-          setSelectedImage(response.data[0].jewelryImageURL);
+        // Chuyển đổi liên kết Google Drive thành liên kết trực tiếp
+        const formattedImages = response.data.map(image => ({
+          ...image,
+          jewelryImageURL: image.jewelryImageURL.replace("uc?id=", "uc?export=view&id=")
+        }));
+
+        setImages(formattedImages);
+        if (formattedImages.length > 0) {
+          setSelectedImage(formattedImages[0].jewelryImageURL);
         }
-        console.log('Fetched images:', response.data);
+        console.log('Formatted images:', formattedImages);
       } catch (error) {
         console.error('Error fetching images data:', error);
       }
@@ -103,7 +109,7 @@ const ViewJewelry = () => {
         <div><h3 className="PageName_ViewJewelry">VIEW JEWELRY</h3></div>
         <div className="Jewelry">
           <div className="ImageFrame">
-            <img className="Image" src={selectedImage} alt={jewelry.jewelryName} />
+            <img className="Image" src={selectedImage} alt={jewelry.jewelryName} onError={(e) => { e.target.onerror = null; e.target.src="fallback_image_url_here"; }} />
             <div className="Thumbnails">
               {images.map((image, index) => (
                 <img
@@ -112,6 +118,7 @@ const ViewJewelry = () => {
                   src={image.jewelryImageURL}
                   alt={`${jewelry.jewelryName} ${index + 1}`}
                   onClick={() => handleThumbnailClick(image.jewelryImageURL)}
+                  onError={(e) => { e.target.onerror = null; e.target.src="fallback_thumbnail_url_here"; }}
                 />
               ))}
             </div>
@@ -155,3 +162,4 @@ const ViewJewelry = () => {
 };
 
 export default memo(ViewJewelry);
+
