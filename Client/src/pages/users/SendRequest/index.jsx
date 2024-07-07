@@ -14,6 +14,7 @@ import {
   Box,
   FormControl,
   InputLabel,
+  Input,
 } from "@mui/material";
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -41,13 +42,14 @@ export default function SendRequest() {
     description: "",
     designer: "",
     gemstone: "",
-    image: "",
     jewelryName: "",
     estimate: 0,
     startingPrice: 0,
     status: false,
     jewelryCategoryId: "",
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [jewelryId, setJewelryId] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,6 +57,10 @@ export default function SendRequest() {
       ...newJewelry,
       [name]: value,
     });
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
   };
 
   const handleClickOpen = () => {
@@ -87,11 +93,12 @@ export default function SendRequest() {
         throw new Error("Failed to create jewelry");
       }
 
-      const jewelryId = jewelryResponse.data.jewelryId;
-      console.log("Jewelry created with ID:", jewelryId);
+      const createdJewelryId = jewelryResponse.data.jewelryId;
+      setJewelryId(createdJewelryId);
+      console.log("Jewelry created with ID:", createdJewelryId);
 
       const requestData = {
-        jewelryId: jewelryId,
+        jewelryId: createdJewelryId,
         requestDate: new Date().toISOString(),
         status: "PENDING",
         evaluationDate: null,
@@ -115,12 +122,52 @@ export default function SendRequest() {
       }
 
       console.log("Request created successfully");
+
+      // Upload the image after the jewelry is created
+      await handleUploadImage(createdJewelryId);
+
       handleClickOpen(); // Open success dialog
     } catch (error) {
       console.error(
         "Error creating request:",
         error.response?.data || error.message
       );
+    }
+  };
+
+  const handleUploadImage = async (jewelryId) => {
+    if (!selectedFile) {
+      console.error("No file selected");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+
+      const response = await axios.post(
+        `http://localhost:8088/jewelryImage/upload/${jewelryId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to upload image");
+      }
+
+      console.log("Image uploaded successfully");
+    } catch (error) {
+      console.error("Error uploading image:", error.response?.data || error.message);
     }
   };
 
@@ -217,14 +264,6 @@ export default function SendRequest() {
                 margin="normal"
               />
               <TextField
-                label="Image"
-                name="image"
-                value={newJewelry.image}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
                 label="Jewelry Name"
                 name="jewelryName"
                 value={newJewelry.jewelryName}
@@ -253,6 +292,13 @@ export default function SendRequest() {
                   ))}
                 </Select>
               </FormControl>
+              <Input
+                type="file"
+                onChange={handleFileChange}
+                fullWidth
+                margin="normal"
+                sx={{ mt: 2 }}
+              />
               <Button
                 variant="contained"
                 color="primary"
@@ -270,14 +316,14 @@ export default function SendRequest() {
                 }}
               >
                 <DialogTitle>Successfully</DialogTitle>
-                  <DialogContentText
-                          sx={{
-                            textAlign: 'center',
-                            marginTop: 2,
-                          }}
-                  >
+                <DialogContentText
+                  sx={{
+                    textAlign: 'center',
+                    marginTop: 2,
+                  }}
+                >
                   Sending request successfully, please wait for our staff to make valuation for the jewelry for you!
-                  </DialogContentText>
+                </DialogContentText>
                 <DialogActions>
                   <Button onClick={handleClose}>Close</Button>
                 </DialogActions>

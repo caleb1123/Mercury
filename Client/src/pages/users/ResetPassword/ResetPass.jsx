@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,92 +13,21 @@ import axios from 'axios';
 
 const defaultTheme = createTheme();
 
-function ResetPassword({ onSuccess }) {
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-
-    try {
-      const response = await axios.post('http://localhost:8088/auth/forgot-password', { email }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status === 200) {
-        alert('Reset link sent to your email');
-        onSuccess(email);
-      } else {
-        alert('Failed to send reset link');
-      }
-    } catch (error) {
-      console.error('Error during reset password:', error);
-      alert('Error occurred, please try again');
-    }
-  };
-
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs" sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <CssBaseline />
-        <Paper elevation={6} sx={{ padding: 4, borderRadius: '8px', textAlign: 'center' }}>
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h4">
-            Forgot Password
-          </Typography>
-          <Typography component="h2" variant="subtitle1" color="text.secondary" sx={{ mt: 2 }}>
-            Lost your password? Please enter your email address. You will receive a link to create a new password via email.
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 4 }}>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              sx={{ mb: 2 }}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Reset my password
-            </Button>
-            <Link href="/login" variant="body2">
-              Back to sign in
-            </Link>
-          </Box>
-        </Paper>
-      </Container>
-    </ThemeProvider>
-  );
-}
-
-function ConfirmResetPassword({ email }) {
+export default function ConfirmResetPassword() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const otp = data.get('otp');
-    const newPassword = data.get('password');
+    const password = data.get('password');
     const confirmPassword = data.get('confirmPassword');
 
-    if (newPassword !== confirmPassword) {
+    if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8088/auth/reset-password', {
-        email,
-        otp,
-        newPassword,
-      }, {
+      const response = await axios.post('http://localhost:8088/auth/reset-password', { otp, password }, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -176,22 +104,5 @@ function ConfirmResetPassword({ email }) {
         </Paper>
       </Container>
     </ThemeProvider>
-  );
-}
-
-export default function PasswordResetContainer() {
-  const [step, setStep] = useState('request');
-  const [email, setEmail] = useState('');
-
-  const handleSuccess = (email) => {
-    setEmail(email);
-    setStep('confirm');
-  };
-
-  return (
-    <div>
-      {step === 'request' && <ResetPassword onSuccess={handleSuccess} />}
-      {step === 'confirm' && <ConfirmResetPassword email={email} />}
-    </div>
   );
 }

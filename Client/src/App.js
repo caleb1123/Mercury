@@ -14,6 +14,7 @@ import ViewProfile from './pages/users/ViewProfile';
 import ManagerPage from './pages/manager/manager';
 import ViewPost from './pages/users/ViewPost';
 import Auctions from './pages/users/Auctions';
+import ResetPassword from './pages/users/ResetPassword';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/manager" element={<ManagerPage/>} />
         <Route path="/ViewPost" element={<ViewPost/>} />
         <Route path="/Auctions/:opId" element={<Auctions/>} />
+        <Route path="/ResetPassword" element={<ResetPassword/>} />
 
 
         </Routes>
