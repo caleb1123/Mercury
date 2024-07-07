@@ -148,17 +148,8 @@ public class JewelryServiceImpl implements JewelryService {
     }
     @Override
     public List<JewelryDTO> getJewelryForAuction() {
-        List<Jewelry> allJewelries = jewelryRepository.findAll();
-        List<JewelryDTO> list = new ArrayList<>();
-        for (Jewelry j : allJewelries) {
-            List<Auction> auctions = auctionRepository.findByJewelry(j);
-            if (auctions.isEmpty() || auctions.stream().allMatch(
-                    auction -> "Deleted".equals(auction.getStatus())
-                            || ("Ended".equals(auction.getStatus()) && auction.getBids().isEmpty()))) {
-                list.add(jewelryConverter.toDTO(j));
-            }
-        }
-        return list;
+        List<Jewelry> entityList = jewelryRepository.getJewelriesForAuction();
+        return jewelryConverter.convertToJewelryDTOList(entityList);
     }
     @Override
     public List<JewelryDTO> getJewelryByCategory(int id) {
