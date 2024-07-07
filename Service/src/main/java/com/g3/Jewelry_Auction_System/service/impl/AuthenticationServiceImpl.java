@@ -167,7 +167,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = passwordEncoder.encode(account.getPassword());
+        String encodedPassword = passwordEncoder.encode(newPassword);
         account.setPassword(encodedPassword);
         accountRepository.save(account);
 
