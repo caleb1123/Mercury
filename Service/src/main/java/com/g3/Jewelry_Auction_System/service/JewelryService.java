@@ -17,4 +17,5 @@ public interface JewelryService {
     JewelryDTO getJewelryDetail(int jewelryId);
     AuctionDTO getAuctionByJewelry(int jewelryId);
     List<JewelryDTO> getJewelryForAuction();
+    List<JewelryDTO> getJewelryByCategory(int categoryId);
 }

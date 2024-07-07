@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -53,11 +54,14 @@ public class PaymentServiceImpl implements PaymentService {
         if (account == null) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
-
-        long amount = (long) bid.getBidAmount()*100;
-        String bankCode = paymentRequest2.getBankCode();
         int auctionId = paymentRequest2.getAuctionId();
         String username = account.getUserName();
+        List<Payment> paymentHistory = paymentRepository.findByAuctionAndAccountIds(auctionId, account.getAccountId());
+        if (!paymentHistory.isEmpty() && paymentHistory.stream().anyMatch(payment -> payment.getPaymentStatus().equals("SUCCESSFUL"))) {
+            throw new RuntimeException("Payment is already completed");
+        }
+        long amount = (long) bid.getBidAmount()*100;
+        String bankCode = paymentRequest2.getBankCode();
         String transactionId = paymentRequest2.getTransactionId();
         Map<String, String> vnpParamsMap;
 

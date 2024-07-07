@@ -138,5 +138,10 @@ public class JewelryServiceImpl implements JewelryService {
         }
         return list;
     }
+    @Override
+    public List<JewelryDTO> getJewelryByCategory(int id) {
+        List<Jewelry> jewelries = jewelryRepository.getByCategory(id);
+        return jewelryConverter.convertToJewelryDTOList(jewelries);
+    }
 }
 

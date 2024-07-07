@@ -13,4 +13,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     Payment findByPaymentCode(int paymentCode);
     @Query(value = "SELECT * FROM Payment WHERE payment_code = :paymentCode", nativeQuery = true)
     Payment getPaymentByCode(String paymentCode);
+    @Query(value = "SELECT * from Payment where auction_id = :auctionId and account_id = :accountId", nativeQuery = true)
+    List<Payment> findByAuctionAndAccountIds(int auctionId, int accountId);
 }
