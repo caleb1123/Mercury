@@ -3,14 +3,14 @@ package com.g3.Jewelry_Auction_System.entity;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EJewelCategory {
-    RINGS("Rings"),
-    BRACELETS("Bracelets"),
-    BROOCHES_PINS("Brooches Pins"),
-    CUFFLINKS_TIEPINS_TIECLIPS("Cufflinks Tiepins Tieclips"),
-    EARRINGS("Earrings"),
-    LOOSESTONES_BEADS("Loose Stones Beads"),
-    NECKLACES_PENDANTS("Necklaces Pendants"),
-    WATCHES("Watches");
+    RINGS("Rings"), //RNG01
+    BRACELETS("Bracelets"), //BRCLT01
+    BROOCHES_PINS("Brooches Pins"), //BRCHPN01
+    CUFFLINKS_TIEPINS_TIECLIPS("Cufflinks Tiepins Tieclips"), //LNKPNCLP01
+    EARRINGS("Earrings"), //EARNG01
+    LOOSESTONES_BEADS("Loose Stones Beads"), //STNBD01
+    NECKLACES_PENDANTS("Necklaces Pendants"), //NCKPDNT
+    WATCHES("Watches"); //WATCH01
 
     private final String categoryName;
 

@@ -4,6 +4,7 @@ package com.g3.Jewelry_Auction_System.service.impl;
 import com.g3.Jewelry_Auction_System.converter.AuctionConverter;
 import com.g3.Jewelry_Auction_System.converter.JewelryConverter;
 import com.g3.Jewelry_Auction_System.entity.Auction;
+import com.g3.Jewelry_Auction_System.entity.EJewelCategory;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
@@ -41,8 +42,29 @@ public class JewelryServiceImpl implements JewelryService {
     public JewelryDTO addJewelry(JewelryDTO jewelryDTO) {
         Jewelry newJewelry = jewelryConverter.toEntity(jewelryDTO);
         newJewelry.setStatus(false);
+        String code = generateJewelryCode(newJewelry.getJewelryCategory().getCategoryName());
+        newJewelry.setJewelryCode(code);
         Jewelry newJewelrySaved = jewelryRepository.save(newJewelry);
         return jewelryConverter.toDTO(newJewelrySaved);
+    }
+
+    private String generateJewelryCode(EJewelCategory category) {
+        StringBuilder jewelryCode = new StringBuilder();
+        int listSize = jewelryRepository.getByCategory(category.getId()).size() + 1;
+        String numberPart = String.valueOf(listSize);
+        switch (category) {
+            case RINGS -> jewelryCode.append("RNG");
+            case BROOCHES_PINS ->  jewelryCode.append("BRP");
+            case BRACELETS -> jewelryCode.append("BRC");
+            case CUFFLINKS_TIEPINS_TIECLIPS -> jewelryCode.append("CLP");
+            case LOOSESTONES_BEADS -> jewelryCode.append("LSB");
+            case EARRINGS -> jewelryCode.append("EAR");
+            case NECKLACES_PENDANTS -> jewelryCode.append("NEC");
+            case WATCHES -> jewelryCode.append("WCH") ;
+        }
+        jewelryCode.append("0".repeat(Math.max(0, 4 - numberPart.length())));
+        jewelryCode.append(numberPart);
+        return jewelryCode.toString();
     }
 
     @Override
