@@ -99,9 +99,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public void updateAuction(AuctionDTO auctionDTO, int id) {
-        if (auctionDTO.getAuctionId() != id) {
-            throw new AppException(ErrorCode.ID_NOT_MATCHED);
-        }
+//        if (auctionDTO.getAuctionId() != id) {
+//            throw new AppException(ErrorCode.ID_NOT_MATCHED);
+//        }
         Auction auction = auctionRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUCTION_NOT_FOUND));
@@ -122,10 +122,6 @@ public class AuctionServiceImpl implements AuctionService {
             }
             auctionRepository.save(auction);
         }else  throw  new AppException(ErrorCode.INVALID_STATUS);
-
-
-
-
     }
     @Override
     public List<AuctionDTO> getAuctionList() {
@@ -243,5 +239,14 @@ public class AuctionServiceImpl implements AuctionService {
         } else {
             throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
         }
+    }
+
+    @Override
+    public LocalDateTime getTargetDate(int auctionId) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(auctionRepository.findById(auctionId).get().getStartDate())) {
+            return auctionRepository.findById(auctionId).get().getStartDate();
+        }
+        return auctionRepository.findById(auctionId).get().getEndDate();
     }
 }

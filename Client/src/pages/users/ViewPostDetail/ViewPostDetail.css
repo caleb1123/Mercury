@@ -1,0 +1,54 @@
+.post-detail-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-detail-container h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.post-detail-container p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.post-detail-container small {
+    display: block;
+    margin-top: 20px;
+    color: #888;
+    font-size: 14px;
+}
+
+.post-detail-container div {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #444;
+}
+
+/* Style for status indication */
+.post-detail-container div.status {
+    font-weight: bold;
+    color: #5cb85c; /* Green for active, grey for inactive */
+}
+
+/* Category and Author styles */
+.post-detail-container div.category,
+.post-detail-container div.author {
+    font-style: italic;
+}
+
+/* Loading style */
+.loading {
+    text-align: center;
+    padding: 50px 0;
+    font-size: 18px;
+    color: #333;
+}

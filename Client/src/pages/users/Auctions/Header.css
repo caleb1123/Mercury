@@ -73,20 +73,3 @@
   background-color: #555;
   color: white;
 }
-.ProfileDropdown{
-  border-style: solid;
-  border: black;
-
-}
-.ProfileItem{
-  color: black;
-  border: black;
-  cursor: pointer;
-  margin-top: 7px;
-}
-.Logout{
-  color: red;
-  margin-top: 7px;
-  cursor: pointer;
-  
-}

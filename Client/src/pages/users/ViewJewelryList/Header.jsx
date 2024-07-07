@@ -59,7 +59,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
       <div className="Down_Header">
         <div className="Bar_Home">
           AUCTIONS
-          <NavLink to="./SendRequest" className="world_bar_style">SELL</NavLink>
+          <NavLink to="/SendRequest" className="world_bar_style">SELL</NavLink>
           <div 
             onMouseEnter={handleCategoryMouseEnter} 
             onMouseLeave={handleCategoryMouseLeave} 

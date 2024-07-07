@@ -26,7 +26,6 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
   const navigate = useNavigate();
   const [showCategories, setShowCategories] = useState(false);
   const [showAuctionOp, setShowAuctionOp] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -47,14 +46,6 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
     setShowAuctionOp(false);
   };
 
-  const handleProfileMouseEnter = () => {
-    setShowProfileMenu(true);
-  };
-
-  const handleProfileMouseLeave = () => {
-    setShowProfileMenu(false);
-  };
-
   return (
     <div className="Header">
       <div className="UpHeader">
@@ -63,32 +54,20 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
         </NavLink>
         <div className="Login_CreaAccount">
           {isLoggedIn ? (
-            <div 
-              onMouseEnter={handleProfileMouseEnter}
-              onMouseLeave={handleProfileMouseLeave}
-              className="ProfileMenu"
-            >
+            <>
               <IconButton onClick={handleProfileClick} sx={{ color: "white" }}>
                 <Avatar alt="User Icon" />
               </IconButton>
-              {showProfileMenu && (
-                <div className="ProfileDropdown">
-                  <div
-                    className="ProfileItem"
-                    onClick={() => navigate("/viewprofile")}
-                  >
-                    View Profile
-                  </div>
-                  <div className="Logout" onClick={handleLogout}>
-                    Logout
-                  </div>
-                </div>
-              )}
-            </div>
+              <button onClick={handleLogout} className="LogoutButton">
+                Logout
+              </button>
+            </>
           ) : (
-            <NavLink to="/Login" className="LoginStyle">
-              LOGIN
-            </NavLink>
+            <>
+              <NavLink to="./Login" className="LoginStyle">
+                LOGIN
+              </NavLink>
+            </>
           )}
         </div>
       </div>
@@ -113,7 +92,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/Auctions/${category.id}`)}
+                    onClick={() => navigate(`/auctions/${category.id}`)}
                   >
                     {category.name}
                   </div>
@@ -121,7 +100,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </div>
             )}
           </div>
-          <NavLink to="/SendRequest" className="world_bar_style">
+          <NavLink to="./SendRequest" className="world_bar_style">
             SELL
           </NavLink>
           <div
@@ -148,7 +127,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </div>
             )}
           </div>
-          <NavLink to="/ViewPost" className="world_bar_style">BLOG</NavLink>
+          <NavLink to="./ViewPost" className="world_bar_style">BLOG</NavLink>
         </div>
       </div>
     </div>
