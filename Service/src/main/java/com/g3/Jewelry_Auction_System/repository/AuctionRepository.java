@@ -60,7 +60,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
             "FROM " +
             "    JewelryAuctionSystem.dbo.auction " +
             "WHERE " +
-            "    status = 'On Going' " +
+            "    status = 'Ongoing' " +
             "ORDER BY " +
             "    days_to_end ASC", nativeQuery = true)
     List<Object[]> findOngoingAuctionsOrderByDaysToEnd();
