@@ -36,6 +36,7 @@ function App() {
         <Route path="/ViewPost" element={<ViewPost/>} />
         <Route path="/Auctions/:opId" element={<Auctions/>} />
         <Route path="/ResetPassword" element={<ResetPassword/>} />
+        <Route path='/ViewJewelryList/Category/:Cateid' element={<ViewJewelryList/>}/>
 
 
         </Routes>

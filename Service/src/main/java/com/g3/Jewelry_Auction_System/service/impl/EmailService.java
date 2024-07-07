@@ -38,7 +38,6 @@ public class EmailService {
                 "<p>Best regards,<br/>Mercury</p>" +
                 "</body>" +
                 "</html>";
-
         sendNewMail(to, subject, body,fullname);
     }
 

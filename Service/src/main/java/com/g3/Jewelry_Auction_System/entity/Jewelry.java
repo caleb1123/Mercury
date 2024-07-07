@@ -22,6 +22,9 @@ public class Jewelry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int jewelryId;
 
+    @Column(unique = true)
+    private String jewelryCode;
+
     @Column
     @NotBlank(message = "Jewelry name is required")
     @Size(min = 6, message = "Jewelry name must be at least 6 character")
