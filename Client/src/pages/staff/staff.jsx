@@ -26,12 +26,13 @@ import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import CreatePost from './CreatePost';
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
 import EditJewelryImages from './EditJewelryImages'; // Import EditJewelryImages
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -41,6 +42,7 @@ function StaffPage() {
   const [auctionList, setAuctionList] = useState([]);
   const [requestList, setRequestList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState(''); // State to manage selected status filter
   const [editMode, setEditMode] = useState(false);
   const [addJewelryMode, setAddJewelryMode] = useState(false);
   const [selectedJewelry, setSelectedJewelry] = useState(null);
@@ -48,6 +50,8 @@ function StaffPage() {
   const [viewRequestId, setViewRequestId] = useState(null);
   const [editImageMode, setEditImageMode] = useState(false); // State to manage image editing mode
   const [selectedJewelryId, setSelectedJewelryId] = useState(null); // State to store selected jewelry ID
+
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
@@ -122,12 +126,24 @@ function StaffPage() {
   const handleCategoryChange = (event) => {
     const categoryId = event.target.value;
     setSelectedCategory(categoryId);
-    if (categoryId === '') {
-      setFilteredJewelryList(jewelryList);
-    } else {
-      const filteredList = jewelryList.filter(jewelry => jewelry.jewelryCategoryId === categoryId);
-      setFilteredJewelryList(filteredList);
+    filterJewelryList(categoryId, selectedStatus);
+  };
+
+  const handleStatusChange = (event) => {
+    const status = event.target.value;
+    setSelectedStatus(status);
+    filterJewelryList(selectedCategory, status);
+  };
+
+  const filterJewelryList = (categoryId, status) => {
+    let filteredList = jewelryList;
+    if (categoryId !== '') {
+      filteredList = filteredList.filter(jewelry => jewelry.jewelryCategoryId === categoryId);
     }
+    if (status !== '') {
+      filteredList = filteredList.filter(jewelry => (status === 'active' ? jewelry.status : !jewelry.status));
+    }
+    setFilteredJewelryList(filteredList);
   };
 
   const handleEditClick = (jewelry) => {
@@ -161,6 +177,11 @@ function StaffPage() {
   const closeEditImageDialog = () => { // Function to close the image editing dialog
     setEditImageMode(false);
     setSelectedJewelryId(null);
+  };
+
+  const handleLogout = () => { // Function to handle logout
+    localStorage.removeItem('token');
+    navigate('/'); // Redirect to home page
   };
 
   useEffect(() => {
@@ -223,7 +244,7 @@ function StaffPage() {
           </List>
           <Divider sx={{ backgroundColor: '#fff' }} />
           <List>
-            <ListItem button selected={selectedIndex === 6} onClick={() => handleListItemClick(6)} sx={{ color: '#fff' }} key="logout">
+            <ListItem button onClick={handleLogout} sx={{ color: '#fff' }} key="logout">
               <ListItemIcon sx={{ color: '#fff' }}>
                 <ExitToAppIcon />
               </ListItemIcon>
@@ -270,6 +291,18 @@ function StaffPage() {
                         {category.category_name}
                       </MenuItem>
                     ))}
+                  </Select>
+                  <Select
+                    displayEmpty
+                    fullWidth
+                    name="status"
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
+                    sx={{ backgroundColor: '#fff', mt: 2 }}
+                  >
+                    <MenuItem value=""><em>All Status</em></MenuItem>
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="inactive">Inactive</MenuItem>
                   </Select>
                 </Box>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>

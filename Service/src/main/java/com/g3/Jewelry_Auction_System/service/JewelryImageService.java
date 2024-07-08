@@ -9,6 +9,7 @@ import java.util.List;
 public interface JewelryImageService {
 
     List<JewelryImageDTO> getImagesByJewelryId(int id);
+    List<JewelryImageDTO> getImagesByJewelryIdWithoutStatusFalse(int id);
     String uploadImageToCloudinary(MultipartFile file, int id) throws IOException;
     boolean deleteImage(String fileId) throws IOException;
     JewelryImageDTO getImageByFileId(String fileId);

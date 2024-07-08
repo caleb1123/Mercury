@@ -27,4 +27,6 @@ public interface JewelryImageRepository extends JpaRepository<JewelryImage, Inte
             "    [jewelry_image_id] ASC;\n" , nativeQuery = true)
     JewelryImage findJewelryImageAuto(int id);
 
+    @Query(value = "SELECT * FROM Jewelry_Image where jewelry_id = :id and status = 1" , nativeQuery = true)
+    List<JewelryImage> getByJewelryIdWithoutStatusFalse(int id);
 }

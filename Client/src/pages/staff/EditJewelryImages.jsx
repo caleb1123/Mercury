@@ -26,7 +26,7 @@ function EditJewelryImages({ jewelryId, onClose }) {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`, {
+      const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },

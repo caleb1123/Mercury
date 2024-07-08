@@ -43,7 +43,12 @@ public class JewelryImageController {
     }
 
     @CrossOrigin(origins = "http://localhost:3001")
-
+    @GetMapping("/all/{jewelryId}")
+    public ResponseEntity<List<JewelryImageDTO>> getImageByJewelryIdWithoutStatus(@PathVariable int jewelryId) {
+        List<JewelryImageDTO> list = jewelryImageService.getImagesByJewelryIdWithoutStatusFalse(jewelryId);
+        return new ResponseEntity<>(list , HttpStatus.OK);
+    }
+    @CrossOrigin(origins = "http://localhost:3001")
     @DeleteMapping("/delete/{fileId}")
     public ResponseEntity<String> deleteImage(@PathVariable String fileId) {
         try {
