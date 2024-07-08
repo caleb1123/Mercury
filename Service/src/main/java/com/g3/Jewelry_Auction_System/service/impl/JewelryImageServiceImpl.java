@@ -77,7 +77,10 @@ public class JewelryImageServiceImpl implements JewelryImageService {
         Jewelry jewelry = jewelryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
         Integer imageCount = jewelryImageRepository.getImageCountByJewelryId(id);
-        if (imageCount != null && imageCount >= 5) {
+        if(imageCount == null){
+            imageCount = 0;
+        }
+        if ( imageCount >= 5) {
             throw new AppException(ErrorCode.IMAGE_MANY);
         }
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());

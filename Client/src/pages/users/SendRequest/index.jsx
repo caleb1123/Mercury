@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Paper,
   TextField,
@@ -49,7 +49,16 @@ export default function SendRequest() {
     jewelryCategoryId: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
+  const [newImageFile, setNewImageFile] = useState(null);
   const [jewelryId, setJewelryId] = useState(null);
+  const [images, setImages] = useState([]);
+  const [noImages, setNoImages] = useState(false);
+
+  useEffect(() => {
+    if (jewelryId) {
+      fetchImages();
+    }
+  }, [jewelryId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,6 +70,10 @@ export default function SendRequest() {
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
+  };
+
+  const handleNewImageFileChange = (e) => {
+    setNewImageFile(e.target.files[0]);
   };
 
   const handleClickOpen = () => {
@@ -168,6 +181,81 @@ export default function SendRequest() {
       console.log("Image uploaded successfully");
     } catch (error) {
       console.error("Error uploading image:", error.response?.data || error.message);
+    }
+  };
+
+  const handleAddImage = async () => {
+    if (!newImageFile) return;
+
+    const formData = new FormData();
+    formData.append("file", newImageFile);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+
+      const response = await axios.post(
+        `http://localhost:8088/jewelryImage/upload/${jewelryId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to upload image");
+      }
+
+      console.log("Image uploaded successfully");
+      alert("Image uploaded successfully!");
+      setNewImageFile(null);
+      fetchImages();
+    } catch (error) {
+      console.error("Error adding image:", error);
+    }
+  };
+
+  const handleDeleteImage = async (fileId) => {
+    console.log("Deleting fileId:", fileId); // Log fileId on console
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+
+      await axios.delete(`http://localhost:8088/jewelryImage/delete/${fileId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchImages();
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
+  };
+
+  const fetchImages = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+
+      const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setImages(response.data);
+      setNoImages(response.data.length === 0);
+    } catch (error) {
+      console.error("Error fetching images:", error);
+      setNoImages(true);
     }
   };
 
@@ -315,20 +403,71 @@ export default function SendRequest() {
                   onSubmit: handleDialogSubmit,
                 }}
               >
-                <DialogTitle>Successfully</DialogTitle>
+                <DialogTitle>Request Sent Successfully</DialogTitle>
                 <DialogContentText
                   sx={{
-                    textAlign: 'center',
+                    textAlign: "center",
                     marginTop: 2,
                   }}
                 >
-                  Sending request successfully, please wait for our staff to make valuation for the jewelry for you!
+                  Your request has been sent successfully. Please wait for our staff to evaluate your jewelry. You can also upload additional images if needed.
                 </DialogContentText>
                 <DialogActions>
+                  <Input
+                    type="file"
+                    onChange={handleNewImageFileChange}
+                    fullWidth
+                    margin="normal"
+                    sx={{ mt: 2 }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddImage}
+                    sx={{ mt: 2 }}
+                  >
+                    Upload Additional Image
+                  </Button>
                   <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
               </Dialog>
               <ViewRequests open={requestsOpen} onClose={handleViewRequestsClose} />
+              <Grid container spacing={2} sx={{ mt: 2 }}>
+  {images.map((image) => (
+    <Grid item xs={6} sm={4} md={3} key={image.jewelryImageId}>
+      <Box
+        sx={{
+          width: "100%",
+          paddingBottom: "100%", // This creates a square container
+          position: "relative",
+        }}
+      >
+        <img
+          src={image.jewelryImageURL}
+          alt="Jewelry"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => handleDeleteImage(image.fileId)}
+          sx={{ mt: 1 }}
+          fullWidth
+        >
+          Delete Image
+        </Button>
+      </Box>
+    </Grid>
+  ))}
+</Grid>
+
             </Paper>
           </Box>
         </Grid>

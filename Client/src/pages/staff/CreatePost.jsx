@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import EditPostImages from './EditPostImages';
 
 const postCategories = [
   { category_id: 1, category_name: 'AUCTION_INSIGHTS' },
@@ -29,25 +30,22 @@ function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [files, setFiles] = useState([]);
-
-  const handleFileChange = (event) => {
-    setFiles(Array.from(event.target.files));
-  };
+  const [postId, setPostId] = useState(null);
+  const [isPostCreated, setIsPostCreated] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No token found');
         return;
       }
-  
+
       const decodedToken = jwtDecode(token);
-      const account_id = decodedToken.account_id; // Adjust according to your token structure
-  
+      const account_id = decodedToken.account_id;
+
       const postData = {
         title,
         content,
@@ -55,51 +53,30 @@ function CreatePost() {
         postDate: new Date().toISOString(),
         status: true,
       };
-  
+
       const postResponse = await axios.post('http://localhost:8088/posts/create', postData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-  
-      const postId = postResponse.data.postId;
-  
-      if (files.length > 0) {
-        const formData = new FormData();
-        files.forEach((file) => {
-          formData.append('images', file);
-        });
-  
-        try {
-          await axios.post(`http://localhost:8088/postImage/upload/${postId}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          console.log('Images uploaded successfully');
-        } catch (uploadError) {
-          console.error('Error uploading images:', uploadError.response ? uploadError.response.data : uploadError.message);
-        }
-      }
-  
+
+      const newPostId = postResponse.data.postId;
+      setPostId(newPostId);
+      setIsPostCreated(true);
+
       console.log('Post created successfully:', postResponse.data);
     } catch (error) {
       if (error.response) {
-        // Server responded with a status other than 200 range
         console.error('Error response:', error.response.data);
       } else if (error.request) {
-        // Request was made but no response received
         console.error('Error request:', error.request);
       } else {
-        // Something else happened in making the request
         console.error('Error message:', error.message);
       }
       console.error('Error config:', error.config);
     }
   };
-  
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -140,25 +117,13 @@ function CreatePost() {
               ))}
             </Select>
           </FormControl>
-          <Box sx={{ marginTop: 2 }}>
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', marginTop: 2 }}>
-            {files.map((file, index) => (
-              <Box key={index} sx={{ width: 100, height: 100, marginRight: 2, marginBottom: 2 }}>
-                <img src={URL.createObjectURL(file)} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </Box>
-            ))}
-          </Box>
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2', marginTop: 2 }}>
             Submit Post
           </Button>
         </form>
+        {isPostCreated && (
+          <EditPostImages postId={postId} onClose={() => setIsPostCreated(false)} />
+        )}
       </Paper>
     </Container>
   );

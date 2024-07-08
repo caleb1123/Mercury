@@ -26,7 +26,7 @@ import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import  {jwtDecode}  from 'jwt-decode';
 import CreatePost from './CreatePost';
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';

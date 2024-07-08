@@ -38,7 +38,11 @@ public class PostImageServiceImpl implements PostImageService {
     public String uploadImageToCloudinary(MultipartFile file, int id) throws IOException {
         Post post = postRepository.getReferenceById(id);
         Integer imageCount = postImageRepository.getImageCountByPostId(id);
-        if(imageCount >= 5 ){
+        if (imageCount == null) {
+            // Xử lý khi imageCount bị null, ví dụ như gán mặc định là 0
+            imageCount = 0;
+        }
+        if (imageCount >= 5) {
             throw new AppException(ErrorCode.IMAGE_MANY);
         }
         if(post != null){
