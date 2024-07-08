@@ -26,11 +26,13 @@ import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import  {jwtDecode}  from 'jwt-decode';
 import CreatePost from './CreatePost';
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
+import EditJewelryImages from './EditJewelryImages'; // Import EditJewelryImages
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -40,11 +42,17 @@ function StaffPage() {
   const [auctionList, setAuctionList] = useState([]);
   const [requestList, setRequestList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState(''); // State to manage selected status filter
   const [editMode, setEditMode] = useState(false);
   const [addJewelryMode, setAddJewelryMode] = useState(false);
   const [selectedJewelry, setSelectedJewelry] = useState(null);
   const [viewJewelryId, setViewJewelryId] = useState(null);
   const [viewRequestId, setViewRequestId] = useState(null);
+  const [editImageMode, setEditImageMode] = useState(false); // State to manage image editing mode
+  const [selectedJewelryId, setSelectedJewelryId] = useState(null); // State to store selected jewelry ID
+  const [username, setUsername] = useState(''); // State to store username
+
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
@@ -52,13 +60,13 @@ function StaffPage() {
     setAddJewelryMode(false);
     setViewJewelryId(null);
     setViewRequestId(null);
+    setEditImageMode(false); // Reset edit image mode
   };
 
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
-      const username = decodedToken.username;
 
       const response = await axios.get(`http://localhost:8088/account/myinfor`, {
         headers: {
@@ -66,6 +74,8 @@ function StaffPage() {
         },
       });
       setProfile(response.data);
+      setUsername(response.data.userName); // Lấy username từ API
+
     } catch (error) {
       console.error('Error fetching profile data:', error);
     }
@@ -118,12 +128,24 @@ function StaffPage() {
   const handleCategoryChange = (event) => {
     const categoryId = event.target.value;
     setSelectedCategory(categoryId);
-    if (categoryId === '') {
-      setFilteredJewelryList(jewelryList);
-    } else {
-      const filteredList = jewelryList.filter(jewelry => jewelry.jewelryCategoryId === categoryId);
-      setFilteredJewelryList(filteredList);
+    filterJewelryList(categoryId, selectedStatus);
+  };
+
+  const handleStatusChange = (event) => {
+    const status = event.target.value;
+    setSelectedStatus(status);
+    filterJewelryList(selectedCategory, status);
+  };
+
+  const filterJewelryList = (categoryId, status) => {
+    let filteredList = jewelryList;
+    if (categoryId !== '') {
+      filteredList = filteredList.filter(jewelry => jewelry.jewelryCategoryId === categoryId);
     }
+    if (status !== '') {
+      filteredList = filteredList.filter(jewelry => (status === 'active' ? jewelry.status : !jewelry.status));
+    }
+    setFilteredJewelryList(filteredList);
   };
 
   const handleEditClick = (jewelry) => {
@@ -149,6 +171,40 @@ function StaffPage() {
     setViewRequestId(requestId);
   };
 
+  const handleEditImageClick = (jewelryId) => { // Function to handle edit image button click
+    setSelectedJewelryId(jewelryId);
+    setEditImageMode(true);
+  };
+
+  const closeEditImageDialog = () => { // Function to close the image editing dialog
+    setEditImageMode(false);
+    setSelectedJewelryId(null);
+  };
+
+  const handleLogout = () => { // Function to handle logout
+    localStorage.removeItem('token');
+    navigate('/'); // Redirect to home page
+  };
+
+  const updateProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+
+      await axios.put(`http://localhost:8088/account/update/${username}`, profile, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      fetchProfile();
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+
   useEffect(() => {
     if (selectedIndex === 0) {
       fetchProfile();
@@ -170,6 +226,13 @@ function StaffPage() {
     { jewelry_category_id: 6, category_name: 'LOOSESTONES_BEADS' },
     { jewelry_category_id: 7, category_name: 'NECKLACES_PENDANTS' },
     { jewelry_category_id: 8, category_name: 'WATCHES' },
+  ];
+
+  const roles = [
+    { role_id: 1, role_name: 'ADMIN' },
+    { role_id: 2, role_name: 'MANAGER' },
+    { role_id: 3, role_name: 'STAFF' },
+    { role_id: 4, role_name: 'USER' },
   ];
 
   return (
@@ -209,7 +272,7 @@ function StaffPage() {
           </List>
           <Divider sx={{ backgroundColor: '#fff' }} />
           <List>
-            <ListItem button selected={selectedIndex === 6} onClick={() => handleListItemClick(6)} sx={{ color: '#fff' }} key="logout">
+            <ListItem button onClick={handleLogout} sx={{ color: '#fff' }} key="logout">
               <ListItemIcon sx={{ color: '#fff' }}>
                 <ExitToAppIcon />
               </ListItemIcon>
@@ -233,10 +296,27 @@ function StaffPage() {
             {selectedIndex === 0 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Profile</Typography>
-                <TextField label="Full Name" value={profile.fullName || ''} fullWidth margin="normal" />
-                <TextField label="Email" value={profile.email || ''} fullWidth margin="normal" />
-                <TextField label="Phone" value={profile.phone || ''} fullWidth margin="normal" />
-                <Button variant="contained" color="primary">Update Profile</Button>
+                <TextField label="Full Name" value={profile.fullName || ''} fullWidth margin="normal" onChange={(e) => setProfile({ ...profile, fullName: e.target.value })} />
+                <TextField label="Email" value={profile.email || ''} fullWidth margin="normal" disabled />
+                <TextField label="Phone" value={profile.phone || ''} fullWidth margin="normal" disabled />
+                <TextField label="Address" value={profile.address || ''} fullWidth margin="normal" onChange={(e) => setProfile({ ...profile, address: e.target.value })} />
+                <TextField label="Date of Birth" type="date" value={profile.dob || ''} fullWidth margin="normal" onChange={(e) => setProfile({ ...profile, dob: e.target.value })} />
+                <Select
+                  label="Sex"
+                  value={profile.sex === true ? 'male' : profile.sex === false ? 'female' : 'other'}
+                  fullWidth
+                  margin="normal"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setProfile({ ...profile, sex: value === 'male' ? true : value === 'female' ? false : null });
+                  }}
+                >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                </Select>
+
+                <TextField label="Role" value={roles.find(role => role.role_id === profile.roleId)?.role_name || ''} fullWidth margin="normal" disabled />
+                <Button variant="contained" color="primary" onClick={updateProfile}>Update Profile</Button>
               </Paper>
             )}
             {selectedIndex === 1 && !editMode && !addJewelryMode && !viewJewelryId && (
@@ -256,6 +336,18 @@ function StaffPage() {
                         {category.category_name}
                       </MenuItem>
                     ))}
+                  </Select>
+                  <Select
+                    displayEmpty
+                    fullWidth
+                    name="status"
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
+                    sx={{ backgroundColor: '#fff', mt: 2 }}
+                  >
+                    <MenuItem value=""><em>All Status</em></MenuItem>
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="inactive">Inactive</MenuItem>
                   </Select>
                 </Box>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
@@ -285,6 +377,7 @@ function StaffPage() {
                           <TableCell>
                             <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
                             <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
+                            <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -328,8 +421,8 @@ function StaffPage() {
                           <TableCell>{auction.currentPrice}</TableCell>
                           <TableCell>{auction.endDate}</TableCell>
                           <TableCell>{auction.startDate}</TableCell>
-                          <TableCell>{auction.status ? 'Active' : 'Inactive'}</TableCell>
-                          <TableCell>{auction.winner_id || 'N/A'}</TableCell>
+                          <TableCell>{auction.status}</TableCell> 
+                          <TableCell>{auction.winnerId || 'N/A'}</TableCell>
                           <TableCell>{auction.jewelryId}</TableCell>
                         </TableRow>
                       ))}
@@ -337,6 +430,7 @@ function StaffPage() {
                   </Table>
                 </TableContainer>
               </Paper>
+
             )}
             {selectedIndex === 3 && !viewJewelryId && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
@@ -396,6 +490,9 @@ function StaffPage() {
                   <CreatePost />
                 </Box>
               </Box>
+            )}
+            {editImageMode && (
+              <EditJewelryImages jewelryId={selectedJewelryId} onClose={closeEditImageDialog} />
             )}
           </Box>
         </Box>

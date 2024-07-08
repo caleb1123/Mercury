@@ -16,7 +16,7 @@ public class WinnerIDUpdate {
     private BidRepository bidRepository;
     @Autowired
     private AuctionRepository auctionRepository;
-    @Scheduled(fixedRate = 60000) // Chạy vào mỗi đêm lúc 00:00
+    @Scheduled(fixedRate = 60000) // 1 minute
     public void updateWinners() {
         LocalDateTime now = LocalDateTime.now();
         List<Auction> auctions = auctionRepository.findByEndDateBeforeAndWinnerIdIsNull(now);

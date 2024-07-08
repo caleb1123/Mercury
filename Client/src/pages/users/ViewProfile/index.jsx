@@ -169,9 +169,7 @@ function ViewProfile() {
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </div>
     </div>
-    <div className="Footer">
-        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
-      </div>
+
     </>
   );
 }

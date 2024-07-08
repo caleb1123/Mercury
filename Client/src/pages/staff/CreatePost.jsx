@@ -12,7 +12,8 @@ import {
   InputLabel,
 } from '@mui/material';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import EditPostImages from './EditPostImages';
 
 const postCategories = [
   { category_id: 1, category_name: 'AUCTION_INSIGHTS' },
@@ -29,6 +30,8 @@ function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [postId, setPostId] = useState(null);
+  const [isPostCreated, setIsPostCreated] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,7 +44,7 @@ function CreatePost() {
       }
 
       const decodedToken = jwtDecode(token);
-      const account_id = decodedToken.account_id; // Adjust according to your token structure
+      const account_id = decodedToken.account_id;
 
       const postData = {
         title,
@@ -51,24 +54,24 @@ function CreatePost() {
         status: true,
       };
 
-      console.log('postData:', postData); // Log the postData object
-
-      const response = await axios.post('http://localhost:8088/posts/create', postData, {
+      const postResponse = await axios.post('http://localhost:8088/posts/create', postData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Post created successfully:', response.data);
+
+      const newPostId = postResponse.data.postId;
+      setPostId(newPostId);
+      setIsPostCreated(true);
+
+      console.log('Post created successfully:', postResponse.data);
     } catch (error) {
       if (error.response) {
-        // Server responded with a status other than 200 range
         console.error('Error response:', error.response.data);
       } else if (error.request) {
-        // Request was made but no response received
         console.error('Error request:', error.request);
       } else {
-        // Something else happened in making the request
         console.error('Error message:', error.message);
       }
       console.error('Error config:', error.config);
@@ -114,10 +117,13 @@ function CreatePost() {
               ))}
             </Select>
           </FormControl>
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2' }}>
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2', marginTop: 2 }}>
             Submit Post
           </Button>
         </form>
+        {isPostCreated && (
+          <EditPostImages postId={postId} onClose={() => setIsPostCreated(false)} />
+        )}
       </Paper>
     </Container>
   );

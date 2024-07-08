@@ -22,9 +22,14 @@ public interface JewelryImageRepository extends JpaRepository<JewelryImage, Inte
             "FROM\n" +
             "    [JewelryAuctionSystem].[dbo].[jewelry_image]\n" +
             "WHERE\n" +
-            "    [jewelry_id] = :id\n" +
+            "    [jewelry_id] = :id and status = 1\n" +
             "ORDER BY\n" +
             "    [jewelry_image_id] ASC;\n" , nativeQuery = true)
     JewelryImage findJewelryImageAuto(int id);
 
+    @Query(value = "SELECT * FROM Jewelry_Image where jewelry_id = :id and status = 1" , nativeQuery = true)
+    List<JewelryImage> getByJewelryIdWithoutStatusFalse(int id);
+
+    @Query(value = "SELECT COUNT(jewelry_image_id) AS image_count FROM jewelry_image where jewelry_id = :id GROUP BY jewelry_id ;\n",nativeQuery = true)
+    Integer getImageCountByJewelryId(int id);
 }
