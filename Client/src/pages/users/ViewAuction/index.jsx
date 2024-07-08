@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewAuction.css";
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Header from "./Header";
 
 const categoryMapping = {
@@ -54,6 +54,8 @@ function ViewAuction() {
   const [winner, setWinner] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -62,6 +64,7 @@ function ViewAuction() {
     if (jewelryId) {
       fetchJewelryData();
       fetchAuctionData();
+      fetchImagesData();
     }
   }, [jewelryId]);
 
@@ -92,6 +95,29 @@ function ViewAuction() {
       console.error('Error fetching jewelry data:', error);
       console.error(error.response ? error.response.data : error.message);
       setNotification({ type: 'error', message: 'Error fetching jewelry data' });
+    }
+  };
+
+  const fetchImagesData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`);
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Chuyển đổi liên kết Google Drive thành liên kết trực tiếp
+      const formattedImages = response.data.map(image => ({
+        ...image,
+        jewelryImageURL: image.jewelryImageURL.replace("uc?id=", "uc?export=view&id=")
+      }));
+
+      setImages(formattedImages);
+      if (formattedImages.length > 0) {
+        setSelectedImage(formattedImages[0].jewelryImageURL);
+      }
+      console.log('Formatted images:', formattedImages);
+    } catch (error) {
+      console.error('Error fetching images data:', error);
     }
   };
 
@@ -175,6 +201,7 @@ function ViewAuction() {
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
+  
   const handleProfileClick = () => {
     navigate('/viewProfile');
   };
@@ -265,6 +292,10 @@ function ViewAuction() {
     setIsModalOpen(false); // Close the modal
   };
 
+  const handleThumbnailClick = (url) => {
+    setSelectedImage(url);
+  };
+
   if (!jewelry || !auction) {
     return <div>Loading...</div>;
   }
@@ -323,7 +354,19 @@ function ViewAuction() {
         <div className="Auction_ViewAuction">
           <div className="Au_info">
             <div className="auction_pic_frame">
-              <img src={jewelry.image} className="AuPic" alt="Auction" />
+              <img className="Image" src={selectedImage} alt={jewelry.jewelryName} onError={(e) => { e.target.onerror = null; e.target.src="fallback_image_url_here"; }} />
+              <div className="Thumbnails">
+                {images.map((image, index) => (
+                  <img
+                    key={index}
+                    className={`Thumbnail ${selectedImage === image.jewelryImageURL ? 'selected' : ''}`}
+                    src={image.jewelryImageURL}
+                    alt={`${jewelry.jewelryName} ${index + 1}`}
+                    onClick={() => handleThumbnailClick(image.jewelryImageURL)}
+                    onError={(e) => { e.target.onerror = null; e.target.src="fallback_thumbnail_url_here"; }}
+                  />
+                ))}
+              </div>
             </div>
             <h4>Details</h4>
             <div className="info_WordStyle">
@@ -347,17 +390,6 @@ function ViewAuction() {
               <div>No bids yet</div>
             )}
           </div>
-          {/* {winner && (
-            <div className="WinnerInfo">
-              <h3>Winner Information</h3>
-              <div className="info_WordStyle"><strong>Winner ID:</strong> {winner.winnerId}</div>
-              <div className="info_WordStyle"><strong>Username:</strong> {winner.username}</div>
-              <div className="info_WordStyle"><strong>Bid Amount:</strong> ${winner.bidAmount}</div>
-              <div className="info_WordStyle"><strong>Jewelry ID:</strong> {winner.jewelryId}</div>
-              <div className="info_WordStyle"><strong>Jewelry Name:</strong> {winner.jewelryName}</div>
-              <div className="info_WordStyle"><strong>Auction ID:</strong> {winner.auctionId}</div>
-            </div>
-          )} */}
         </div>
       </div>
 
