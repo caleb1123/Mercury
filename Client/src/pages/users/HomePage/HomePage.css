@@ -81,11 +81,12 @@ body {
 }
 
 .Footer {
-    background-color: rgb(0, 0, 0);
-    color: rgb(0, 0, 0);
-    width: 100%;
-    justify-content: center;
-    width: 100vw;
+  text-align: center;
+  padding: 10px;
+  background-color: #000000;
+  width: 100%;
+  flex-shrink: 0;
+
 
 }
 
@@ -96,7 +97,6 @@ body {
 
 .Footer_style {
     color: rgb(255, 255, 255);
-    padding-left: 650px;
     padding-top: 20px;
     padding-bottom: 20px;
 

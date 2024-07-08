@@ -1,12 +1,23 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewJewelryList.css";
 import Header from "./Header";
 
+const categories = [
+  { jewelryCategoryId: 1, category_name: "RINGS" },
+  { jewelryCategoryId: 2, category_name: "BRACELETS" },
+  { jewelryCategoryId: 3, category_name: "BROOCHES_PINS" },
+  { jewelryCategoryId: 4, category_name: "CUFFLINKS_TIEPINS_TIECLIPS" },
+  { jewelryCategoryId: 5, category_name: "EARRINGS" },
+  { jewelryCategoryId: 6, category_name: "LOOSESTONES_BEADS" },
+  { jewelryCategoryId: 7, category_name: "NECKLACES_PENDANTS" },
+  { jewelryCategoryId: 8, category_name: "WATCHES" },
+];
+
 function ViewJewelryList() {
   const [inputValue, setInputValue] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [jewelryList, setJewelryList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchError, setSearchError] = useState('');
@@ -14,16 +25,18 @@ function ViewJewelryList() {
 
   const navigate = useNavigate();
 
-  // Handle input change
   const handleChange = (event) => {
     setInputValue(event.target.value);
+  };
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
   };
 
   const handleProfileClick = () => {
     navigate('/viewProfile');
   };
 
-  // Fetch jewelry data from API
   const fetchJewelryData = async () => {
     try {
       const response = await axios.get('http://localhost:8088/jewelry/getAll', {
@@ -39,7 +52,6 @@ function ViewJewelryList() {
       const data = response.data;
       setJewelryList(data);
       setSearchError('');
-      // Fetch images for each jewelry item
       data.forEach(jewelry => fetchJewelryImage(jewelry.jewelryId));
     } catch (error) {
       console.error('Error fetching jewelry data:', error);
@@ -59,7 +71,6 @@ function ViewJewelryList() {
     navigate(`/ViewJewelry/${id}`);
   };
 
-  // Fetch jewelry image
   const fetchJewelryImage = async (id) => {
     try {
       const response = await axios.get(`http://localhost:8088/jewelryImage/jewelry/${id}/image`, {
@@ -84,47 +95,14 @@ function ViewJewelryList() {
     }
   };
 
-  // Filter jewelry list based on status
-  const filteredJewelryList = jewelryList.filter(jewelry => jewelry.status === true);
+  const filteredJewelryList = jewelryList.filter(jewelry => {
+    const matchesCategory = selectedCategory ? jewelry.jewelryCategoryId === parseInt(selectedCategory) : true;
+    const matchesSearch = jewelry.jewelryName.toLowerCase().includes(inputValue.toLowerCase());
+    return jewelry.status === true && matchesCategory && matchesSearch;
+  });
 
-  // Handle search
-  const handleSearch = async () => {
-    if (!inputValue.trim()) {
-      // If input is empty, fetch all jewelry data
-      fetchJewelryData();
-      return;
-    }
-
-    try {
-      const response = await axios.get(`http://localhost:8088/jewelry/search/${inputValue}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = response.data;
-      if (data.length === 0) {
-        setSearchError('Jewelry not found');
-        setJewelryList([]);
-      } else {
-        setJewelryList(data);
-        setSearchError('');
-        // Fetch images for each jewelry item
-        data.forEach(jewelry => fetchJewelryImage(jewelry.jewelryId));
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setSearchError('Jewelry not found');
-        setJewelryList([]);
-      } else {
-        console.error('Error searching jewelry data:', error);
-        setSearchError('Error searching jewelry data');
-      }
-    }
+  const handleSearch = () => {
+    setSearchError('');
   };
 
   return (
@@ -138,7 +116,14 @@ function ViewJewelryList() {
           onChange={handleChange}
           placeholder="Search jewelry..."
         />
-        <button onClick={handleSearch}>Search</button>
+        <select value={selectedCategory} onChange={handleCategoryChange}>
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category.jewelryCategoryId} value={category.jewelryCategoryId}>
+              {category.category_name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {searchError && <div className="error-message">{searchError}</div>}
