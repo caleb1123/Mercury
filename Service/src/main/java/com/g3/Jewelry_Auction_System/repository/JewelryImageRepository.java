@@ -22,7 +22,7 @@ public interface JewelryImageRepository extends JpaRepository<JewelryImage, Inte
             "FROM\n" +
             "    [JewelryAuctionSystem].[dbo].[jewelry_image]\n" +
             "WHERE\n" +
-            "    [jewelry_id] = :id\n" +
+            "    [jewelry_id] = :id and status = 1\n" +
             "ORDER BY\n" +
             "    [jewelry_image_id] ASC;\n" , nativeQuery = true)
     JewelryImage findJewelryImageAuto(int id);

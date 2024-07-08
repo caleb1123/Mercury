@@ -12,7 +12,7 @@ import {
   InputLabel,
 } from '@mui/material';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 const postCategories = [
   { category_id: 1, category_name: 'AUCTION_INSIGHTS' },
@@ -29,6 +29,11 @@ function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [files, setFiles] = useState([]);
+
+  const handleFileChange = (event) => {
+    setFiles(Array.from(event.target.files));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -51,15 +56,30 @@ function CreatePost() {
         status: true,
       };
 
-      console.log('postData:', postData); // Log the postData object
-
-      const response = await axios.post('http://localhost:8088/posts/create', postData, {
+      const postResponse = await axios.post('http://localhost:8088/posts/create', postData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Post created successfully:', response.data);
+
+      const postId = postResponse.data.id;
+
+      if (files.length > 0) {
+        const formData = new FormData();
+        files.forEach((file) => {
+          formData.append('images', file);
+        });
+
+        await axios.post(`http://localhost:8088/postImage/upload/${postId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      }
+
+      console.log('Post created successfully:', postResponse.data);
     } catch (error) {
       if (error.response) {
         // Server responded with a status other than 200 range
@@ -114,7 +134,22 @@ function CreatePost() {
               ))}
             </Select>
           </FormControl>
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2' }}>
+          <Box sx={{ marginTop: 2 }}>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </Box>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', marginTop: 2 }}>
+            {files.map((file, index) => (
+              <Box key={index} sx={{ width: 100, height: 100, marginRight: 2, marginBottom: 2 }}>
+                <img src={URL.createObjectURL(file)} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </Box>
+            ))}
+          </Box>
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ backgroundColor: '#1976d2', marginTop: 2 }}>
             Submit Post
           </Button>
         </form>

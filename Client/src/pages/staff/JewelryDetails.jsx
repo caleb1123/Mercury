@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Button, Box, Grid, TextField } from '@mui/material';
 import axios from 'axios';
+import './JewelryDetails.css';
 
 function JewelryDetails({ jewelryId, requestId, onClose }) {
   const [jewelry, setJewelry] = useState(null);
@@ -40,7 +40,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
     const fetchJewelryImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`, {
+        const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -109,52 +109,42 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
   };
 
   if (!jewelry) {
-    return <Typography>Loading...</Typography>;
+    return <p>Loading...</p>;
   }
 
   return (
-    <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh', width: '100%' }}>
-      <Grid item xs={12} md={10} lg={8}>
-        <Paper sx={{ padding: 4, width: '100%' }}>
-          <Typography variant="h4" gutterBottom>
-            Jewelry Details
-          </Typography>
-          <Typography><strong>Request ID:</strong> {requestId}</Typography>
-          <Typography><strong>ID:</strong> {jewelry.jewelryId}</Typography>
-          <Typography><strong>Name:</strong> {jewelry.jewelryName}</Typography>
-          <Typography><strong>Condition:</strong> {jewelry.condition}</Typography>
-          <Typography><strong>Description:</strong> {jewelry.description}</Typography>
-          <Typography><strong>Designer:</strong> {jewelry.designer}</Typography>
-          <Typography><strong>Estimate:</strong> {jewelry.estimate}</Typography>
-          <Typography><strong>Gemstone:</strong> {jewelry.gemstone}</Typography>
-          <Typography><strong>Images:</strong></Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, marginBottom: 2 }}>
-            {images.map((image, index) => (
-              <img key={index} src={image.jewelryImageURL} alt={`${jewelry.jewelryName} ${index + 1}`} style={{ width: '100%', maxWidth: '200px', borderRadius: '10px' }} />
-            ))}
-          </Box>
-          <Typography><strong>Starting Price:</strong> {jewelry.startingPrice}</Typography>
-          <Typography><strong>Status:</strong> {jewelry.status ? 'Active' : 'Inactive'}</Typography>
-          <Typography><strong>Category ID:</strong> {jewelry.jewelryCategoryId}</Typography>
+    <div className="jewelry-details">
+      <div className="jewelry-details__container">
+        <h2>Jewelry Details</h2>
+        <p><strong>Request ID:</strong> {requestId}</p>
+        <p><strong>ID:</strong> {jewelry.jewelryId}</p>
+        <p><strong>Name:</strong> {jewelry.jewelryName}</p>
+        <p><strong>Condition:</strong> {jewelry.condition}</p>
+        <p><strong>Description:</strong> {jewelry.description}</p>
+        <p><strong>Designer:</strong> {jewelry.designer}</p>
+        <p><strong>Estimate:</strong> {jewelry.estimate}</p>
+        <p><strong>Gemstone:</strong> {jewelry.gemstone}</p>
+        <div className="jewelry-details__images">
+          {images.map((image, index) => (
+            <img key={index} src={image.jewelryImageURL} alt={`${jewelry.jewelryName} ${index + 1}`} />
+          ))}
+        </div>
+        <p><strong>Starting Price:</strong> {jewelry.startingPrice}</p>
+        <p><strong>Status:</strong> {jewelry.status ? 'Active' : 'Inactive'}</p>
+        <p><strong>Category ID:</strong> {jewelry.jewelryCategoryId}</p>
 
-          <Typography variant="h5" gutterBottom sx={{ marginTop: 4 }}>
-            Edit Preliminary Price
-          </Typography>
-          <TextField 
-            label="Preliminary Price"
-            value={preliminaryPrice} 
-            onChange={handlePreliminaryPriceChange} 
-            fullWidth 
-            sx={{ marginBottom: 2 }}
-          />
-
-          <Box mt={2}>
-            <Button variant="contained" color="primary" onClick={handleSave}>Save</Button>
-            <Button variant="contained" color="secondary" onClick={onClose} sx={{ marginLeft: 2 }}>Close</Button>
-          </Box>
-        </Paper>
-      </Grid>
-    </Grid>
+        <h3>Edit Preliminary Price</h3>
+        <input
+          type="text"
+          value={preliminaryPrice}
+          onChange={handlePreliminaryPriceChange}
+        />
+        <div className="jewelry-details__actions">
+          <button onClick={handleSave}>Save</button>
+          <button onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -26,6 +26,7 @@ public class AuctionConverter {
         auction.setEndDate(auctionDTO.getEndDate());
         auction.setCurrentPrice(auctionDTO.getCurrentPrice());
         auction.setStatus(auctionDTO.getStatus());
+        auction.setWinnerId(auctionDTO.getWinnerId());
         auction.setJewelry(jewelryRepository.getReferenceById(auctionDTO.getJewelryId()));
 
         return auction;
@@ -37,6 +38,7 @@ public class AuctionConverter {
         auctionDTO.setStartDate(auction.getStartDate());
         auctionDTO.setEndDate(auction.getEndDate());
         auctionDTO.setCurrentPrice(auction.getCurrentPrice());
+        auctionDTO.setWinnerId(auction.getWinnerId());
         auctionDTO.setStatus(auction.getStatus());
         auctionDTO.setJewelryId(jewelryConverter.toDTO(auction.getJewelry()).getJewelryId());
 
