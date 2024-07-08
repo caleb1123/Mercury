@@ -20,4 +20,9 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Integer> {
 
     @Override
     Page<Jewelry> findAll(Pageable pageable);
+
+    @Query(value = "Select * FROM jewelry where jewelry_category_id = :categoryId", nativeQuery = true)
+    List<Jewelry> getByCategory(int categoryId);
+    @Query(value = "SELECT j.* FROM Jewelry j JOIN Auction a ON j.jewelry_id = a.jewelry_id\n WHERE a.status != 'Ongoing' AND a.winner_id IS NULL AND j.status = 1", nativeQuery = true)
+    List<Jewelry> getJewelriesForAuction();
 }

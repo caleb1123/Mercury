@@ -26,6 +26,7 @@ public class JewelryConverter {
         if (dto==null) return null;
         Jewelry entity = new Jewelry();
         entity.setJewelryId(dto.getJewelryId());
+        entity.setJewelryCode(dto.getJewelryCode());
         entity.setJewelryName(dto.getJewelryName());
         entity.setDesigner(dto.getDesigner());
         entity.setGemstone(dto.getGemstone());
@@ -43,6 +44,7 @@ public class JewelryConverter {
         if (entity==null) return null;
         JewelryDTO dto = new JewelryDTO();
         dto.setJewelryId(entity.getJewelryId());
+        dto.setJewelryCode(entity.getJewelryCode());
         dto.setJewelryName(entity.getJewelryName());
         dto.setDesigner(entity.getDesigner());
         dto.setGemstone(entity.getGemstone());

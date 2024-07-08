@@ -96,4 +96,10 @@ public class JewelryController {
         List<JewelryDTO> jewelries = jewelryService.getJewelryForAuction();
         return new ResponseEntity<>(jewelries, HttpStatus.OK);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/list/category/{id}")
+    public ResponseEntity<List<JewelryDTO>> getJewelryByCategory(@PathVariable int id) {
+        List<JewelryDTO> jewelries = jewelryService.getJewelryByCategory(id);
+        return new ResponseEntity<>(jewelries, HttpStatus.OK);
+    }
 }

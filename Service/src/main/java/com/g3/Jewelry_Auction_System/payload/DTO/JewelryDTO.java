@@ -13,6 +13,7 @@ import java.util.Collection;
 @Data
 public class JewelryDTO {
     private int jewelryId;
+    private String jewelryCode;
     private String jewelryName;
     private String designer;
     private String gemstone;
