@@ -219,9 +219,6 @@ function StaffPage() {
         </Grid>
 
         <Grid item>
-          <Typography variant="body2" color="textSecondary" align="center" sx={{ pb: 2 }}>
-            © {new Date().getFullYear()} Mercury
-          </Typography>
         </Grid>
       </Grid>
 
@@ -230,9 +227,9 @@ function StaffPage() {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          sx={{ height: '100%' }}
+          sx={{ height: '100%', width: '100%' }} // Full width adjustment
         >
-          <Box sx={{ width: '80%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
+          <Box sx={{ width: '100%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
             {selectedIndex === 0 && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Profile</Typography>

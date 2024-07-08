@@ -15,6 +15,7 @@ import ManagerPage from './pages/manager/manager';
 import ViewPost from './pages/users/ViewPost';
 import Auctions from './pages/users/Auctions';
 import About from './pages/users/About/AboutMercury';
+import ResetPassword from './pages/users/ResetPassword';
 
 
 function App() {
@@ -35,6 +36,8 @@ function App() {
         <Route path="/manager" element={<ManagerPage/>} />
         <Route path="/ViewPost" element={<ViewPost/>} />
         <Route path="/Auctions/:opId" element={<Auctions/>} />
+        <Route path="/ResetPassword" element={<ResetPassword/>} />
+        <Route path='/ViewJewelryList/Category/:Cateid' element={<ViewJewelryList/>}/>
         <Route path="/about-mercury" element={<About/>} />
 
         </Routes>

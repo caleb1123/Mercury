@@ -73,12 +73,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </IconButton>
               {showProfileMenu && (
                 <div className="ProfileDropdown">
-                  <div
-                    className="ProfileItem"
-                    onClick={() => navigate("/viewprofile")}
-                  >
-                    View Profile
-                  </div>
+      
                   <div className="Logout" onClick={handleLogout}>
                     Logout
                   </div>
@@ -140,7 +135,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/category/${category.id}`)}
+                    onClick={() => navigate(`/ViewJewelryList/Category/${category.id}`)}
                   >
                     {category.name}
                   </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewProfile.css';
+import Header from './Header';
 
 function ViewProfile() {
   const [userData, setUserData] = useState(null);
@@ -12,9 +13,16 @@ function ViewProfile() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    
     const fetchUserData = async () => {
       try {
         const response = await fetch('http://localhost:8088/account/myinfor', {
@@ -101,55 +109,70 @@ function ViewProfile() {
     navigate('/');
   };
 
+  const handleProfileClick = () => {
+    navigate('/viewProfile');
+  };
+
   if (!userData) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="Profile">
-      <h2>User Profile</h2>
-      <div className="ProfileDetails">
-        <p><strong>Account ID:</strong> {userData.accountId}</p>
-        <p><strong>Full Name:</strong> {userData.fullName}</p>
-        <p><strong>User Name:</strong> {userData.userName}</p>
-        <p><strong>Address:</strong> {userData.address}</p>
-        <p><strong>Date of Birth:</strong> {userData.dob}</p>
-        <p><strong>Email:</strong> {userData.email}</p>
-        <p><strong>Sex:</strong> {userData.sex ? 'Male' : 'Female'}</p>
-        <p><strong>Phone:</strong> {userData.phone}</p>
-        <p><strong>Status:</strong> {userData.status ? 'Active' : 'Inactive'}</p>
-        <p><strong>Role ID:</strong> {userData.roleId}</p>
+    
+    <>
+      <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
+
+    
+    <div className="containerProfile">
+      <div className="profile">
+        <h2>User Profile</h2>
+        <div className="profile-details">
+          <p><strong>Account ID:</strong> {userData.accountId}</p>
+          <p><strong>Full Name:</strong> {userData.fullName}</p>
+          <p><strong>User Name:</strong> {userData.userName}</p>
+          <p><strong>Address:</strong> {userData.address}</p>
+          <p><strong>Date of Birth:</strong> {userData.dob}</p>
+          <p><strong>Email:</strong> {userData.email}</p>
+          <p><strong>Sex:</strong> {userData.sex ? 'Male' : 'Female'}</p>
+          <p><strong>Phone:</strong> {userData.phone}</p>
+          <p><strong>Status:</strong> {userData.status ? 'Active' : 'Inactive'}</p>
+          <p><strong>Role ID:</strong> {userData.roleId}</p>
+        </div>
+        {!isEditing && <button onClick={handleEditClick} className="edit-button">Edit Profile</button>}
+        {isEditing && (
+          <form onSubmit={handleFormSubmit} className="edit-profile-form">
+            <h3>Edit Profile</h3>
+            {error && <div className="error-message">{error}</div>}
+            <div className="form-field">
+              <label>Full Name:</label>
+              <input type="text" name="fullName" value={editData.fullName} onChange={handleInputChange} />
+            </div>
+            <div className="form-field">
+              <label>Address:</label>
+              <input type="text" name="address" value={editData.address} onChange={handleInputChange} />
+            </div>
+            <div className="form-field">
+              <label>Date of Birth:</label>
+              <input type="date" name="dob" value={editData.dob} onChange={handleInputChange} />
+            </div>
+            <div className="form-field">
+              <label>Sex:</label>
+              <select name="sex" value={editData.sex} onChange={handleInputChange}>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <button type="submit" className="save-button">Save Changes</button>
+          </form>
+        )}
+        <button onClick={handleLogout} className="logout-button">Logout</button>
       </div>
-      {!isEditing && <button onClick={handleEditClick} className="EditButton">Edit Profile</button>}
-      {isEditing && (
-        <form onSubmit={handleFormSubmit} className="EditProfileForm">
-          <h3>Edit Profile</h3>
-          {error && <div className="ErrorMessage">{error}</div>}
-          <div className="FormField">
-            <label>Full Name:</label>
-            <input type="text" name="fullName" value={editData.fullName} onChange={handleInputChange} />
-          </div>
-          <div className="FormField">
-            <label>Address:</label>
-            <input type="text" name="address" value={editData.address} onChange={handleInputChange} />
-          </div>
-          <div className="FormField">
-            <label>Date of Birth:</label>
-            <input type="date" name="dob" value={editData.dob} onChange={handleInputChange} />
-          </div>
-          <div className="FormField">
-            <label>Sex:</label>
-            <select name="sex" value={editData.sex} onChange={handleInputChange}>
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-          <button type="submit" className="SaveButton">Save Changes</button>
-        </form>
-      )}
-      <button onClick={handleLogout} className="LogoutButton">Logout</button>
     </div>
+    <div className="Footer">
+        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
+      </div>
+    </>
   );
 }
 
