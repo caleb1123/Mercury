@@ -49,4 +49,15 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private Collection<PostImage> postImages;
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + postId +
+                ", title='" + title + '\'' +
+                // Assuming 'author' is a simple field; adjust based on your entity structure
+                ", author='" + account + '\'' +
+                // Do not include collections or related entities that could cause recursion
+                '}';
+    }
 }

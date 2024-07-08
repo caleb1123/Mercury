@@ -1,4 +1,10 @@
-FROM ubuntu:latest
-LABEL authors="ryy15"
+FROM maven:3.8.4-openjdk-17-slim AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-ENTRYPOINT ["top", "-b"]
+FROM openjdk:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar /app/app.jar
+EXPOSE 8088
+CMD ["java", "-jar", "/app/app.jar"]
