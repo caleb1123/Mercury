@@ -12,5 +12,7 @@ public interface PostImageRepository extends JpaRepository<PostImage, Integer> {
     @Query(value = "SELECT * FROM Post_Image where post_id = :id" , nativeQuery = true)
     List<PostImage> getByPostId(int id);
     PostImage findByFileId(String fileId);
+    @Query(value = "select COUNT(post_image_id) as image_count from post_image where post_id = 5 group by post_id",nativeQuery = true)
+    Integer getImageCountByPostId(int id);
 }
 
