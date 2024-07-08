@@ -32,6 +32,10 @@ function HomePage() {
     navigate('/viewProfile');
   };
 
+  const handleLearnMore = () => {
+    navigate('/about-mercury');
+  }
+
   return (
     <>
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
@@ -48,7 +52,7 @@ function HomePage() {
         <div className="auction-container">
           <div className="auction-intro">
             <h1>THE LEADING BOUTIQUE JEWELRY AND WATCH AUCTION HOUSE</h1>
-            <button>LEARN MORE ABOUT US</button>
+            <button onClick={handleLearnMore}>LEARN MORE ABOUT US</button>
           </div>
           <div className="auction-sections">
             <div className="auction-section">

@@ -16,8 +16,9 @@ const btnViewDetail = () => {
   window.location.href = "/ViewPostDetail";
 };
 
-const Article = ({ title, excerpt }) => (
+const Article = ({ title, excerpt, imageUrl }) => (
   <article className="article">
+    <img src={imageUrl} alt={title} className="article-image" />
     <h2 className="article-title">{title}</h2>
     <p className="article-excerpt">{excerpt}</p>
     <button onClick={btnViewDetail} className="read-more">
@@ -25,6 +26,7 @@ const Article = ({ title, excerpt }) => (
     </button>
   </article>
 );
+
 
 function ViewPost() {
   const [posts, setPosts] = useState([]);
@@ -59,12 +61,16 @@ function ViewPost() {
     axios
       .get(url)
       .then((response) => {
-        if (response.data.length === 0) {
+        const postsWithImages = response.data.map((post) => ({
+          ...post,
+          imageUrl: post.images && post.images.length > 0 ? post.images[0].url : null,
+        }));
+        if (postsWithImages.length === 0) {
           setNoPosts(true);
         } else {
           setNoPosts(false);
         }
-        setPosts(response.data);
+        setPosts(postsWithImages);
       })
       .catch((error) => {
         if (error.response && error.response.status === 404) {
@@ -125,7 +131,7 @@ function ViewPost() {
             <div className="article-row" key={rowIndex}>
               {row.map((post) => (
                 <div className="article-column" key={post.postId}>
-                  <Article title={post.title} excerpt={post.content} />
+                  <Article title={post.title} excerpt={post.content} imageUrl={post.imageUrl} />
                 </div>
               ))}
             </div>
@@ -135,4 +141,5 @@ function ViewPost() {
     </div>
   );
 }
+
 export default ViewPost;
