@@ -1,5 +1,8 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Singleton;
+import com.cloudinary.utils.ObjectUtils;
 import com.g3.Jewelry_Auction_System.converter.JewelryImageConverter;
 import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.entity.JewelryImage;
@@ -22,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 public class JewelryImageServiceImpl implements JewelryImageService {
@@ -34,7 +39,7 @@ public class JewelryImageServiceImpl implements JewelryImageService {
     @Autowired
     JewelryImageConverter jewelryImageConverter;
     @Autowired
-    Drive drive;
+    Cloudinary cloudinary;
 
 
 
@@ -51,65 +56,68 @@ public class JewelryImageServiceImpl implements JewelryImageService {
         }
         return dtoList;
     }
+
+
+
+
     @Override
-    public String uploadImageToGoogleDrive(MultipartFile file, int id) throws IOException {
+    public String uploadImageToCloudinary(MultipartFile file, int id) throws IOException {
         Jewelry jewelry = jewelryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
-        if(jewelry!= null){
-            com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
-            fileMetadata.setName(file.getOriginalFilename());
-
-            ByteArrayContent mediaContent = new ByteArrayContent(file.getContentType(), file.getBytes());
-
-            com.google.api.services.drive.model.File uploadedFile = drive.files().create(fileMetadata, mediaContent)
-                    .setFields("id")
-                    .execute();
-            JewelryImage jewelryImage = new JewelryImage();
-            jewelryImage.setJewelry(jewelry);
-            String imageUrl = "https://drive.google.com/uc?id=" + uploadedFile.getId();
-            jewelryImage.setJewelryImageURL(imageUrl);
-            String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
-            jewelryImage.setFileId(fileId); // Assuming you have a setFileId method in JewelryImage class
-            jewelryImage.setStatus(true);
-            jewelryImageRepository.save(jewelryImage);
-            return imageUrl;
-        }else {
-            return "upload fail";
-        }
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        JewelryImage jewelryImage = new JewelryImage();
+        jewelryImage.setJewelry(jewelry);
+        jewelryImage.setJewelryImageURL((String) uploadResult.get("url"));
+        jewelryImage.setStatus(true);
+        jewelryImage.setFileId(getRandomNumber(8));
+        jewelryImageRepository.save(jewelryImage);
+        return (String) uploadResult.get("url");
     }
-
-
-    @Override
-    public void setFilePublic(String fileId) throws IOException {
-        // Create a permission object with 'anyone' type and 'reader' role
-        Permission permission = new Permission()
-                .setType("anyone")
-                .setRole("reader");
-
-        // Create a permission request
-        Drive.Permissions.Create permissionRequest = drive.permissions().create(fileId, permission);
-
-        // Execute the request
-        permissionRequest.execute();
-    }
-
 
     @Override
     public boolean deleteImage(String fileId) throws IOException {
-       JewelryImage image =  jewelryImageRepository.findByFileId(fileId);
-        if(image != null){
-            drive.files().delete(fileId).execute();
-            image.setStatus(false);
-            jewelryImageRepository.save(image);
-            return true;
+        JewelryImage jewelryImage = jewelryImageRepository.findByFileId(fileId);
+        if (jewelryImage != null) {
+            String publicId = extractPublicId(jewelryImage.getJewelryImageURL());
+            Map deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            if (deleteResult.get("result").equals("ok")) {
+                jewelryImage.setStatus(false);
+                jewelryImageRepository.save(jewelryImage);
+                return true;
+            }
         }
         return false;
     }
+    private String extractPublicId(String jewelryImageUrl) {
+        // Example: https://res.cloudinary.com/demo/image/upload/v1234567890/public_id.jpg
+        // Extract public_id "v1234567890/public_id"
+        int startIndex = jewelryImageUrl.lastIndexOf("/") + 1;
+        int endIndex = jewelryImageUrl.lastIndexOf(".");
+        return jewelryImageUrl.substring(startIndex, endIndex);
+    }
+    public static String getRandomNumber(int len) {
+        Random rnd = new Random();
+        String chars = "0123456789";
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
 
     @Override
     public JewelryImageDTO getImageByFileId(String fileId) {
         JewelryImage image = jewelryImageRepository.findByFileId(fileId);
+        if(image != null){
+            return jewelryImageConverter.toDTO(image);
+        }
+        return null;
+    }
 
-        return jewelryImageConverter.toDTO(image);
+    @Override
+    public JewelryImageDTO getImageAuto(int id) {
+        JewelryImage image = jewelryImageRepository.findJewelryImageAuto(id);
+        return image != null ? jewelryImageConverter.toDTO(image) : null;
     }
 }

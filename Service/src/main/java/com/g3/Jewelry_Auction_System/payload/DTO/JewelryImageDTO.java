@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 public class JewelryImageDTO {
     private int jewelryImageId;
     private String jewelryImageURL;
+    private String fileId;
+    private boolean status;
     private int jewelryId;
 }

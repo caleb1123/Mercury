@@ -20,6 +20,8 @@ public class PostImageConverter {
         entity.setPostImageId(postImageDTO.getPostImageId());
         entity.setPostImageURL(postImageDTO.getPostImageURL());
         entity.setPost(postRepository.getReferenceById(postImageDTO.getPostId()));
+        entity.setFileId(postImageDTO.getFileId());
+        entity.setStatus(postImageDTO.isStatus());
         return entity;
     }
     public PostImageDTO toDTO(PostImage postImage) {
@@ -28,6 +30,8 @@ public class PostImageConverter {
         dto.setPostImageId(postImage.getPostImageId());
         dto.setPostImageURL(postImage.getPostImageURL());
         dto.setPostId(postImage.getPost().getPostId());
+        dto.setFileId(postImage.getFileId());
+        dto.setStatus(postImage.isStatus());
         return dto;
     }
 }

@@ -9,9 +9,8 @@ import java.util.List;
 public interface JewelryImageService {
 
     List<JewelryImageDTO> getImagesByJewelryId(int id);
-    String uploadImageToGoogleDrive(MultipartFile file,int id) throws IOException;
-    void setFilePublic(String fileId) throws IOException;
-
+    String uploadImageToCloudinary(MultipartFile file, int id) throws IOException;
     boolean deleteImage(String fileId) throws IOException;
     JewelryImageDTO getImageByFileId(String fileId);
+    JewelryImageDTO getImageAuto(int id);
 }
