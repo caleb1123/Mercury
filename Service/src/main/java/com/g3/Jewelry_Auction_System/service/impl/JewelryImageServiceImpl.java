@@ -57,7 +57,19 @@ public class JewelryImageServiceImpl implements JewelryImageService {
         return dtoList;
     }
 
-
+    @Override
+    public List<JewelryImageDTO> getImagesByJewelryIdWithoutStatusFalse(int id) {
+        List<JewelryImage> list = jewelryImageRepository.getByJewelryIdWithoutStatusFalse(id);
+        List<JewelryImageDTO> dtoList = new ArrayList<>();
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.NO_IMAGE_FOUND);
+        } else {
+            for (JewelryImage jewelryImage : list) {
+                dtoList.add(jewelryImageConverter.toDTO(jewelryImage));
+            }
+        }
+        return dtoList;
+    }
 
 
     @Override
