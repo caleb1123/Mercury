@@ -37,6 +37,10 @@ public class PostImageServiceImpl implements PostImageService {
     @Override
     public String uploadImageToCloudinary(MultipartFile file, int id) throws IOException {
         Post post = postRepository.getReferenceById(id);
+        Integer imageCount = postImageRepository.getImageCountByPostId(id);
+        if(imageCount >= 5 ){
+            throw new AppException(ErrorCode.IMAGE_MANY);
+        }
         if(post != null){
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
             PostImage postImage = new PostImage();

@@ -37,17 +37,17 @@ function CreatePost() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No token found');
         return;
       }
-
+  
       const decodedToken = jwtDecode(token);
       const account_id = decodedToken.account_id; // Adjust according to your token structure
-
+  
       const postData = {
         title,
         content,
@@ -55,30 +55,35 @@ function CreatePost() {
         postDate: new Date().toISOString(),
         status: true,
       };
-
+  
       const postResponse = await axios.post('http://localhost:8088/posts/create', postData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-
-      const postId = postResponse.data.id;
-
+  
+      const postId = postResponse.data.postId;
+  
       if (files.length > 0) {
         const formData = new FormData();
         files.forEach((file) => {
           formData.append('images', file);
         });
-
-        await axios.post(`http://localhost:8088/postImage/upload/${postId}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}`
-          }
-        });
+  
+        try {
+          await axios.post(`http://localhost:8088/postImage/upload/${postId}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          console.log('Images uploaded successfully');
+        } catch (uploadError) {
+          console.error('Error uploading images:', uploadError.response ? uploadError.response.data : uploadError.message);
+        }
       }
-
+  
       console.log('Post created successfully:', postResponse.data);
     } catch (error) {
       if (error.response) {
@@ -94,6 +99,7 @@ function CreatePost() {
       console.error('Error config:', error.config);
     }
   };
+  
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
