@@ -109,7 +109,15 @@ public class JewelryImageServiceImpl implements JewelryImageService {
     @Override
     public JewelryImageDTO getImageByFileId(String fileId) {
         JewelryImage image = jewelryImageRepository.findByFileId(fileId);
+        if(image != null){
+            return jewelryImageConverter.toDTO(image);
+        }
+        return null;
+    }
 
-        return jewelryImageConverter.toDTO(image);
+    @Override
+    public JewelryImageDTO getImageAuto(int id) {
+        JewelryImage image = jewelryImageRepository.findJewelryImageAuto(id);
+        return image != null ? jewelryImageConverter.toDTO(image) : null;
     }
 }

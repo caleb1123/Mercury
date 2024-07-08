@@ -88,6 +88,9 @@ public class JewelryController {
     @GetMapping("/{jewelryId}/auction")
     public ResponseEntity<AuctionDTO> getAuctionByJewelry(@PathVariable int jewelryId) {
         AuctionDTO auction = jewelryService.getAuctionByJewelry(jewelryId);
+        if(auction == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(auction, HttpStatus.OK);
     }
     @CrossOrigin(origins = "http://localhost:3001")

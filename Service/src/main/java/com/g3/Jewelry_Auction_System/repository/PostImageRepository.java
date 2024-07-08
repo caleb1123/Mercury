@@ -11,5 +11,6 @@ import java.util.List;
 public interface PostImageRepository extends JpaRepository<PostImage, Integer> {
     @Query(value = "SELECT * FROM Post_Image where post_id = :id" , nativeQuery = true)
     List<PostImage> getByPostId(int id);
+    PostImage findByFileId(String fileId);
 }
 

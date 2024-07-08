@@ -16,6 +16,8 @@ public class JewelryImageConverter {
         entity.setJewelryImageId(jewelryImageDTO.getJewelryImageId());
         entity.setJewelryImageURL(jewelryImageDTO.getJewelryImageURL());
         entity.setJewelry(jewelryRepository.getReferenceById(jewelryImageDTO.getJewelryId()));
+        entity.setStatus(jewelryImageDTO.isStatus());
+        entity.setFileId(jewelryImageDTO.getFileId());
         return entity;
     }
     public JewelryImageDTO toDTO(JewelryImage jewelryImage) {
@@ -24,6 +26,8 @@ public class JewelryImageConverter {
         dto.setJewelryImageId(jewelryImage.getJewelryImageId());
         dto.setJewelryImageURL(jewelryImage.getJewelryImageURL());
         dto.setJewelryId(jewelryImage.getJewelry().getJewelryId());
+        dto.setStatus(jewelryImage.isStatus());
+        dto.setFileId(jewelryImage.getFileId());
         return dto;
     }
 }

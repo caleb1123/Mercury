@@ -10,6 +10,7 @@ function ViewJewelryList() {
   const [jewelryList, setJewelryList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchError, setSearchError] = useState('');
+  const [imageUrls, setImageUrls] = useState({});
 
   const navigate = useNavigate();
 
@@ -38,6 +39,8 @@ function ViewJewelryList() {
       const data = response.data;
       setJewelryList(data);
       setSearchError('');
+      // Fetch images for each jewelry item
+      data.forEach(jewelry => fetchJewelryImage(jewelry.jewelryId));
     } catch (error) {
       console.error('Error fetching jewelry data:', error);
       setSearchError('Error fetching jewelry data');
@@ -54,6 +57,31 @@ function ViewJewelryList() {
 
   const handleItemClick = (id) => {
     navigate(`/ViewJewelry/${id}`);
+  };
+
+  // Fetch jewelry image
+  const fetchJewelryImage = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8088/jewelryImage/jewelry/${id}/image`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = response.data;
+      if (data && data.jewelryImageURL) {
+        setImageUrls(prevState => ({
+          ...prevState,
+          [id]: data.jewelryImageURL,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching jewelry image:', error);
+    }
   };
 
   // Filter jewelry list based on status
@@ -85,6 +113,8 @@ function ViewJewelryList() {
       } else {
         setJewelryList(data);
         setSearchError('');
+        // Fetch images for each jewelry item
+        data.forEach(jewelry => fetchJewelryImage(jewelry.jewelryId));
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -118,7 +148,15 @@ function ViewJewelryList() {
           filteredJewelryList.map((jewelry) => (
             <div key={jewelry.jewelryId} className="jewelry-item">
               <button onClick={() => handleItemClick(jewelry.jewelryId)} className="image-button">
-                <img src={jewelry.image} alt={jewelry.jewelryName} className="jewelry-image" />
+                {imageUrls[jewelry.jewelryId] ? (
+                  <img
+                    src={imageUrls[jewelry.jewelryId]}
+                    alt={jewelry.jewelryName}
+                    className="jewelry-image"
+                  />
+                ) : (
+                  <div>Loading image...</div>
+                )}
               </button>
               <div className="jewelry-info">
                 <h3>{jewelry.jewelryName}</h3>
