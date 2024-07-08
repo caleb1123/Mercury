@@ -12,4 +12,19 @@ public interface JewelryImageRepository extends JpaRepository<JewelryImage, Inte
     @Query(value = "SELECT * FROM Jewelry_Image where jewelry_id = :id" , nativeQuery = true)
     List<JewelryImage> getByJewelryId(int id);
     JewelryImage findByFileId(String fileId);
+
+    @Query(value = "SELECT TOP 1\n" +
+            "    [jewelry_image_id],\n" +
+            "    [jewelry_imageurl],\n" +
+            "    [jewelry_id],\n" +
+            "    [file_id],\n" +
+            "    [status]\n" +
+            "FROM\n" +
+            "    [JewelryAuctionSystem].[dbo].[jewelry_image]\n" +
+            "WHERE\n" +
+            "    [jewelry_id] = :id\n" +
+            "ORDER BY\n" +
+            "    [jewelry_image_id] ASC;\n" , nativeQuery = true)
+    JewelryImage findJewelryImageAuto(int id);
+
 }

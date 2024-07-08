@@ -67,4 +67,14 @@ public class JewelryImageController {
         }
     }
 
+    @GetMapping("/jewelry/{id}/image")
+    public ResponseEntity<JewelryImageDTO> getImageAuto(@PathVariable int id) {
+        JewelryImageDTO image = jewelryImageService.getImageAuto(id);
+        if(image != null) {
+            return new ResponseEntity<>(image, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
