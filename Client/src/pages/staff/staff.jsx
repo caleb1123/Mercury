@@ -26,11 +26,12 @@ import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import CreatePost from './CreatePost';
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
+import EditJewelryImages from './EditJewelryImages'; // Import EditJewelryImages
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -45,6 +46,8 @@ function StaffPage() {
   const [selectedJewelry, setSelectedJewelry] = useState(null);
   const [viewJewelryId, setViewJewelryId] = useState(null);
   const [viewRequestId, setViewRequestId] = useState(null);
+  const [editImageMode, setEditImageMode] = useState(false); // State to manage image editing mode
+  const [selectedJewelryId, setSelectedJewelryId] = useState(null); // State to store selected jewelry ID
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
@@ -52,6 +55,7 @@ function StaffPage() {
     setAddJewelryMode(false);
     setViewJewelryId(null);
     setViewRequestId(null);
+    setEditImageMode(false); // Reset edit image mode
   };
 
   const fetchProfile = async () => {
@@ -147,6 +151,16 @@ function StaffPage() {
   const handleViewJewelryClick = (jewelryId, requestId) => {
     setViewJewelryId(jewelryId);
     setViewRequestId(requestId);
+  };
+
+  const handleEditImageClick = (jewelryId) => { // Function to handle edit image button click
+    setSelectedJewelryId(jewelryId);
+    setEditImageMode(true);
+  };
+
+  const closeEditImageDialog = () => { // Function to close the image editing dialog
+    setEditImageMode(false);
+    setSelectedJewelryId(null);
   };
 
   useEffect(() => {
@@ -285,6 +299,7 @@ function StaffPage() {
                           <TableCell>
                             <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
                             <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
+                            <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -396,6 +411,9 @@ function StaffPage() {
                   <CreatePost />
                 </Box>
               </Box>
+            )}
+            {editImageMode && (
+              <EditJewelryImages jewelryId={selectedJewelryId} onClose={closeEditImageDialog} />
             )}
           </Box>
         </Box>

@@ -42,6 +42,7 @@ public class JewelryImageController {
         return new ResponseEntity<>(list , HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
 
     @DeleteMapping("/delete/{fileId}")
     public ResponseEntity<String> deleteImage(@PathVariable String fileId) {
