@@ -29,4 +29,15 @@ public class JewelryImage {
     @ManyToOne
     @JoinColumn(name = "jewelryId")
     private Jewelry jewelry;
+
+    @Override
+    public String toString() {
+        return "JewelryImage{" +
+                "id=" + jewelryImageId +
+                ", jewelryImageURL='" + jewelryImageURL + '\'' +
+                ", status=" + status +
+                ", fileId='" + fileId + '\'' +
+                // Avoid including 'jewelry' here if it has a back-reference to JewelryImage
+                '}';
+    }
 }

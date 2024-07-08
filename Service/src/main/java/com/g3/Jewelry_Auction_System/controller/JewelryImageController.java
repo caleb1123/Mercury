@@ -19,19 +19,16 @@ public class JewelryImageController {
     JewelryImageService jewelryImageService;
     @Autowired
     JewelryImageRepository jewelryImageRepository;
+
     @PostMapping("/upload/{jewelryId}")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,@PathVariable int jewelryId) {
+    public ResponseEntity<String> uploadImageCloudinary(@RequestParam("file") MultipartFile file,@PathVariable int jewelryId) throws IOException {
         try {
-            String imageUrl = jewelryImageService.uploadImageToGoogleDrive(file,jewelryId);
-            String fileId = imageUrl.split("=")[1]; // Extract the file ID from the URL
-            jewelryImageService.setFilePublic(fileId);
+            var imageUrl= jewelryImageService.uploadImageToCloudinary(file,jewelryId);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image: " + e.getMessage());
         }
     }
-
-
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/list/{jewelryId}")
     public ResponseEntity<List<JewelryImageDTO>> getImageByJewelryId(@PathVariable int jewelryId) {
@@ -51,6 +48,16 @@ public class JewelryImageController {
             }
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete image: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{fileId}")
+    public ResponseEntity<JewelryImageDTO> getImageByFileId(@PathVariable String fileId) {
+        JewelryImageDTO imageDTO = jewelryImageService.getImageByFileId(fileId);
+        if (imageDTO != null) {
+            return ResponseEntity.ok(imageDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

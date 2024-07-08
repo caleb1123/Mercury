@@ -1,8 +1,10 @@
 package com.g3.Jewelry_Auction_System.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -16,5 +18,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(appException.getErrorCode().getStatusCode().value())
                 .body(appException.getErrorCode().getMessage());
+    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Kích thước tệp vượt quá giới hạn cho phép!");
     }
 }
