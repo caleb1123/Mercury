@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ViewPost.css";
+import "./Header";
+import Header from "./Header";
 
 const CategoryItem = ({ children, isActive, onClick }) => (
   <div
@@ -27,12 +29,13 @@ const Article = ({ title, excerpt, imageUrl }) => (
   </article>
 );
 
-
 function ViewPost() {
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(0);
   const [noPosts, setNoPosts] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch categories from the backend
@@ -63,7 +66,8 @@ function ViewPost() {
       .then((response) => {
         const postsWithImages = response.data.map((post) => ({
           ...post,
-          imageUrl: post.images && post.images.length > 0 ? post.images[0].url : null,
+          imageUrl:
+            post.images && post.images.length > 0 ? post.images[0].url : null,
         }));
         if (postsWithImages.length === 0) {
           setNoPosts(true);
@@ -100,45 +104,56 @@ function ViewPost() {
 
   const postRows = createRows(posts, 2);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleProfileClick = () => {
+    navigate("/viewProfile");
+  };
+
   return (
-    <div className="container">
-      <header className="header">
-        <div className="header-content">
-          <NavLink to="/" className="logo">
-            MERCURY
-          </NavLink>
-        </div>
-      </header>
-      <h1 className="section-title">Recent Posts</h1>
-      <div className="category-menu">
-        {categories.map((category) => (
-          <CategoryItem
-            key={category.categoryId}
-            isActive={category.categoryId === activeCategory}
-            onClick={() => filterPostsByCategory(category.categoryId)}
-          >
-            {category.categoryName.replace(/_/g, " ")}
-          </CategoryItem>
-        ))}
-      </div>
-      {noPosts ? (
-        <div className="no-posts-announcement">
-          No posts available in this category.
-        </div>
-      ) : (
-        <section className="article-grid">
-          {postRows.map((row, rowIndex) => (
-            <div className="article-row" key={rowIndex}>
-              {row.map((post) => (
-                <div className="article-column" key={post.postId}>
-                  <Article title={post.title} excerpt={post.content} imageUrl={post.imageUrl} />
-                </div>
-              ))}
-            </div>
+    <>
+      <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
+      <div className="container">
+        <h1 className="section-title">Recent Posts</h1>
+        <div className="category-menu">
+          {categories.map((category) => (
+            <CategoryItem
+              key={category.categoryId}
+              isActive={category.categoryId === activeCategory}
+              onClick={() => filterPostsByCategory(category.categoryId)}
+            >
+              {category.categoryName.replace(/_/g, " ")}
+            </CategoryItem>
           ))}
-        </section>
-      )}
-    </div>
+        </div>
+        {noPosts ? (
+          <div className="no-posts-announcement">
+            No posts available in this category.
+          </div>
+        ) : (
+          <section className="article-grid">
+            {postRows.map((row, rowIndex) => (
+              <div className="article-row" key={rowIndex}>
+                {row.map((post) => (
+                  <div className="article-column" key={post.postId}>
+                    <Article
+                      title={post.title}
+                      excerpt={post.content}
+                      imageUrl={post.imageUrl}
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </section>
+        )}
+      </div>
+    </>
   );
 }
 
