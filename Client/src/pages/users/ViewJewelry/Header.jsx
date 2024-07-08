@@ -76,7 +76,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div 
                     key={category.id} 
                     className="CategoryItem"
-                    onClick={() => navigate(`/category/${category.id}`)}
+                    onClick={() => navigate(`/ViewJewelrylist/Category/${category.id}`)}
                   >
                     {category.name}
                   </div>

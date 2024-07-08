@@ -13,20 +13,19 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
   const [jewelryList, setJewelryList] = useState([]);
 
   useEffect(() => {
-    fetchJewelryList();
+    fetchAvailableJewelry();
   }, []);
 
-  const fetchJewelryList = async () => {
+  const fetchAvailableJewelry = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/getAll', {
+      const response = await axios.get('http://localhost:8088/jewelry/list/available', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const activeJewelry = response.data.filter(jewelry => jewelry.status === true);
-      setJewelryList(activeJewelry);
+      setJewelryList(response.data);
     } catch (error) {
-      console.error('Error fetching jewelry list:', error);
+      console.error('Error fetching available jewelry:', error);
     }
   };
 
@@ -49,7 +48,7 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
   };
 
   const handleSubmit = async () => {
-    console.log('Auction data to be submitted:', auctionData); // Add this line to log auction data
+    console.log('Auction data to be submitted:', auctionData);
     try {
       const response = await axios.post('http://localhost:8088/auction/create', auctionData, {
         headers: {
@@ -93,20 +92,6 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
-        {/* <Grid item xs={12}>
-          <FormControl fullWidth variant="outlined">
-            <InputLabel>Status</InputLabel>
-            <Select
-              label="Status"
-              name="status"
-              value={auctionData.status}
-              onChange={handleChange}
-            >
-              <MenuItem value={true}>Active</MenuItem>
-              <MenuItem value={false}>Inactive</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid> */}
         <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
             <InputLabel>Jewelry</InputLabel>

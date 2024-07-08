@@ -11,6 +11,7 @@ import axios from 'axios';
 
 const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
   const [editedJewelry, setEditedJewelry] = useState({ ...jewelry });
+  const [imageFile, setImageFile] = useState(null);
 
   const categories = [
     { jewelry_category_id: 1, category_name: 'RINGS' },
@@ -36,8 +37,25 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
     });
   };
 
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
   const handleUpdateJewelry = async () => {
     try {
+      // Upload image first if a new image file is selected
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        const imageUploadResponse = await axios.post(`http://localhost:8088/jewelryImage/upload/${editedJewelry.jewelryId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        editedJewelry.image = imageUploadResponse.data.imageUrl; // Assuming the server returns the image URL in imageUrl field
+      }
+
+      // Update jewelry details
       const url = `http://localhost:8088/jewelry/update/${editedJewelry.jewelryId}`;
       await axios.put(url, editedJewelry);
       fetchJewelry(); // Refresh the list
@@ -90,13 +108,11 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Image"
-        name="image"
-        value={editedJewelry.image}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
+      <input
+        accept="image/*"
+        type="file"
+        onChange={handleFileChange}
+        style={{ margin: '20px 0' }}
       />
       <TextField
         label="Jewelry Name"

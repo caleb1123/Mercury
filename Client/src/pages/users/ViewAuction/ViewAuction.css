@@ -1,8 +1,9 @@
 .ViewAuction{
     margin-top: 120px;
     font-size: 24px;
-    color: white;
+    color: rgb(0, 0, 0);
     margin-left: 150px;
+    margin-bottom: 40px;
 }
 .PageName_ViewAuction{
     font-weight: bold;
@@ -12,6 +13,7 @@
     margin-top: 20px;
     font-size: 30px;
     font-style: italic;
+    font-weight: bold;
 }
 .Auction_ViewAuction{
     display: flex;
@@ -20,7 +22,7 @@
     background-color: rgb(156, 145, 145);
     margin-top: 20px;
     padding: 30px;
-    border: 2px solid white;
+    border: 2px solid rgb(0, 0, 0);
 }
 .AuPic{
     width: 500px;
@@ -34,7 +36,7 @@
     padding-right: 300px;
     margin-left: 150px;
     padding-left: 20px;
-    border: 2px solid white;
+    border: 2px solid rgb(0, 0, 0);
     height: fit-content;
 }
 .BidDetals{
@@ -63,6 +65,7 @@
     padding: 20px;
     border-radius: 5px;
     margin-bottom: 20px;
+    color: white;
 }
 .info_data {
     display: flex;
@@ -79,7 +82,7 @@
 .PlaceBidNextButton {
     font-size: 24px; 
     background-color: rgb(99, 186, 238);
-    color: white;
+    color: rgb(0, 0, 0);
     cursor: pointer;
     border-radius: 5px;
     margin-top: 10px;
@@ -112,3 +115,32 @@
     background-color: #f44336;
     color: white;
   }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  

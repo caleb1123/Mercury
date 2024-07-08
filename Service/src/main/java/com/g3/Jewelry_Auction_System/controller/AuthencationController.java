@@ -46,6 +46,8 @@ public class AuthencationController {
         return ResponseEntity.ok(result);
     }
 
+
+    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/forgot-password")
     public ResponseEntity<String> generateAndSendOtp(@RequestBody OTPRequest otpRequestDTO) {
         try {
@@ -57,6 +59,8 @@ public class AuthencationController {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPasswordWithOtp(@RequestBody ResetPasswordRequest resetPasswordRequestDTO) {
         try {
