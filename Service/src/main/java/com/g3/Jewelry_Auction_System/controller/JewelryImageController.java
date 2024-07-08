@@ -1,5 +1,6 @@
 package com.g3.Jewelry_Auction_System.controller;
 
+import com.g3.Jewelry_Auction_System.entity.JewelryImage;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryImageDTO;
 import com.g3.Jewelry_Auction_System.repository.JewelryImageRepository;
 import com.g3.Jewelry_Auction_System.service.JewelryImageService;
@@ -17,12 +18,17 @@ import java.util.List;
 public class JewelryImageController {
     @Autowired
     JewelryImageService jewelryImageService;
+
+
     @Autowired
     JewelryImageRepository jewelryImageRepository;
+
+    @CrossOrigin(origins = "http://localhost:3001")
 
     @PostMapping("/upload/{jewelryId}")
     public ResponseEntity<String> uploadImageCloudinary(@RequestParam("file") MultipartFile file,@PathVariable int jewelryId) throws IOException {
         try {
+
             var imageUrl= jewelryImageService.uploadImageToCloudinary(file,jewelryId);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {

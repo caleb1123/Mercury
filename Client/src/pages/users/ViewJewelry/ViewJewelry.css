@@ -25,9 +25,8 @@ body{
 
 }
 .Jewelry{
-  padding: 0 25px 0;
   align-items: flex-start;
-  width: 100%; 
+  width: 90%; 
   margin: 0 auto;
   display: flex;
   border-style: solid;
@@ -113,4 +112,46 @@ top: 72px;
   top: 10px;
   right: 10px;
   cursor: pointer;
+}
+.ImageFrame {
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #F5F5F5; /* Brown color */
+  border-radius: 10px;
+  width: 600px; /* Fixed width */
+  height: 700px; /* Increased height to accommodate thumbnails */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Image {
+  border-style: solid;
+  max-width: 100%;
+  max-height: 100%;
+  margin-bottom: 10px; /* Space between main image and thumbnails */
+}
+
+.Thumbnails {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.Thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.Thumbnail.selected {
+  border-color: #000;
+}
+
+.Middle{
+  justify-content: center;
 }

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 function JewelryDetails({ jewelryId, requestId, onClose }) {
   const [jewelry, setJewelry] = useState(null);
+  const [images, setImages] = useState([]);
   const [preliminaryPrice, setPreliminaryPrice] = useState('');
   const [requestDetails, setRequestDetails] = useState(null);
 
@@ -16,6 +17,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
           },
         });
         setJewelry(response.data);
+        console.log("Jewelry Details:", response.data);
       } catch (error) {
         console.error('Error fetching jewelry details:', error);
       }
@@ -30,13 +32,29 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
         });
         setRequestDetails(response.data);
         setPreliminaryPrice(response.data.preliminaryPrice);
+        console.log("Request Details:", response.data);
       } catch (error) {
         console.error('Error fetching request details:', error);
       }
     };
 
+    const fetchJewelryImages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setImages(response.data);
+        console.log("Jewelry Images:", response.data);
+      } catch (error) {
+        console.error('Error fetching jewelry images:', error);
+      }
+    };
+
     fetchJewelryDetails();
     fetchRequestDetails();
+    fetchJewelryImages();
   }, [jewelryId, requestId]);
 
   const handlePreliminaryPriceChange = (e) => {
@@ -95,9 +113,9 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
   }
 
   return (
-    <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
-      <Grid item xs={10} md={8} lg={6}>
-        <Paper sx={{ padding: 4 }}>
+    <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh', width: '100%' }}>
+      <Grid item xs={12} md={10} lg={8}>
+        <Paper sx={{ padding: 4, width: '100%' }}>
           <Typography variant="h4" gutterBottom>
             Jewelry Details
           </Typography>
@@ -109,8 +127,12 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
           <Typography><strong>Designer:</strong> {jewelry.designer}</Typography>
           <Typography><strong>Estimate:</strong> {jewelry.estimate}</Typography>
           <Typography><strong>Gemstone:</strong> {jewelry.gemstone}</Typography>
-          <Typography><strong>Image:</strong></Typography>
-          <img src={jewelry.image} alt={jewelry.jewelryName} style={{ width: '100%', marginBottom: '20px', borderRadius: '10px' }} />
+          <Typography><strong>Images:</strong></Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, marginBottom: 2 }}>
+            {images.map((image, index) => (
+              <img key={index} src={image.jewelryImageURL} alt={`${jewelry.jewelryName} ${index + 1}`} style={{ width: '100%', maxWidth: '200px', borderRadius: '10px' }} />
+            ))}
+          </Box>
           <Typography><strong>Starting Price:</strong> {jewelry.startingPrice}</Typography>
           <Typography><strong>Status:</strong> {jewelry.status ? 'Active' : 'Inactive'}</Typography>
           <Typography><strong>Category ID:</strong> {jewelry.jewelryCategoryId}</Typography>

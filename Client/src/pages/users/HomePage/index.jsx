@@ -75,38 +75,7 @@ function HomePage() {
           </div>
         </div>
 
-        {/* <div className="UpcomingAuctionsTitle"><h3>UPCOMING AUCTIONS</h3></div>
-        <div className="UpcomingAuctions">
-          {upcomingAuctions.map((auction) => (
-            <div key={auction.id} className="ViewJewelry_HomePage_UpcomingAuctions">
-              <img className="JewelryImg_HomePage" src={auction.image} alt={auction.name} />
-              <div className="JewelryDate_HomePage_Upcoming">{auction.daysLeft} days left</div>
-              <div className="JewelryName_HomePage">{auction.name}</div>
-              <strong>{auction.price}($)</strong>
-            </div>
-          ))}
-        </div>
-        <div className="UpcomingAuctionsTitle"><h3>RECOMMENDED AUCTIONS</h3></div>
-        <div className="UpcomingAuctions">
-          {recommendedAuctions.map((auction) => (
-            <div key={auction.id} className="ViewJewelry_HomePage_UpcomingAuctions">
-              <img className="JewelryImg_HomePage" src={auction.image} alt={auction.name} />
-              <div className="JewelryDate_HomePage">{new Date(auction.date).toLocaleString()}</div>
-              <div className="JewelryName_HomePage">{auction.name}</div>
-              <strong>{auction.price}($)</strong>
-            </div>
-          ))}
-        </div>
-        <div className="UpcomingAuctionsTitle"><h3>Bid now on these items</h3></div>
-        <div className="UpcomingAuctions">
-          {bidNowItems.map((item) => (
-            <div key={item.id} className="ViewJewelry_HomePage_UpcomingAuctions">
-              <img className="JewelryImg_HomePage" src={item.image} alt={item.name} />
-              <div className="JewelryName_HomePage">{item.name}</div>
-              <strong>{item.priceRange}</strong>
-            </div>
-          ))}
-        </div> */}
+
       </div>
 
 
