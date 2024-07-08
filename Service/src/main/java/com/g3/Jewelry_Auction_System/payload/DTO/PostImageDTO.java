@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 public class PostImageDTO {
     private int postImageId;
     private String postImageURL;
+    private String fileId;
+    private boolean status;
     private int postId;
 }

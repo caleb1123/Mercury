@@ -19,7 +19,10 @@ public class PostImage {
 
     @Column
     private String postImageURL;
-
+    @Column
+    private boolean status;
+    @Column
+    private String fileId;
     @ManyToOne
     @JoinColumn(name = "postId")
     private Post post;
