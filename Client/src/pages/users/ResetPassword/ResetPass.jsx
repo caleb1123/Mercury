@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 
@@ -47,62 +48,81 @@ export default function ConfirmResetPassword() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs" sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <CssBaseline />
-        <Paper elevation={6} sx={{ padding: 4, borderRadius: '8px', textAlign: 'center' }}>
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h4">
-            Reset Password
-          </Typography>
-          <Typography component="h2" variant="subtitle1" color="text.secondary" sx={{ mt: 2 }}>
-            Please enter the OTP sent to your email and your new password.
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 4 }}>
-            <TextField
-              required
-              fullWidth
-              id="otp"
-              label="OTP"
-              name="otp"
-              autoComplete="one-time-code"
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              required
-              fullWidth
-              name="password"
-              label="New Password"
-              type="password"
-              id="password"
-              autoComplete="new-password"
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              required
-              fullWidth
-              name="confirmPassword"
-              label="Confirm New Password"
-              type="password"
-              id="confirmPassword"
-              autoComplete="new-password"
-              sx={{ mb: 2 }}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+      <div className='Middle'>
+        <style jsx global>{`
+          body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+          }
+
+          .Middle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          }
+        `}</style>
+        <Container component="main" maxWidth="xs" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CssBaseline />
+          <Paper elevation={6} sx={{ padding: 4, borderRadius: '8px', textAlign: 'center' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h4">
               Reset Password
-            </Button>
-            <Link href="/login" variant="body2">
-              Back to sign in
-            </Link>
-          </Box>
-        </Paper>
-      </Container>
+            </Typography>
+            <Typography component="h2" variant="subtitle1" color="text.secondary" sx={{ mt: 2 }}>
+              Please enter the OTP sent to your email and your new password.
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 4 }}>
+              <TextField
+                required
+                fullWidth
+                id="otp"
+                label="OTP"
+                name="otp"
+                autoComplete="one-time-code"
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="New Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm New Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="new-password"
+                sx={{ mb: 2 }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Reset Password
+              </Button>
+              <Link href="/login" variant="body2">
+                Back to sign in
+              </Link>
+            </Box>
+          </Paper>
+        </Container>
+      </div>
     </ThemeProvider>
   );
 }

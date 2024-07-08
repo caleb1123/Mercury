@@ -189,7 +189,24 @@ export default function PasswordResetContainer() {
   };
 
   return (
-    <div>
+    <div className='Middle'>
+      <style jsx global>{`
+        body, html {
+          height: 100%;
+          margin: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #f0f0f0;
+        }
+
+        .Middle {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+        }
+      `}</style>
       {step === 'request' && <ResetPassword onSuccess={handleSuccess} />}
       {step === 'confirm' && <ConfirmResetPassword email={email} />}
     </div>

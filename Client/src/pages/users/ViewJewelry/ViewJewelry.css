@@ -152,4 +152,6 @@ top: 72px;
   border-color: #000;
 }
 
-
+.Middle{
+  justify-content: center;
+}
