@@ -129,11 +129,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDTO getPostByAccountId(int id) {
-        Post post = postRepository.getPostByAccountId(id);
+    public List<PostDTO> getPostByAccountId(int id) {
+        List<Post> post = postRepository.getPostByAccountId(id);
         if (post == null) {
             throw new AppException(ErrorCode.ITEM_NOT_FOUND);
         }
-        return postConverter.toDTO(post);
+        return postConverter.convertToDTOList(post);
     }
 }

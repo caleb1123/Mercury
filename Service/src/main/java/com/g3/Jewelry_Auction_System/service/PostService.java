@@ -13,5 +13,5 @@ public interface PostService {
     List<PostDTO> getPostByCategoryId(int cateId);
     List<PostDTO> getAllPosts();
     PostDTO getPostById(int id);
-    PostDTO getPostByAccountId(int id);
+    List<PostDTO> getPostByAccountId(int id);
 }
