@@ -63,6 +63,7 @@ public class JewelryImageController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{fileId}")
     public ResponseEntity<JewelryImageDTO> getImageByFileId(@PathVariable String fileId) {
         JewelryImageDTO imageDTO = jewelryImageService.getImageByFileId(fileId);
@@ -74,7 +75,6 @@ public class JewelryImageController {
     }
 
     @CrossOrigin(origins = "http://localhost:3001")
-
     @GetMapping("/jewelry/{id}/image")
     public ResponseEntity<JewelryImageDTO> getImageAuto(@PathVariable int id) {
         JewelryImageDTO image = jewelryImageService.getImageAuto(id);

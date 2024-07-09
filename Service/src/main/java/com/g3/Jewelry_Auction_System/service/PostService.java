@@ -10,7 +10,9 @@ public interface PostService {
     PostDTO deletePost(int id);
     List<PostDTO> getPostByTitleLike(String title);
     List<PostDTO> getPostByCategory(String cate);
-    List<PostDTO> getPostByCategoryId(int cateId);
+    List<PostDTO> getPostByCategory(int cateId);
+    List<PostDTO> getActivePostByCategory(int cateId);
     List<PostDTO> getAllPosts();
+    List<PostDTO> getAllActivePosts();
     PostDTO getPostById(int id);
 }

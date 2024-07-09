@@ -99,8 +99,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getPostByCategoryId(int cateId) {
+    public List<PostDTO> getPostByCategory(int cateId) {
         List<PostDTO> list = postConverter.convertToDTOList(postRepository.getPostsByCategoryId(cateId));
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_EMPTY);
+        }
+        if (list.contains(null)) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return list;
+    }
+
+    @Override
+    public List<PostDTO> getActivePostByCategory(int cateId) {
+        List<PostDTO> list = postConverter.convertToDTOList(postRepository.getPostsByCategoryId(cateId));
+        for (PostDTO postDTO : list) {
+            if (!postDTO.getStatus()) {
+                list.remove(postDTO);
+            }
+        }
         if (list.isEmpty()) {
             throw new AppException(ErrorCode.LIST_EMPTY);
         }
@@ -113,6 +130,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDTO> getAllPosts() {
         List<PostDTO> list = postConverter.convertToDTOList(postRepository.findAll());
+        if (list.isEmpty()) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return list;
+    }
+
+    @Override
+    public List<PostDTO> getAllActivePosts() {
+        List<PostDTO> list = postConverter.convertToDTOList(postRepository.findAllThatActive());
         if (list.isEmpty()) {
             throw new AppException(ErrorCode.ITEM_NOT_FOUND);
         }

@@ -24,6 +24,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> getPostsByCategoryId (@Param(value = "categoryId") int categoryId);
 
     @Query(value = "select * from post where status = 1", nativeQuery = true)
-    List<Post> findAll();
+    List<Post> findAllThatActive();
     Optional<Post> findById(int id);
 }

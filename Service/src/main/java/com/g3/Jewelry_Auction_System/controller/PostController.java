@@ -60,7 +60,17 @@ public class PostController {
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/searchByCateID/{categoryId}")
     public ResponseEntity<List<PostDTO>> searchPostByCateID(@PathVariable(value = "categoryId") int categoryId) {
-        List<PostDTO> postDTOList = postService.getPostByCategoryId(categoryId);
+        List<PostDTO> postDTOList = postService.getPostByCategory(categoryId);
+        if (postDTOList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/getActivePostByCate/{categoryId}")
+    public ResponseEntity<List<PostDTO>> getActivePostByCate(@PathVariable(value = "categoryId") int categoryId) {
+        List<PostDTO> postDTOList = postService.getActivePostByCategory(categoryId);
         if (postDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -71,6 +81,16 @@ public class PostController {
     @GetMapping("/getAll")
     public ResponseEntity<List<PostDTO>> getAllPosts() {
         List<PostDTO> postDTOList = postService.getAllPosts();
+        if (postDTOList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/getAllActive")
+    public ResponseEntity<List<PostDTO>> getAllActivePosts() {
+        List<PostDTO> postDTOList = postService.getAllActivePosts();
         if (postDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
