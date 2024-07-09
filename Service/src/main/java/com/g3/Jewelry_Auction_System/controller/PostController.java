@@ -85,8 +85,8 @@ public class PostController {
     }
 
     @GetMapping("/getByAccountId/{id}")
-    public ResponseEntity<PostDTO> getPostByAccountId(@PathVariable int id) {
-        PostDTO postDTO = postService.getPostByAccountId(id);
+    public ResponseEntity<List<PostDTO>> getPostByAccountId(@PathVariable int id) {
+        List<PostDTO> postDTO = postService.getPostByAccountId(id);
         if (postDTO == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
