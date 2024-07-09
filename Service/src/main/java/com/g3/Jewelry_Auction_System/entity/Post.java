@@ -30,9 +30,10 @@ public class Post {
     @NotNull(message = "Post date is required")
     private LocalDate postDate;
 
-    @Column
+    @Column(columnDefinition = "nvarchar(max)")
     @NotBlank(message = "Content is required")
     private String content;
+
 
     @Column
     private Boolean status;
