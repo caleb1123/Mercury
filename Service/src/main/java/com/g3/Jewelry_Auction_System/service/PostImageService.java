@@ -12,7 +12,7 @@ public interface PostImageService {
     boolean deleteImage(String fileId) throws IOException;
     List<PostImageDTO> getImagesByPostId(int id);
 
-    PostImageDTO getImageByPostId(int id);
+    PostImageDTO getImageByPostId(int fileId);
 
-
+    PostImageDTO getImageAuto(int id);
 }

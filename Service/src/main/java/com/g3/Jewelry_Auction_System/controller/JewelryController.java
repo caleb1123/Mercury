@@ -105,4 +105,19 @@ public class JewelryController {
         List<JewelryDTO> jewelries = jewelryService.getJewelryByCategory(id);
         return new ResponseEntity<>(jewelries, HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/{id}/jewelry")
+    public ResponseEntity<JewelryDTO> getJewelryByAuctionId(@PathVariable("id") int id) {
+        try {
+            JewelryDTO dto = jewelryService.getJewelryByAuctionId(id);
+            if (dto != null) {
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

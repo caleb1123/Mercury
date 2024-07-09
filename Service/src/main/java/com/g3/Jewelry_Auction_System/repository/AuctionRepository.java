@@ -67,4 +67,5 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
     List<Auction> findByEndDateBeforeAndWinnerIdIsNull(LocalDateTime endDate);
     List<Auction> getAuctionByStatus(String status);
+    Auction findAuctionByAuctionId(int auctionId);
 }

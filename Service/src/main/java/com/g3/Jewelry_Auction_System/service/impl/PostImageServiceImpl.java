@@ -9,6 +9,7 @@ import com.g3.Jewelry_Auction_System.entity.Post;
 import com.g3.Jewelry_Auction_System.entity.PostImage;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
+import com.g3.Jewelry_Auction_System.payload.DTO.JewelryImageDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.PostImageDTO;
 import com.g3.Jewelry_Auction_System.repository.PostImageRepository;
 import com.g3.Jewelry_Auction_System.repository.PostRepository;
@@ -39,7 +40,7 @@ public class PostImageServiceImpl implements PostImageService {
         Post post = postRepository.getReferenceById(id);
         Integer imageCount = postImageRepository.getImageCountByPostId(id);
         if (imageCount == null) {
-            // Xử lý khi imageCount bị null, ví dụ như gán mặc định là 0
+            // Xử lý khi imageCount bị null, gán mặc định là 0
             imageCount = 0;
         }
         if (imageCount >= 5) {
@@ -109,5 +110,11 @@ public class PostImageServiceImpl implements PostImageService {
             return postImageConverter.toDTO(image);
         }
         return null;
+    }
+
+    @Override
+    public PostImageDTO getImageAuto(int id) {
+        PostImage image = postImageRepository.findPostImageAuto(id);
+        return image != null ? postImageConverter.toDTO(image) : null;
     }
 }

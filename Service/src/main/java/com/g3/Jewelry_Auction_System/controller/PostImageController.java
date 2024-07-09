@@ -51,11 +51,17 @@ public class PostImageController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<PostImageDTO> getImageByPostId(@PathVariable int id) {
+    public PostImageDTO getImageByPostId(@PathVariable int id) {
         PostImageDTO image = postImageService.getImageByPostId(id);
+        return image;
+    }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/{id}/autoImg")
+    public ResponseEntity<PostImageDTO> getImageAuto(@PathVariable int id) {
+        PostImageDTO image = postImageService.getImageAuto(id);
         if(image != null) {
             return new ResponseEntity<>(image, HttpStatus.OK);
         } else {

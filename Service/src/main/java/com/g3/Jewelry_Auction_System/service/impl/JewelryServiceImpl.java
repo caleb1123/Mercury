@@ -156,5 +156,14 @@ public class JewelryServiceImpl implements JewelryService {
         List<Jewelry> jewelries = jewelryRepository.getByCategory(id);
         return jewelryConverter.convertToJewelryDTOList(jewelries);
     }
+
+    @Override
+    public JewelryDTO getJewelryByAuctionId(int id) {
+        Auction auction = auctionRepository.findAuctionByAuctionId(id);
+        if(auction!= null){
+            return jewelryConverter.toDTO(auction.getJewelry());
+        }
+        return null;
+    }
 }
 
