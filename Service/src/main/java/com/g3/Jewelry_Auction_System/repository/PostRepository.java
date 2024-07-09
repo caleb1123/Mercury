@@ -26,4 +26,16 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query(value = "select * from post where status = 1", nativeQuery = true)
     List<Post> findAll();
     Optional<Post> findById(int id);
+
+    @Query(value = "SELECT TOP (1000) [post_id]\n" +
+            "      ,[content]\n" +
+            "      ,[post_date]\n" +
+            "      ,[status]\n" +
+            "      ,[title]\n" +
+            "      ,[account_id]\n" +
+            "      ,[post_category_id]\n" +
+            "  FROM [JewelryAuctionSystem].[dbo].[post]\n" +
+            "  Where account_id = :id\n" +
+            "\n", nativeQuery = true)
+    Post getPostByAccountId(@Param(value = "id") int id);
 }
