@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from './Header';
 import "./HomePage.css";
-import line from './image/line-3.svg';
 import Homebackground from './image/Website-banner-2-1.png';
 import pic1 from './image/Untitled-2560-×-1703-px-1-1-scaled.jpg'
 import pic2 from './image/pic2.jpg'
 import pic3 from './image/pic3.jpg'
 
-
-
 function HomePage() {
-  const [inputValue, setInputValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
