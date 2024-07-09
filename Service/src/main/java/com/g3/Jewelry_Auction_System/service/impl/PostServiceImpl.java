@@ -153,4 +153,13 @@ public class PostServiceImpl implements PostService {
         }
         return postDTO;
     }
+
+    @Override
+    public PostDTO getPostByAccountId(int id) {
+        Post post = postRepository.getPostByAccountId(id);
+        if (post == null) {
+            throw new AppException(ErrorCode.ITEM_NOT_FOUND);
+        }
+        return postConverter.toDTO(post);
+    }
 }

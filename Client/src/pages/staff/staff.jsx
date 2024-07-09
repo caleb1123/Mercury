@@ -500,32 +500,32 @@ function StaffPage() {
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
             {selectedIndex === 5 && !selectedPost && (
-              <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-                <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>Title</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>Date</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {postList.map((post) => (
-                      <TableRow key={post.id}>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>{post.id}</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>{post.date}</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>
-                          <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
-                          <Button variant="contained" color="primary" onClick={() => handleEditClick(post)}>Edit</Button>
-                          <Button variant="contained" onClick={() => handleEditImageClick(post.id)}>Edit Image</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+    <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+      <TableHead>
+        <TableRow>
+          <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word' }}>Title</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word' }}>Date</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word' }}>Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {postList.map((post) => (
+          <TableRow key={post.id}>
+            <TableCell sx={{ wordWrap: 'break-word' }}>{post.postId}</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>
+              <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
+              <Button variant="contained" color="primary" onClick={() => handleEditClick(post)}>Edit</Button>
+              <Button variant="contained" onClick={() => handleEditImageClick(post.id)}>Edit Image</Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
             )}
             {selectedIndex === 5 && selectedPost && (
               <Box>
