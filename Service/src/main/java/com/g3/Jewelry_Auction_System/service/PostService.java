@@ -15,4 +15,5 @@ public interface PostService {
     List<PostDTO> getAllPosts();
     List<PostDTO> getAllActivePosts();
     PostDTO getPostById(int id);
+    List<PostDTO> getPostByAccountId(int id);
 }

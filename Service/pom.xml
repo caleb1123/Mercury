@@ -162,5 +162,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>mercury-docker</finalName>
 	</build>
 </project>
