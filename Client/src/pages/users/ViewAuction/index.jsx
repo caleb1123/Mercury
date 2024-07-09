@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewAuction.css";
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import Header from "./Header";
 
 const categoryMapping = {
@@ -72,6 +72,8 @@ function ViewAuction() {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
+    } else {
+      navigate('/login');
     }
     fetchJewelryData();
   }, []);
@@ -92,9 +94,13 @@ function ViewAuction() {
 
       setJewelry(response.data);
     } catch (error) {
-      console.error('Error fetching jewelry data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: 'Error fetching jewelry data' });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching jewelry data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: 'Error fetching jewelry data' });
+      }
     }
   };
 
@@ -139,9 +145,13 @@ function ViewAuction() {
       setAuction(auctionData);
       fetchBidsData(auctionData.auctionId);
     } catch (error) {
-      console.error('Error fetching auction data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching auction data: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching auction data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching auction data: ${error.message}` });
+      }
     }
   };
 
@@ -170,9 +180,13 @@ function ViewAuction() {
         setAuction(prevState => ({ ...prevState, currentPrice: jewelry.startingPrice }));
       }
     } catch (error) {
-      console.error('Error fetching bids data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching bids data: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching bids data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching bids data: ${error.message}` });
+      }
     }
   };
 
@@ -192,9 +206,13 @@ function ViewAuction() {
 
       setWinner(response.data);
     } catch (error) {
-      console.error('Error fetching winner data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching winner data: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching winner data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching winner data: ${error.message}` });
+      }
     }
   };
 
@@ -250,10 +268,14 @@ function ViewAuction() {
       setNotification({ type: 'success', message: 'Bid placed successfully!' });
       window.location.reload();
     } catch (error) {
-      console.error('Error creating bid:', error);
-      console.error(error.response ? error.response.data : error.message);
-      const errorMessage = error.response?.data || 'Unknown error occurred';
-      setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error creating bid:', error);
+        console.error(error.response ? error.response.data : error.message);
+        const errorMessage = error.response?.data || 'Unknown error occurred';
+        setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
+      }
     }
   };
 
@@ -273,9 +295,13 @@ function ViewAuction() {
 
       return response.data.bidAmount;
     } catch (error) {
-      console.error('Error fetching highest bid:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching highest bid: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching highest bid:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching highest bid: ${error.message}` });
+      }
     }
   };
 

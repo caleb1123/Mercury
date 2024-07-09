@@ -9,6 +9,7 @@ function ViewProfile() {
     fullName: '',
     address: '',
     dob: '',
+    password: '',
     sex: ''
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +38,7 @@ function ViewProfile() {
             fullName: data.fullName || '',
             address: data.address || '',
             dob: data.dob || '',
+            password: data.password || '',
             sex: data.sex !== null ? (data.sex ? 'Male' : 'Female') : ''
           });
           console.log('Fetched user data:', data); // Log user data
@@ -74,6 +76,7 @@ function ViewProfile() {
           fullName: editData.fullName || null,
           address: editData.address || null,
           dob: editData.dob || null,
+          password: editData.password || null,
           sex: editData.sex === 'Male' ? true : (editData.sex === 'Female' ? false : null)
         })
       });
@@ -154,6 +157,10 @@ function ViewProfile() {
             <div className="form-field">
               <label>Date of Birth:</label>
               <input type="date" name="dob" value={editData.dob} onChange={handleInputChange} />
+            </div>
+            <div className="form-field">
+              <label>Password:</label>
+              <input type="password" name="password" value={editData.passwword} onChange={handleInputChange} />
             </div>
             <div className="form-field">
               <label>Sex:</label>

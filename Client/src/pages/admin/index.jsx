@@ -198,33 +198,33 @@ function Sidebar() {
               </Button>
             </Grid>
             <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-              <Table>
+              <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Account ID</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Date of Birth</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Full Name</TableCell>
-                    <TableCell>Phone</TableCell>
-                    <TableCell>Sex</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Role</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell sx={{ width: '10%' }}>Account ID</TableCell>
+                    <TableCell sx={{ width: '15%' }}>Address</TableCell>
+                    <TableCell sx={{ width: '10%' }}>Date of Birth</TableCell>
+                    <TableCell sx={{ width: '15%' }}>Email</TableCell>
+                    <TableCell sx={{ width: '15%' }}>Full Name</TableCell>
+                    <TableCell sx={{ width: '10%' }}>Phone</TableCell>
+                    <TableCell sx={{ width: '5%' }}>Sex</TableCell>
+                    <TableCell sx={{ width: '5%' }}>Status</TableCell>
+                    <TableCell sx={{ width: '10%' }}>Role</TableCell>
+                    <TableCell sx={{ width: '5%' }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {filteredAndSearchedAccounts.map((account) => (
                     <TableRow key={account.accountId}>
-                      <TableCell>{account.accountId || 'NULL'}</TableCell>
-                      <TableCell>{account.address || 'NULL'}</TableCell>
-                      <TableCell>{account.dob || 'NULL'}</TableCell>
-                      <TableCell>{account.email || 'NULL'}</TableCell>
-                      <TableCell>{account.fullName || 'NULL'}</TableCell>
-                      <TableCell>{account.phone || 'NULL'}</TableCell>
-                      <TableCell>{account.sex ? 'Female' : 'Male'}</TableCell>
-                      <TableCell>{account.status ? 'Enable' : 'Disable'}</TableCell>
-                      <TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.accountId || 'NULL'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.address || 'NULL'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.dob || 'NULL'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.email || 'NULL'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.fullName || 'NULL'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.phone || 'NULL'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.sex ? 'Female' : 'Male'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.status ? 'Enable' : 'Disable'}</TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>
                         {(() => {
                           switch (account.roleId) {
                             case 1: return 'ADMIN';
@@ -235,7 +235,7 @@ function Sidebar() {
                           }
                         })()}
                       </TableCell>
-                      <TableCell>
+                      <TableCell sx={{ wordWrap: 'break-word' }}>
                         <Button
                           variant="outlined"
                           color="primary"
