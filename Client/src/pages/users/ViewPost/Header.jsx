@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
+import line from "./image/line-3.svg";
 import "./Header.css";
 
 const categories = [
@@ -86,6 +87,9 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           )}
         </div>
       </div>
+      <div className="Line">
+        <img src={line} alt="line" />
+      </div>
       <div className="Down_Header">
         <div className="Bar_Home">
           <div
@@ -115,7 +119,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           <NavLink to="/SendRequest" className="world_bar_style">
             SELL
           </NavLink>
-          <div
+          {/* <div
             onMouseEnter={handleCategoryMouseEnter}
             onMouseLeave={handleCategoryMouseLeave}
             className="world_bar_style"
@@ -138,7 +142,8 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
+          <NavLink to="/ViewJewelryList" className="world_bar_style">CATEGORY</NavLink>
           <NavLink to="/ViewPost" className="world_bar_style">BLOG</NavLink>
         </div>
       </div>

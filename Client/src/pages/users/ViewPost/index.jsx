@@ -2,14 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ViewPost.css";
-import "./Header";
 import Header from "./Header";
 
 const CategoryItem = ({ children, isActive, onClick }) => (
-  <div
-    className={isActive ? "active-category" : "category-item"}
-    onClick={onClick}
-  >
+  <div className={isActive ? "active-category" : "category-item"} onClick={onClick}>
     {children}
   </div>
 );
@@ -35,6 +31,7 @@ function ViewPost() {
   const [activeCategory, setActiveCategory] = useState(0);
   const [noPosts, setNoPosts] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [imageUrls, setImageUrls] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,10 +39,7 @@ function ViewPost() {
     axios
       .get("http://localhost:8088/postCategory/getCategories")
       .then((response) => {
-        setCategories([
-          { categoryId: 0, categoryName: "All" },
-          ...response.data,
-        ]);
+        setCategories([{ categoryId: 0, categoryName: "All" }, ...response.data]);
       })
       .catch((error) => {
         console.error("Error fetching categories:", error);
@@ -56,18 +50,16 @@ function ViewPost() {
   }, []);
 
   const fetchPosts = (categoryID) => {
-    let url =
-      categoryID === 0
-        ? "http://localhost:8088/posts/getAll"
-        : `http://localhost:8088/posts/searchByCateID/${categoryID}`;
+    let url = categoryID === 0
+      ? "http://localhost:8088/posts/getAllActive"
+      : `http://localhost:8088/posts/getActivePostByCate/${categoryID}`;
 
     axios
       .get(url)
       .then((response) => {
         const postsWithImages = response.data.map((post) => ({
           ...post,
-          imageUrl:
-            post.images && post.images.length > 0 ? post.images[0].url : null,
+          imageUrl: null, // Initialize imageUrl as null
         }));
         if (postsWithImages.length === 0) {
           setNoPosts(true);
@@ -75,18 +67,39 @@ function ViewPost() {
           setNoPosts(false);
         }
         setPosts(postsWithImages);
+
+        // Fetch images for each post
+        postsWithImages.forEach((post) => {
+          fetchImagePost(post.postId);
+        });
       })
       .catch((error) => {
         if (error.response && error.response.status === 404) {
           setNoPosts(true);
         } else {
-          console.error(
-            `Error fetching posts for category ${categoryID}:`,
-            error
-          );
+          console.error(`Error fetching posts for category ${categoryID}:`, error);
         }
         setPosts([]);
       });
+  };
+
+  const fetchImagePost = async (postId) => {
+    try {
+      const response = await axios.get(`http://localhost:8088/postImage/${postId}`);
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = response.data;
+      const imageUrl = data ? data.url : null;
+
+      setImageUrls((prevState) => ({
+        ...prevState,
+        [postId]: imageUrl,
+      }));
+    } catch (error) {
+      console.error(`Error fetching image for post ${postId}:`, error);
+    }
   };
 
   const filterPostsByCategory = (categoryID) => {
@@ -144,7 +157,7 @@ function ViewPost() {
                     <Article
                       title={post.title}
                       excerpt={post.content}
-                      imageUrl={post.imageUrl}
+                      imageUrl={imageUrls[post.postId]}
                     />
                   </div>
                 ))}
@@ -158,3 +171,4 @@ function ViewPost() {
 }
 
 export default ViewPost;
+

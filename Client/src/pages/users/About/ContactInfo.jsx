@@ -26,7 +26,7 @@ const ContactInfo = () => {
       </p>
       <p className="email">
         Email: <br />
-        <span>info@FortunaAuction.com</span>
+        <span>info@MercuryAuction.com</span>
       </p>
       <p className="languages">
         Languages: <br />

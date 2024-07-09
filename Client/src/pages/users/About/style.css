@@ -1,4 +1,4 @@
-.about-fortuna {
+.about-mercury {
     justify-content: center;
     align-items: center;
     background-color: #fff;
@@ -7,7 +7,7 @@
   }
   
   @media (max-width: 991px) {
-    .about-fortuna {
+    .about-mercury {
       padding: 0 20px;
     }
   }

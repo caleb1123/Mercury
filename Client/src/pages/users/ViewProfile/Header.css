@@ -1,0 +1,92 @@
+.Header {
+  color: #3f2305;
+}
+
+.UpHeader,
+.Down_Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 10px;
+}
+
+.Mercury {
+  color: #3f2305;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.Login_CreaAccount {
+  display: flex;
+  align-items: center;
+}
+
+.LoginStyle,
+.LogoutButton {
+  color: #3f2305;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.world_bar_style {
+  color: #3f2305;
+  position: relative;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.Line img {
+  width: 100%;
+}
+
+.Bar_Home {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.AuctionsList,
+.CategoryList {
+  background-color: white;
+  position: absolute;
+  top: 100%;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.CategoryItem,
+.AuctionItem {
+  cursor: pointer;
+}
+
+.AuctionsList {
+  padding: 10px;
+  width: 190px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.CategoryItem:hover {
+  background-color: #555;
+  color: white;
+}
+.ProfileDropdown{
+  border-style: solid;
+  border: black;
+
+}
+.ProfileItem{
+  color: black;
+  border: black;
+  cursor: pointer;
+  margin-top: 7px;
+}
+.Logout{
+  color: red;
+  margin-top: 7px;
+  cursor: pointer;
+  
+}

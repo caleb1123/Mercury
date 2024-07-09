@@ -119,7 +119,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           <NavLink to="/SendRequest" className="world_bar_style">
             SELL
           </NavLink>
-          <div
+          {/* <div
             onMouseEnter={handleCategoryMouseEnter}
             onMouseLeave={handleCategoryMouseLeave}
             className="world_bar_style"
@@ -142,7 +142,8 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
+          <NavLink to="/ViewJewelryList" className="world_bar_style">CATEGORY</NavLink>
           <NavLink to="/ViewPost" className="world_bar_style">BLOG</NavLink>
         </div>
       </div>
