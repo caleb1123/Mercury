@@ -10,8 +10,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
-  Alert,
+  TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
@@ -20,7 +19,6 @@ function EditPostImages({ postId, onClose }) {
   const [images, setImages] = useState([]);
   const [newImageFile, setNewImageFile] = useState(null);
   const [noImages, setNoImages] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     fetchImages();
@@ -56,7 +54,6 @@ function EditPostImages({ postId, onClose }) {
       });
       setNewImageFile(null);
       fetchImages();
-      setSnackbarOpen(true); // Mở snackbar khi tải ảnh lên thành công
     } catch (error) {
       console.error('Error adding image:', error);
     }
@@ -106,15 +103,6 @@ function EditPostImages({ postId, onClose }) {
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%' }}>
-          Image uploaded successfully!
-        </Alert>
-      </Snackbar>
     </Dialog>
   );
 }

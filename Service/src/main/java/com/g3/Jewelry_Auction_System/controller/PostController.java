@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3001")
+
 @RequestMapping("posts")
 public class PostController {
     @Autowired
@@ -29,7 +31,6 @@ public class PostController {
             return new ResponseEntity<>(postDTO1, HttpStatus.OK);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @CrossOrigin(origins = "http://localhost:3001")
     @PutMapping("/delete/{postId}")
     public ResponseEntity<PostDTO> deletePost(@PathVariable(value = "postId") int postId) {
         PostDTO deletePost = postService.deletePost(postId);
@@ -105,8 +106,8 @@ public class PostController {
     }
 
     @GetMapping("/getByAccountId/{id}")
-    public ResponseEntity<PostDTO> getPostByAccountId(@PathVariable int id) {
-        PostDTO postDTO = postService.getPostByAccountId(id);
+    public ResponseEntity<List<PostDTO>> getPostByAccountId(@PathVariable int id) {
+        List<PostDTO> postDTO = postService.getPostByAccountId(id);
         if (postDTO == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }

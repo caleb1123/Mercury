@@ -37,5 +37,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "  FROM [JewelryAuctionSystem].[dbo].[post]\n" +
             "  Where account_id = :id\n" +
             "\n", nativeQuery = true)
-    Post getPostByAccountId(@Param(value = "id") int id);
+    List<Post> getPostByAccountId(@Param(value = "id") int id);
 }

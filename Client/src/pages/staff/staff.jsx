@@ -19,6 +19,7 @@ import {
   TableRow,
   TableCell,
   Box,
+  Dialog,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import JewelryIcon from '@mui/icons-material/Stars';
@@ -28,7 +29,10 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import PostIcon from '@mui/icons-material/Description';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import PostDetail from './PostDetail';
 import CreatePost from './CreatePost';
+import EditPostImages from './EditPostImages';
+
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
@@ -53,7 +57,11 @@ function StaffPage() {
   const [editImageMode, setEditImageMode] = useState(false); // State to manage image editing mode
   const [selectedJewelryId, setSelectedJewelryId] = useState(null); // State to store selected jewelry ID
   const [selectedPost, setSelectedPost] = useState(null); // State to store selected post
-  const [username, setUsername] = useState(''); // State to store username
+  const [username, setUsername] = useState(''); 
+  const [editPostImageMode, setEditPostImageMode] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  
+
 
   const navigate = useNavigate(); // Initialize navigate
 
@@ -78,6 +86,8 @@ function StaffPage() {
       });
       setProfile(response.data);
       setUsername(response.data.userName); // Lấy username từ API
+      fetchPosts(response.data.accountId);
+
 
     } catch (error) {
       console.error('Error fetching profile data:', error);
@@ -110,6 +120,16 @@ function StaffPage() {
       console.error('Error fetching auction data:', error);
     }
   };
+  const handleEditPostImageClick = (postId) => {
+    setSelectedPostId(postId);
+    setEditPostImageMode(true);
+  };
+  
+  const closeEditPostImageDialog = () => {
+    setEditPostImageMode(false);
+    setSelectedPostId(null);
+  };
+  
 
   const fetchRequests = async () => {
     try {
@@ -124,9 +144,9 @@ function StaffPage() {
     }
   };
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (accountId) => {
     try {
-      const response = await axios.get('http://localhost:8088/posts/myposts', {
+      const response = await axios.get(`http://localhost:8088/posts/getByAccountId/${accountId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -178,6 +198,19 @@ function StaffPage() {
     }
   };
 
+  const handleDeleteClickPost = async (postId) => {
+    try {
+      await axios.put(`http://localhost:8088/posts/delete/${postId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      //setPostList(postList.filter(post => post.postId !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
   const handleViewJewelryClick = (jewelryId, requestId) => {
     setViewJewelryId(jewelryId);
     setViewRequestId(requestId);
@@ -218,7 +251,13 @@ function StaffPage() {
 
   const handleViewPostClick = (post) => {
     setSelectedPost(post);
+    setEditPostImageMode(false);
+
   };
+  const handleUpdatePost = (updatedPost) => {
+    setPostList(postList.map(post => post.postId === updatedPost.postId ? updatedPost : post));
+  };
+  
 
   useEffect(() => {
     if (selectedIndex === 0) {
@@ -499,15 +538,20 @@ function StaffPage() {
             {selectedIndex === 4 && (
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
-            {selectedIndex === 5 && !selectedPost && (
-    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                        {editImageMode && (
+              <EditJewelryImages jewelryId={selectedJewelryId} onClose={closeEditImageDialog} />
+            )}
+{selectedIndex === 5 && !selectedPost && !editPostImageMode && (
+  <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
     <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
       <TableHead>
         <TableRow>
-          <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word' }}>Title</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word' }}>Date</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word' }}>Actions</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>ID</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word', width: '20%' }}>Title</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word', width: '40%' }}>Content</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Date</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>Status</TableCell>
+          <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -515,28 +559,39 @@ function StaffPage() {
           <TableRow key={post.id}>
             <TableCell sx={{ wordWrap: 'break-word' }}>{post.postId}</TableCell>
             <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>{post.content}</TableCell>
             <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>{post.status ? 'True' : 'False'}</TableCell>
             <TableCell sx={{ wordWrap: 'break-word' }}>
               <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
-              <Button variant="contained" color="primary" onClick={() => handleEditClick(post)}>Edit</Button>
-              <Button variant="contained" onClick={() => handleEditImageClick(post.id)}>Edit Image</Button>
+              <Button variant="contained" color="error" onClick={() => handleDeleteClickPost(post.postId)}>Delete</Button>
+              <Button variant="contained" onClick={() => handleEditPostImageClick(post.postId)}>Edit Image</Button>
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   </TableContainer>
-            )}
-            {selectedIndex === 5 && selectedPost && (
-              <Box>
-                <Typography variant="h6">Post Details</Typography>
-                <Typography variant="body1">{selectedPost.content}</Typography>
-                <Button variant="contained" onClick={() => setSelectedPost(null)}>Back</Button>
-              </Box>
-            )}
-            {editImageMode && (
-              <EditJewelryImages jewelryId={selectedJewelryId} onClose={closeEditImageDialog} />
-            )}
+)}
+{selectedIndex === 5 && selectedPost && !editPostImageMode && (
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+    <Box sx={{ width: '100%', maxWidth: '800px', backgroundColor: '#fff', padding: 4, borderRadius: 2 }}>
+      <PostDetail 
+        post={selectedPost} 
+        onClose={() => setSelectedPost(null)} 
+        handleUpdatePost={handleUpdatePost} 
+      />
+    </Box>
+  </Box>
+)}
+{editPostImageMode && (
+  <Dialog open={editPostImageMode} onClose={closeEditPostImageDialog} fullWidth maxWidth="md">
+    <EditPostImages postId={selectedPostId} onClose={closeEditPostImageDialog} />
+  </Dialog>
+)}
+
+
+  
           </Box>
         </Box>
       </Grid>

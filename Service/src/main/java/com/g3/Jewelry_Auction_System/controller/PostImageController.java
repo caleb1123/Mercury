@@ -1,6 +1,7 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.PostImage;
+import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryImageDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.PostImageDTO;
 import com.g3.Jewelry_Auction_System.service.JewelryImageService;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3001")
+
 @RequestMapping("/postImage")
 public class PostImageController {
     @Autowired
@@ -31,10 +34,20 @@ public class PostImageController {
         }
     }
     @CrossOrigin(origins = "http://localhost:3001")
-    @GetMapping("/list/{jewelryId}")
-    public ResponseEntity<List<PostImageDTO>> getImagesByPostId(@PathVariable int postId) {
-        List<PostImageDTO> list = postImageService.getImagesByPostId(postId);
-        return new ResponseEntity<>(list , HttpStatus.OK);
+    @GetMapping("/list/{postId}")
+    public ResponseEntity<?> getImagesByPostId(@PathVariable int postId) {
+        try {
+            List<PostImageDTO> list = postImageService.getImagesByPostId(postId);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (AppException e) {
+            // Handle custom exceptions
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Return a 500 Internal Server Error with the exception message
+            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/delete/{fileId}")
