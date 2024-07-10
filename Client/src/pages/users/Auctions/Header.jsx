@@ -39,6 +39,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
     setShowProfileMenu(false);
   };
 
+  const handleClick = () => {
+    window.location.href = "/Auctions/all";
+  };
+
   return (
     <div className="Header">
       <div className="UpHeader">
@@ -81,7 +85,9 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             onMouseLeave={handleAuctionMouseLeave}
             className="world_bar_style"
           >
+            <div onClick={handleClick}>
             AUCTIONS
+            </div>
             {showAuctionOp && (
               <div
                 className="AuctionsList"

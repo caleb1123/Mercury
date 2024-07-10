@@ -5,16 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
 
-const categories = [
-  { id: 1, name: "RINGS" },
-  { id: 2, name: "BRACELETS" },
-  { id: 3, name: "BROOCHES_PINS" },
-  { id: 4, name: "CUFFLINKS_TIEPINS_TIECLIPS" },
-  { id: 5, name: "EARRINGS" },
-  { id: 6, name: "LOOSESTONES_BEADS" },
-  { id: 7, name: "NECKLACES_PENDANTS" },
-  { id: 8, name: "WATCHES" },
-];
 
 const auction_op = [
   { id: 1, name: "LIVE AUCTIONS" },
@@ -33,16 +23,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
     window.location.href = "/";
   };
 
-  const handleCategoryMouseEnter = () => {
-    setShowCategories(true);
-  };
   const handleAuctionMouseEnter = () => {
     setShowAuctionOp(true);
   };
 
-  const handleCategoryMouseLeave = () => {
-    setShowCategories(false);
-  };
   const handleAuctionMouseLeave = () => {
     setShowAuctionOp(false);
   };
@@ -53,6 +37,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
 
   const handleProfileMouseLeave = () => {
     setShowProfileMenu(false);
+  };
+
+  const handleClick = () => {
+    window.location.href = "/Auctions/all";
   };
 
   return (
@@ -73,12 +61,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </IconButton>
               {showProfileMenu && (
                 <div className="ProfileDropdown">
-                  <div
-                    className="ProfileItem"
-                    onClick={() => navigate("/viewprofile")}
-                  >
-                    View Profile
-                  </div>
+      
                   <div className="Logout" onClick={handleLogout}>
                     Logout
                   </div>
@@ -102,7 +85,9 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             onMouseLeave={handleAuctionMouseLeave}
             className="world_bar_style"
           >
+            <div onClick={handleClick}>
             AUCTIONS
+            </div>
             {showAuctionOp && (
               <div
                 className="AuctionsList"
@@ -124,7 +109,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           <NavLink to="/SendRequest" className="world_bar_style">
             SELL
           </NavLink>
-          <div
+          {/* <div
             onMouseEnter={handleCategoryMouseEnter}
             onMouseLeave={handleCategoryMouseLeave}
             className="world_bar_style"
@@ -140,14 +125,15 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/category/${category.id}`)}
+                    onClick={() => navigate(`/ViewJewelryList/Category/${category.id}`)}
                   >
                     {category.name}
                   </div>
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
+          <NavLink to="/ViewJewelryList" className="world_bar_style">CATEGORY</NavLink>
           <NavLink to="/ViewPost" className="world_bar_style">BLOG</NavLink>
         </div>
       </div>

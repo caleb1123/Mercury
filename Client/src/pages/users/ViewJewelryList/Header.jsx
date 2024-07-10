@@ -5,16 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
 
-const categories = [
-  { id: 1, name: "RINGS" },
-  { id: 2, name: "BRACELETS" },
-  { id: 3, name: "BROOCHES_PINS" },
-  { id: 4, name: "CUFFLINKS_TIEPINS_TIECLIPS" },
-  { id: 5, name: "EARRINGS" },
-  { id: 6, name: "LOOSESTONES_BEADS" },
-  { id: 7, name: "NECKLACES_PENDANTS" },
-  { id: 8, name: "WATCHES" },
-];
 
 const auction_op = [
   { id: 1, name: "LIVE AUCTIONS" },
@@ -33,16 +23,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
     window.location.href = "/";
   };
 
-  const handleCategoryMouseEnter = () => {
-    setShowCategories(true);
-  };
   const handleAuctionMouseEnter = () => {
     setShowAuctionOp(true);
   };
 
-  const handleCategoryMouseLeave = () => {
-    setShowCategories(false);
-  };
   const handleAuctionMouseLeave = () => {
     setShowAuctionOp(false);
   };
@@ -53,6 +37,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
 
   const handleProfileMouseLeave = () => {
     setShowProfileMenu(false);
+  };
+
+  const handleClick = () => {
+    window.location.href = "/Auctions/all";
   };
 
   return (
@@ -97,7 +85,9 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             onMouseLeave={handleAuctionMouseLeave}
             className="world_bar_style"
           >
+            <div onClick={handleClick}>
             AUCTIONS
+            </div>
             {showAuctionOp && (
               <div
                 className="AuctionsList"
