@@ -27,7 +27,7 @@ function AboutMercury () {
     <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
     <section className="about-mercury">
       <div className="content-wrapper">
-        <div className="main-content">
+        <div className="main-content-ab">
           <div className="left-column">
             <article className="info-box">
               <div className="info-content">

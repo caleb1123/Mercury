@@ -85,14 +85,16 @@ function ViewPost() {
 
   const fetchImagePost = async (postId) => {
     try {
-      const response = await axios.get(`http://localhost:8088/postImage/${postId}`);
+      const response = await axios.get(`http://localhost:8088/postImage/${postId}/autoImg`);
+      console.log(response); // Log the entire response object to the console
+  
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const data = response.data;
-      const imageUrl = data ? data.url : null;
-
+      const imageUrl = data ? data.postImageURL : null;
+  
       setImageUrls((prevState) => ({
         ...prevState,
         [postId]: imageUrl,
@@ -101,7 +103,7 @@ function ViewPost() {
       console.error(`Error fetching image for post ${postId}:`, error);
     }
   };
-
+  
   const filterPostsByCategory = (categoryID) => {
     setActiveCategory(categoryID);
     fetchPosts(categoryID);

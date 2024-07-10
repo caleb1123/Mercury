@@ -542,37 +542,46 @@ function StaffPage() {
               <EditJewelryImages jewelryId={selectedJewelryId} onClose={closeEditImageDialog} />
             )}
 {selectedIndex === 5 && !selectedPost && !editPostImageMode && (
-  <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-    <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
-      <TableHead>
-        <TableRow>
-          <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>ID</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word', width: '20%' }}>Title</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word', width: '40%' }}>Content</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Date</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>Status</TableCell>
-          <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {postList.map((post) => (
-          <TableRow key={post.id}>
-            <TableCell sx={{ wordWrap: 'break-word' }}>{post.postId}</TableCell>
-            <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
-            <TableCell sx={{ wordWrap: 'break-word' }}>{post.content}</TableCell>
-            <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
-            <TableCell sx={{ wordWrap: 'break-word' }}>{post.status ? 'True' : 'False'}</TableCell>
-            <TableCell sx={{ wordWrap: 'break-word' }}>
-              <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
-              <Button variant="contained" color="error" onClick={() => handleDeleteClickPost(post.postId)}>Delete</Button>
-              <Button variant="contained" onClick={() => handleEditPostImageClick(post.postId)}>Edit Image</Button>
-            </TableCell>
+  <React.Fragment>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '20%' }}>Title</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '40%' }}>Content</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>Status</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Actions</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
+        </TableHead>
+        <TableBody>
+          {postList.map((post) => (
+            <TableRow key={post.id}>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.postId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.content}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.status ? 'True' : 'False'}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>
+                <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
+                <Button variant="contained" color="error" onClick={() => handleDeleteClickPost(post.postId)}>Delete</Button>
+                <Button variant="contained" onClick={() => handleEditPostImageClick(post.postId)}>Edit Image</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    <Button variant="contained" color="primary" onClick={() => setEditMode(true)} sx={{ mt: 2 }}>
+      Create Post
+    </Button>
+  </React.Fragment>
 )}
+{selectedIndex === 5 && editMode && (
+  <CreatePost fetchPosts={fetchPosts} setEditMode={setEditMode} />
+)}
+
 {selectedIndex === 5 && selectedPost && !editPostImageMode && (
   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
     <Box sx={{ width: '100%', maxWidth: '800px', backgroundColor: '#fff', padding: 4, borderRadius: 2 }}>

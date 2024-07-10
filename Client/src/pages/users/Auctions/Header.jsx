@@ -5,16 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
 
-const categories = [
-  { id: 1, name: "RINGS" },
-  { id: 2, name: "BRACELETS" },
-  { id: 3, name: "BROOCHES_PINS" },
-  { id: 4, name: "CUFFLINKS_TIEPINS_TIECLIPS" },
-  { id: 5, name: "EARRINGS" },
-  { id: 6, name: "LOOSESTONES_BEADS" },
-  { id: 7, name: "NECKLACES_PENDANTS" },
-  { id: 8, name: "WATCHES" },
-];
 
 const auction_op = [
   { id: 1, name: "LIVE AUCTIONS" },
@@ -26,24 +16,27 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
   const navigate = useNavigate();
   const [showCategories, setShowCategories] = useState(false);
   const [showAuctionOp, setShowAuctionOp] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
   };
 
-  const handleCategoryMouseEnter = () => {
-    setShowCategories(true);
-  };
   const handleAuctionMouseEnter = () => {
     setShowAuctionOp(true);
   };
 
-  const handleCategoryMouseLeave = () => {
-    setShowCategories(false);
-  };
   const handleAuctionMouseLeave = () => {
     setShowAuctionOp(false);
+  };
+
+  const handleProfileMouseEnter = () => {
+    setShowProfileMenu(true);
+  };
+
+  const handleProfileMouseLeave = () => {
+    setShowProfileMenu(false);
   };
 
   return (
@@ -54,20 +47,27 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
         </NavLink>
         <div className="Login_CreaAccount">
           {isLoggedIn ? (
-            <>
+            <div 
+              onMouseEnter={handleProfileMouseEnter}
+              onMouseLeave={handleProfileMouseLeave}
+              className="ProfileMenu"
+            >
               <IconButton onClick={handleProfileClick} sx={{ color: "white" }}>
                 <Avatar alt="User Icon" />
               </IconButton>
-              <button onClick={handleLogout} className="LogoutButton">
-                Logout
-              </button>
-            </>
+              {showProfileMenu && (
+                <div className="ProfileDropdown">
+      
+                  <div className="Logout" onClick={handleLogout}>
+                    Logout
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
-            <>
-              <NavLink to="./Login" className="LoginStyle">
-                LOGIN
-              </NavLink>
-            </>
+            <NavLink to="/Login" className="LoginStyle">
+              LOGIN
+            </NavLink>
           )}
         </div>
       </div>
@@ -92,7 +92,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/auctions/${category.id}`)}
+                    onClick={() => navigate(`/Auctions/${category.id}`)}
                   >
                     {category.name}
                   </div>
@@ -100,10 +100,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </div>
             )}
           </div>
-          <NavLink to="./SendRequest" className="world_bar_style">
+          <NavLink to="/SendRequest" className="world_bar_style">
             SELL
           </NavLink>
-          <div
+          {/* <div
             onMouseEnter={handleCategoryMouseEnter}
             onMouseLeave={handleCategoryMouseLeave}
             className="world_bar_style"
@@ -119,15 +119,16 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
                   <div
                     key={category.id}
                     className="CategoryItem"
-                    onClick={() => navigate(`/category/${category.id}`)}
+                    onClick={() => navigate(`/ViewJewelryList/Category/${category.id}`)}
                   >
                     {category.name}
                   </div>
                 ))}
               </div>
             )}
-          </div>
-          <NavLink to="./ViewPost" className="world_bar_style">BLOG</NavLink>
+          </div> */}
+          <NavLink to="/ViewJewelryList" className="world_bar_style">CATEGORY</NavLink>
+          <NavLink to="/ViewPost" className="world_bar_style">BLOG</NavLink>
         </div>
       </div>
     </div>

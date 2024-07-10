@@ -1,37 +1,6 @@
-.main-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  padding: 38px 60px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.logo {
-  color: #000;
-  font: italic 300 50px/44.2% Inria Serif, -apple-system, Roboto, Helvetica,
-    sans-serif;
-}
-
-.main-nav ul {
-  display: flex;
-  gap: 20px;
-  font-size: 15px;
-  color: #111;
-  font-weight: 400;
-  list-style-type: none;
-}
-
-.main-nav a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .main-content {
   max-width: 1110px;
-  margin: 154px auto 50px;
+  margin: 200px auto 50px;
 }
 
 .auction-section {
@@ -44,7 +13,7 @@
 }
 
 .auction-image-container {
-  flex: 0 0 33%;
+  flex: 0 0 40%;
 }
 
 .auction-title {
