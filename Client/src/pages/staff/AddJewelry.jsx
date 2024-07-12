@@ -127,12 +127,12 @@ const AddJewelry = ({ fetchJewelry }) => {
         fullWidth
         margin="normal"
       />
-      <input
+      {/* <input
         accept="image/*"
         type="file"
         onChange={handleFileChange}
         style={{ margin: '20px 0' }}
-      />
+      /> */}
       <TextField
         label="Jewelry Name"
         name="jewelryName"
