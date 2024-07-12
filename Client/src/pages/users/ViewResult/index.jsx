@@ -6,6 +6,7 @@ import Header from "../Header";
 function ViewResult() {
   const [auctionData, setAuctionData] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ function ViewResult() {
           const data = await response.json();
           setAuctionData(data);
           console.log('Fetched auction data:', data); // Log auction data
-        } else {
+        }  else {
           console.error('Failed to fetch auction data:', response.statusText);
         }
       } catch (error) {
@@ -46,8 +47,12 @@ function ViewResult() {
     navigate('/viewProfile');
   };
 
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   if (!auctionData.length) {
-    return <div>Loading...</div>;
+    return <div><h1>You have not won any items yet</h1></div>;
   }
 
   return (
@@ -57,9 +62,10 @@ function ViewResult() {
         <div className="result">
           <h2>Won Auctions</h2>
           <div className="result-details">
+          <div className="Congra"><h1>Congratulations !!!! You have won this item </h1></div>
+
             {auctionData.map((auction) => (
               <div key={auction.auctionId} className="auction-item">
-                
                 <p><strong>Auction ID:</strong> {auction.auctionId}</p>
                 <p><strong>Start Date:</strong> {auction.startDate}</p>
                 <p><strong>End Date:</strong> {auction.endDate}</p>
