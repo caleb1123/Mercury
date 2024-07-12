@@ -68,7 +68,7 @@ function StaffPage() {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
 
-      const response = await axios.get(`http://localhost:8088/account/myinfor`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/account/myinfor`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -83,7 +83,7 @@ function StaffPage() {
 
   const fetchJewelry = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/getAll', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/jewelry/getAll', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -97,7 +97,7 @@ function StaffPage() {
 
   const fetchAuctions = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/auction/list', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/auction/list', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -110,7 +110,7 @@ function StaffPage() {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/request/list', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/request/list', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -155,7 +155,7 @@ function StaffPage() {
 
   const handleDeleteClick = async (jewelry) => {
     try {
-      await axios.put(`http://localhost:8088/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false }, {
+      await axios.put(`https://test-production-532e.up.railway.app/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false }, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -191,7 +191,7 @@ function StaffPage() {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
 
-      await axios.put(`http://localhost:8088/account/update/${username}`, profile, {
+      await axios.put(`https://test-production-532e.up.railway.app/account/update/${username}`, profile, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

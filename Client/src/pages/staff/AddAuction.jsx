@@ -27,7 +27,7 @@ const AddAuction = ({ fetchAuctions }) => {
 
   const handleAddAuction = async () => {
     try {
-      await axios.post('http://localhost:8088/auction/create', newAuction);
+      await axios.post('https://test-production-532e.up.railway.app/auction/create', newAuction);
       fetchAuctions(); // Refresh the list
       setNewAuction({
         currentPrice: '',

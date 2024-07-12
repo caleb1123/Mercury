@@ -17,7 +17,7 @@ const EditAuction = ({ auction, onClose, onAuctionUpdated }) => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:8088/auction/update/${auction.auctionId}`, {
+      await axios.put(`https://test-production-532e.up.railway.app/auction/update/${auction.auctionId}`, {
         ...auction,
         startDate: startDate,
         endDate: endDate,

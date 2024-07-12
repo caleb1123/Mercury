@@ -54,7 +54,7 @@ const AddJewelry = ({ fetchJewelry }) => {
       // if (imageFile) {
       //   const formData = new FormData();
       //   formData.append('file', imageFile);
-      //   const imageUploadResponse = await axios.post('http://localhost:8088/jewelryImage/upload/101', formData, {
+      //   const imageUploadResponse = await axios.post('https://test-production-532e.up.railway.app/jewelryImage/upload/101', formData, {
       //     headers: {
       //       'Content-Type': 'multipart/form-data'
       //     }
@@ -63,7 +63,7 @@ const AddJewelry = ({ fetchJewelry }) => {
       // }
 
       // Add jewelry details
-      const response = await axios.post('http://localhost:8088/jewelry/add', newJewelry);
+      const response = await axios.post('https://test-production-532e.up.railway.app/jewelry/add', newJewelry);
       console.log('Server response:', response);
       fetchJewelry(); // Refresh the list
       setNewJewelry({

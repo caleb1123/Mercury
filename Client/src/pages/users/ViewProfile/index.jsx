@@ -25,7 +25,7 @@ function ViewProfile() {
     
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8088/account/myinfor', {
+        const response = await fetch('https://test-production-532e.up.railway.app/account/myinfor', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -64,7 +64,7 @@ function ViewProfile() {
     setError(null); // Reset error state
     try {
       console.log('Updating user:', userData.userName); // Log userName before update
-      const response = await fetch(`http://localhost:8088/account/update/${userData.userName}`, {
+      const response = await fetch(`https://test-production-532e.up.railway.app/account/update/${userData.userName}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

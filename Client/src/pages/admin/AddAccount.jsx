@@ -21,7 +21,7 @@ function AddAccount() {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await axios.post('http://localhost:8088/account/create', {
+      const response = await axios.post('https://test-production-532e.up.railway.app/account/create', {
         userName,
         email,
         phone,

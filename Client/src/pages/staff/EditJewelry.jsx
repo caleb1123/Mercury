@@ -47,7 +47,7 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
       if (imageFile) {
         const formData = new FormData();
         formData.append('file', imageFile);
-        const imageUploadResponse = await axios.post(`http://localhost:8088/jewelryImage/upload/${editedJewelry.jewelryId}`, formData, {
+        const imageUploadResponse = await axios.post(`https://test-production-532e.up.railway.app/jewelryImage/upload/${editedJewelry.jewelryId}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -56,7 +56,7 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
       }
 
       // Update jewelry details
-      const url = `http://localhost:8088/jewelry/update/${editedJewelry.jewelryId}`;
+      const url = `https://test-production-532e.up.railway.app/jewelry/update/${editedJewelry.jewelryId}`;
       await axios.put(url, editedJewelry);
       fetchJewelry(); // Refresh the list
       setEditMode(false); // Exit edit mode

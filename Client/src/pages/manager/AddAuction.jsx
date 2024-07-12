@@ -18,7 +18,7 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
 
   const fetchAvailableJewelry = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/list/available', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/jewelry/list/available', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -50,7 +50,7 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
   const handleSubmit = async () => {
     console.log('Auction data to be submitted:', auctionData);
     try {
-      const response = await axios.post('http://localhost:8088/auction/create', auctionData, {
+      const response = await axios.post('https://test-production-532e.up.railway.app/auction/create', auctionData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

@@ -11,7 +11,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
   useEffect(() => {
     const fetchJewelryDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}`, {
+        const response = await axios.get(`https://test-production-532e.up.railway.app/jewelry/${jewelryId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -25,7 +25,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
     const fetchRequestDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/request/id/${requestId}`, {
+        const response = await axios.get(`https://test-production-532e.up.railway.app/request/id/${requestId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -40,7 +40,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
     const fetchJewelryImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`, {
+        const response = await axios.get(`https://test-production-532e.up.railway.app/jewelryImage/all/${jewelryId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -65,7 +65,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
     try {
       // Update preliminary price
       const updateResponse = await axios.put(
-        `http://localhost:8088/request/update/preliminary/${requestId}`,
+        `https://test-production-532e.up.railway.app/request/update/preliminary/${requestId}`,
         {
           requestId: requestId,
           preliminaryPrice: preliminaryPrice,
@@ -80,7 +80,7 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
       // If the preliminary price update is successful, send the email notification
       if (updateResponse.status === 200) {
         const emailResponse = await axios.post(
-          `http://localhost:8088/request/sendDeadlineRequest`,
+          `https://test-production-532e.up.railway.app/request/sendDeadlineRequest`,
           {
             ...requestDetails,
             preliminaryPrice: preliminaryPrice,

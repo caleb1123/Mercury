@@ -80,7 +80,7 @@ function ViewAuction() {
   const fetchJewelryData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelry/${jewelryId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -101,7 +101,7 @@ function ViewAuction() {
 
   const fetchImagesData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`);
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelryImage/list/${jewelryId}`);
       const data = response.data.filter(img => img.status !== false);
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -126,7 +126,7 @@ function ViewAuction() {
   const fetchAuctionData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}/auction`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelry/${jewelryId}/auction`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -150,7 +150,7 @@ function ViewAuction() {
   const fetchBidsData = async (auctionId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/bid/list/${auctionId}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/bid/list/${auctionId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -181,7 +181,7 @@ function ViewAuction() {
   const fetchWinnerData = async (auctionId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/auction/${auctionId}/winner`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/auction/${auctionId}/winner`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -219,7 +219,7 @@ function ViewAuction() {
       const decodedToken = jwtDecode(token);
       const username = decodedToken.sub;
 
-      const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}/auction`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelry/${jewelryId}/auction`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -231,7 +231,7 @@ function ViewAuction() {
         throw new Error('Auction ID not found');
       }
 
-      await axios.post('http://localhost:8088/bid/create', {
+      await axios.post('https://test-production-532e.up.railway.app/bid/create', {
         bidAmount: selectedBid,
         auctionId: auctionId,
       }, {
@@ -262,7 +262,7 @@ function ViewAuction() {
   const fetchHighestBid = async (auctionId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/auction/${auctionId}/highestBid`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/auction/${auctionId}/highestBid`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,

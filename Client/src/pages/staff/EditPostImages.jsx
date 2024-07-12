@@ -28,7 +28,7 @@ function EditPostImages({ postId, onClose }) {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/postImage/list/${postId}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/postImage/list/${postId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -48,7 +48,7 @@ function EditPostImages({ postId, onClose }) {
     formData.append('file', newImageFile);
 
     try {
-      await axios.post(`http://localhost:8088/postImage/upload/${postId}`, formData, {
+      await axios.post(`https://test-production-532e.up.railway.app/postImage/upload/${postId}`, formData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data',
@@ -65,7 +65,7 @@ function EditPostImages({ postId, onClose }) {
   const handleDeleteImage = async (fileId) => {
     console.log('Deleting fileId:', fileId); // Log fileId on console
     try {
-      await axios.delete(`http://localhost:8088/postImage/delete/${fileId}`, {
+      await axios.delete(`https://test-production-532e.up.railway.app/postImage/delete/${fileId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },

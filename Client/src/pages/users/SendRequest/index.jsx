@@ -92,7 +92,7 @@ export default function SendRequest() {
       }
 
       const jewelryResponse = await axios.post(
-        "http://localhost:8088/jewelry/add",
+        "https://test-production-532e.up.railway.app/jewelry/add",
         newJewelry,
         {
           headers: {
@@ -120,7 +120,7 @@ export default function SendRequest() {
       };
 
       const requestResponse = await axios.post(
-        "http://localhost:8088/request/create",
+        "https://test-production-532e.up.railway.app/equest/create",
         requestData,
         {
           headers: {
@@ -164,7 +164,7 @@ export default function SendRequest() {
       }
 
       const response = await axios.post(
-        `http://localhost:8088/jewelryImage/upload/${jewelryId}`,
+        `https://test-production-532e.up.railway.app/jewelryImage/upload/${jewelryId}`,
         formData,
         {
           headers: {
@@ -197,7 +197,7 @@ export default function SendRequest() {
       }
 
       const response = await axios.post(
-        `http://localhost:8088/jewelryImage/upload/${jewelryId}`,
+        `https://test-production-532e.up.railway.app/jewelryImage/upload/${jewelryId}`,
         formData,
         {
           headers: {
@@ -228,7 +228,7 @@ export default function SendRequest() {
         throw new Error("User not authenticated");
       }
 
-      await axios.delete(`http://localhost:8088/jewelryImage/delete/${fileId}`, {
+      await axios.delete(`https://test-production-532e.up.railway.app/jewelryImage/delete/${fileId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -246,7 +246,7 @@ export default function SendRequest() {
         throw new Error("User not authenticated");
       }
 
-      const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelryImage/all/${jewelryId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

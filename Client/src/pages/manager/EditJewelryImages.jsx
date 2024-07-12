@@ -26,7 +26,7 @@ function EditJewelryImages({ jewelryId, onClose }) {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelryImage/all/${jewelryId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -46,7 +46,7 @@ function EditJewelryImages({ jewelryId, onClose }) {
     formData.append('file', newImageFile);
 
     try {
-      await axios.post(`http://localhost:8088/jewelryImage/upload/${jewelryId}`, formData, {
+      await axios.post(`https://test-production-532e.up.railway.app/jewelryImage/upload/${jewelryId}`, formData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data',
@@ -62,7 +62,7 @@ function EditJewelryImages({ jewelryId, onClose }) {
   const handleDeleteImage = async (fileId) => {
     console.log('Deleting fileId:', fileId); // Log fileId on console
     try {
-      await axios.delete(`http://localhost:8088/jewelryImage/delete/${fileId}`, {
+      await axios.delete(`https://test-production-532e.up.railway.app/jewelryImage/delete/${fileId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },

@@ -37,7 +37,7 @@ function ViewPost() {
   useEffect(() => {
     // Fetch categories from the backend
     axios
-      .get("http://localhost:8088/postCategory/getCategories")
+      .get("https://test-production-532e.up.railway.app/postCategory/getCategories")
       .then((response) => {
         setCategories([{ categoryId: 0, categoryName: "All" }, ...response.data]);
       })
@@ -51,8 +51,8 @@ function ViewPost() {
 
   const fetchPosts = (categoryID) => {
     let url = categoryID === 0
-      ? "http://localhost:8088/posts/getAllActive"
-      : `http://localhost:8088/posts/getActivePostByCate/${categoryID}`;
+      ? "https://test-production-532e.up.railway.app/posts/getAllActive"
+      : `https://test-production-532e.up.railway.app/posts/getActivePostByCate/${categoryID}`;
 
     axios
       .get(url)
@@ -85,7 +85,7 @@ function ViewPost() {
 
   const fetchImagePost = async (postId) => {
     try {
-      const response = await axios.get(`http://localhost:8088/postImage/${postId}/autoImg`);
+      const response = await axios.get(`https://test-production-532e.up.railway.app/postImage/${postId}/autoImg`);
       console.log(response); // Log the entire response object to the console
   
       if (response.status !== 200) {

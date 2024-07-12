@@ -40,7 +40,7 @@ function ViewJewelryList() {
 
   const fetchJewelryData = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/getAll', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/jewelry/getAll', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -74,7 +74,7 @@ function ViewJewelryList() {
 
   const fetchJewelryImage = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8088/jewelryImage/jewelry/${id}/image`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/jewelryImage/jewelry/${id}/image`, {
         headers: {
           'Content-Type': 'application/json',
         },

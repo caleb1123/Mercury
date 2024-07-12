@@ -54,7 +54,7 @@ function CreatePost() {
         status: true,
       };
 
-      const postResponse = await axios.post('http://localhost:8088/posts/create', postData, {
+      const postResponse = await axios.post('https://test-production-532e.up.railway.app/posts/create', postData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

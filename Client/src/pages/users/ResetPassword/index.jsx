@@ -21,7 +21,7 @@ function ResetPassword({ onSuccess }) {
     const email = data.get('email');
 
     try {
-      const response = await axios.post('http://localhost:8088/auth/forgot-password', { email }, {
+      const response = await axios.post('https://test-production-532e.up.railway.app/auth/forgot-password', { email }, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -95,7 +95,7 @@ function ConfirmResetPassword({ email }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:8088/auth/reset-password', {
+      const response = await axios.post('https://test-production-532e.up.railway.app/auth/reset-password', {
         email,
         otp,
         newPassword,

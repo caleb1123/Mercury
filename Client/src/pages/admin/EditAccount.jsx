@@ -45,7 +45,7 @@ const EditAccount = ({ account }) => {
     console.log("Request Payload:", JSON.stringify(formData, null, 2));
 
     try {
-      const response = await axios.put(`http://localhost:8088/account/update/${formData.userName}`, formData, {
+      const response = await axios.put(`https://test-production-532e.up.railway.app/account/update/${formData.userName}`, formData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

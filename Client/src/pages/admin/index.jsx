@@ -42,7 +42,7 @@ function Sidebar() {
   const fetchAccounts = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:8088/account/list', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/account/list', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -64,7 +64,7 @@ function Sidebar() {
   const searchAccounts = async (name) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`http://localhost:8088/account/search/${name}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/account/search/${name}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -85,7 +85,7 @@ function Sidebar() {
   const fetchAccountDetails = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`http://localhost:8088/account/id/${id}`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/account/id/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

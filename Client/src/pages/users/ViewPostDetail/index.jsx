@@ -62,7 +62,7 @@ const ElsaPerettiArticle = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/posts/getById/${id}`);
+        const response = await axios.get(`https://test-production-532e.up.railway.app/posts/getById/${id}`);
         setPost(response.data);
       } catch (error) {
         console.error("Failed to fetch post:", error);
@@ -71,7 +71,7 @@ const ElsaPerettiArticle = () => {
 
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/postImage/list/${id}`);
+        const response = await axios.get(`https://test-production-532e.up.railway.app/postImage/list/${id}`);
         const formattedImages = response.data.map(image => ({
           ...image,
           postImageURL: image.postImageURL.replace("uc?id=", "uc?export=view&id=")

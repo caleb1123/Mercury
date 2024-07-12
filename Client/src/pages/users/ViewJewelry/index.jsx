@@ -36,7 +36,7 @@ const ViewJewelry = () => {
   useEffect(() => {
     const fetchJewelryData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/jewelry/${id}`, {
+        const response = await axios.get(`https://test-production-532e.up.railway.app/jewelry/${id}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -54,7 +54,7 @@ const ViewJewelry = () => {
 
     const fetchImagesData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8088/jewelryImage/list/${id}`);
+        const response = await axios.get(`https://test-production-532e.up.railway.app/jewelryImage/list/${id}`);
         const data = response.data.filter(img => img.status !== false);
         if (response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);

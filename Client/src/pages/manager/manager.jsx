@@ -82,7 +82,7 @@ function ManagerPage() {
     try {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
-      const response = await axios.get(`http://localhost:8088/account/myinfor`, {
+      const response = await axios.get(`https://test-production-532e.up.railway.app/account/myinfor`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -96,7 +96,7 @@ function ManagerPage() {
 
   const fetchJewelry = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/getAll', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/jewelry/getAll', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -110,7 +110,7 @@ function ManagerPage() {
 
   const fetchAuctions = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/auction/list', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/auction/list', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -123,7 +123,7 @@ function ManagerPage() {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/request/list', {
+      const response = await axios.get('https://test-production-532e.up.railway.app/request/list', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -145,14 +145,14 @@ function ManagerPage() {
   const handleSearch = async () => {
     try {
       if (selectedIndex === 1) {
-        const response = await axios.get(`http://localhost:8088/jewelry/search?name=${searchQuery}`, {
+        const response = await axios.get(`https://test-production-532e.up.railway.app/jewelry/search?name=${searchQuery}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
         setJewelryList(response.data);
       } else if (selectedIndex === 2) {
-        const response = await axios.get(`http://localhost:8088/auction/search?name=${searchQuery}`, {
+        const response = await axios.get(`https://test-production-532e.up.railway.app/auction/search?name=${searchQuery}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -194,7 +194,7 @@ function ManagerPage() {
 
   const handleDeleteClick = async (jewelry) => {
     try {
-      await axios.put(`http://localhost:8088/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false }, {
+      await axios.put(`https://test-production-532e.up.railway.app/jewelry/delist/${jewelry.jewelryId}`, { ...jewelry, status: false }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -227,7 +227,7 @@ function ManagerPage() {
   const updateProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:8088/account/update/${username}`, profile, {
+      await axios.put(`https://test-production-532e.up.railway.app/account/update/${username}`, profile, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -256,7 +256,7 @@ function ManagerPage() {
 
   const handleSaveFinalPrice = async () => {
     try {
-      await axios.put(`http://localhost:8088/request/update/final/${selectedRequest.requestId}`, {
+      await axios.put(`https://test-production-532e.up.railway.app/request/update/final/${selectedRequest.requestId}`, {
         finalPrice: finalPrice,
       }, {
         headers: {
@@ -274,7 +274,7 @@ function ManagerPage() {
 
   const handleDeleteAuction = async (auctionId) => {
     try {
-      await axios.put(`http://localhost:8088/auction/delete/${auctionId}`, null, {
+      await axios.put(`https://test-production-532e.up.railway.app/auction/delete/${auctionId}`, null, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

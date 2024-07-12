@@ -15,7 +15,7 @@ function EditAuction({ auction, fetchAuctions, setEditMode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8088/auction/update/${updatedAuction.auctionId}`, updatedAuction);
+      await axios.put(`https://test-production-532e.up.railway.app/auction/update/${updatedAuction.auctionId}`, updatedAuction);
       fetchAuctions();
       setEditMode(false);
     } catch (error) {

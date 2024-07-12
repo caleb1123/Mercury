@@ -42,7 +42,7 @@ export default function SignUp() {
     };
 
     try {
-      const response = await axios.post('http://localhost:8088/account/signUp', userData, {
+      const response = await axios.post('https://test-production-532e.up.railway.app/account/signUp', userData, {
         headers: {
           'Content-Type': 'application/json',
         },

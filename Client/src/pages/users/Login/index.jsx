@@ -44,7 +44,7 @@ export default function SignIn() {
     const password = data.get('password');
 
     try {
-      const response = await axios.post('http://localhost:8088/auth/login', {
+      const response = await axios.post('https://test-production-532e.up.railway.app/auth/login', {
         userName,
         password,
       });

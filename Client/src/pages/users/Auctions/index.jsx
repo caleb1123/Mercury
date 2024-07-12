@@ -15,7 +15,7 @@ const AuctionSection = ({ image, auctionId, buttonTexts }) => {
     const fetchTargetDate = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8088/auction/${auctionId}/targetDate`
+          `https://test-production-532e.up.railway.app/auction/${auctionId}/targetDate`
         );
         setTargetDate(response.data);
       } catch (error) {
@@ -26,7 +26,7 @@ const AuctionSection = ({ image, auctionId, buttonTexts }) => {
     const fetchJewelryData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8088/jewelry/${auctionId}/jewelry`
+          `https://test-production-532e.up.railway.app/jewelry/${auctionId}/jewelry`
         );
         const data = response.data;
         setJewelryData(data);
@@ -95,7 +95,7 @@ const AuctionDataPage = () => {
     const fetchJewelryImage = async (id) => {
       try {
         const response = await axios.get(
-          `http://localhost:8088/jewelryImage/jewelry/${id}/image`,
+          `https://test-production-532e.up.railway.app/jewelryImage/jewelry/${id}/image`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -124,20 +124,20 @@ const AuctionDataPage = () => {
       try {
         let response;
         if (opId === "1") {
-          response = await axios.get("http://localhost:8088/auction/list/live");
+          response = await axios.get("https://test-production-532e.up.railway.app/auction/list/live");
           setTitle("Live Auctions");
         } else if (opId === "2") {
           response = await axios.get(
-            "http://localhost:8088/auction/list/upcoming"
+            "https://test-production-532e.up.railway.app/auction/list/upcoming"
           );
           setTitle("Upcoming Auctions");
         } else if (opId === "3") {
           response = await axios.get(
-            "http://localhost:8088/auction/list/Ended"
+            "https://test-production-532e.up.railway.app/auction/list/Ended"
           );
           setTitle("Past Auctions");
         } else {
-          response = await axios.get("http://localhost:8088/auction/list");
+          response = await axios.get("https://test-production-532e.up.railway.app/auction/list");
           setTitle("All Auctions");
         }
         const data = response.data.filter(auction => auction.status !== 'Deleted');

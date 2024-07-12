@@ -6,7 +6,7 @@ function RequestDetails({ request, onSave, onFinalPriceChange, finalPrice, onCan
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(`http://localhost:8088/request/update/final/${request.requestId}`, {
+      const response = await axios.put(`https://test-production-532e.up.railway.app/request/update/final/${request.requestId}`, {
         requestId: request.requestId, 
         finalPrice: finalPrice,
       }, {
