@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewJewelryList.css";
-import Header from "./Header";
+import Header from "../Header";
+import Footer from '../Footer'
 
 const categories = [
   { jewelryCategoryId: 1, category_name: "RINGS" },
@@ -153,10 +154,7 @@ function ViewJewelryList() {
           !searchError && <div>No jewelry available</div>
         )}
       </div>
-
-      <div className="Footer">
-        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
-      </div>
+      <Footer/>
     </>
   );
 }

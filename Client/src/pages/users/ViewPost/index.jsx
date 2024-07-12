@@ -2,28 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ViewPost.css";
-import Header from "./Header";
-
-const CategoryItem = ({ children, isActive, onClick }) => (
-  <div className={isActive ? "active-category" : "category-item"} onClick={onClick}>
-    {children}
-  </div>
-);
-
-const btnViewDetail = () => {
-  window.location.href = "/ViewPostDetail";
-};
-
-const Article = ({ title, excerpt, imageUrl }) => (
-  <article className="article">
-    <img src={imageUrl} alt={title} className="article-image" />
-    <h2 className="article-title">{title}</h2>
-    <p className="article-excerpt">{excerpt}</p>
-    <button onClick={btnViewDetail} className="read-more">
-      Read more
-    </button>
-  </article>
-);
+import Header from "../Header";
+import Footer from "../Footer";
 
 function ViewPost() {
   const [posts, setPosts] = useState([]);
@@ -33,6 +13,26 @@ function ViewPost() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [imageUrls, setImageUrls] = useState({});
   const navigate = useNavigate();
+  const CategoryItem = ({ children, isActive, onClick }) => (
+    <div className={isActive ? "active-category" : "category-item"} onClick={onClick}>
+      {children}
+    </div>
+  )  
+  const btnViewDetail = (id) => {
+      navigate(`/ViewPostDetail/${id}`);
+  };
+  
+  const Article = ({ title, excerpt, imageUrl, postId }) => (
+    <article className="article">
+      <img src={imageUrl} alt={title} className="article-image" />
+      <h2 className="article-title">{title}</h2>
+      <p className="article-excerpt">{excerpt}</p>
+      <button onClick={() => btnViewDetail(postId)} className="read-more">
+        Read more
+      </button>
+    </article>
+  );
+  
 
   useEffect(() => {
     // Fetch categories from the backend
@@ -160,6 +160,7 @@ function ViewPost() {
                       title={post.title}
                       excerpt={post.content}
                       imageUrl={imageUrls[post.postId]}
+                      postId={post.postId}
                     />
                   </div>
                 ))}
@@ -168,6 +169,7 @@ function ViewPost() {
           </section>
         )}
       </div>
+      <Footer/>
     </>
   );
 }

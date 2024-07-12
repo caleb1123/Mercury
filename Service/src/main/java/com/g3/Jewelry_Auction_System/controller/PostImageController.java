@@ -31,7 +31,7 @@ public class PostImageController {
         }
     }
     @CrossOrigin(origins = "http://localhost:3001")
-    @GetMapping("/list/{jewelryId}")
+    @GetMapping("/list/{postId}")
     public ResponseEntity<List<PostImageDTO>> getImagesByPostId(@PathVariable int postId) {
         List<PostImageDTO> list = postImageService.getImagesByPostId(postId);
         return new ResponseEntity<>(list , HttpStatus.OK);

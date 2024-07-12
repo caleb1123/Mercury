@@ -181,16 +181,18 @@
   justify-content: center;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: #08c;
+  background-color: rgba(1, 131, 196, 0.877);
   align-self: start;
   margin-top: 20px;
   color: #fff;
   text-align: center;
   padding: 19px 24px;
   font: 13px Inter, sans-serif;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-@media (max-width: 991px) {
-  .read-more {
-    padding: 0 20px;
-  }
+
+.read-more:hover {
+  background-color: rgb(1, 131, 196);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+

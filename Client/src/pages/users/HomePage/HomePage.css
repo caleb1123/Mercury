@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: rgb(253, 253, 253);
-  color: rgb(0, 0, 0);
+  /* color: rgb(0, 0, 0); */
   display: flex;
   justify-content: center;
 }
@@ -85,32 +85,6 @@ body {
 
 .JewelryDate_HomePage_ {
     color: white;
-}
-
-.Footer {
-  text-align: center;
-  padding: 10px;
-  background-color: #000000;
-  width: 100%;
-  flex-shrink: 0;
-
-
-}
-
-.Footer_Small {
-    font-size: 22px;
-    padding-left: 150px;
-}
-
-.Footer_style {
-    color: rgb(255, 255, 255);
-    padding-top: 20px;
-    padding-bottom: 20px;
-
-}
-
-.Footer_Info {
-    display: flex;
 }
 
 .LogoutButton {

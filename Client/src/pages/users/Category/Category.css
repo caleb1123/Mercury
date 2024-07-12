@@ -3,7 +3,7 @@ body {
     display: flex;
     align-content: center;
     text-align: left;
-    color: #000000;
+    /* color: #000000; */
 }
 
 .Category {

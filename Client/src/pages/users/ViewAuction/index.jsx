@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewAuction.css";
 import { jwtDecode } from 'jwt-decode';
-import Header from "./Header";
+import Header from "../Header";
+import Footer from '../Footer'
 
 const categoryMapping = {
   1: 'RINGS',
@@ -101,12 +102,13 @@ function ViewAuction() {
   const fetchImagesData = async () => {
     try {
       const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`);
+      const data = response.data.filter(img => img.status !== false);
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       // Chuyển đổi liên kết Google Drive thành liên kết trực tiếp
-      const formattedImages = response.data.map(image => ({
+      const formattedImages = data.map(image => ({
         ...image,
         jewelryImageURL: image.jewelryImageURL.replace("uc?id=", "uc?export=view&id=")
       }));
@@ -305,7 +307,7 @@ function ViewAuction() {
   return (
     <>
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
-
+      
       <div className="ViewAuction">
         <div className="PageName_ViewAuction">View Auction</div>
         {notification.message && (
@@ -415,9 +417,7 @@ function ViewAuction() {
         </div>
       )}
 
-      <div className="Footer">
-        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
-      </div>
+      <Footer/>
     </>
   );
 }

@@ -45,6 +45,13 @@
   margin-top: 5px;
 }
 
+.image-click {
+  padding: 0cap;
+  border-width: 0cap;
+  background-color: white;
+  cursor: pointer;
+}
+
 .auction-details {
   flex: 0 0 97%;
   margin-top: 50px;

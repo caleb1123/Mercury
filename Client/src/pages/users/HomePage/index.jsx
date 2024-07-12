@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Header from './Header';
+import Header from "../Header";
+import Footer from '../Footer'
 import "./HomePage.css";
 import Homebackground from './image/Website-banner-2-1.png';
 import pic1 from './image/Untitled-2560-×-1703-px-1-1-scaled.jpg'
@@ -77,11 +78,8 @@ function HomePage() {
 
 
       </div>
-
-
-      <div className="Footer">
-        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
-      </div>
+      
+      <Footer/>
     </>
   );
 }
