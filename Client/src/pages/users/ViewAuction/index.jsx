@@ -3,7 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewAuction.css";
 import {jwtDecode} from 'jwt-decode';
-import Header from "./Header";
+import Header from "../Header";
+import Footer from '../Footer'
+
+
 
 const categoryMapping = {
   1: 'RINGS',
@@ -106,7 +109,7 @@ function ViewAuction() {
 
   const fetchImagesData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`);
+      const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`);
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -441,9 +444,8 @@ function ViewAuction() {
         </div>
       )}
 
-      <div className="Footer">
-        <div className="Footer_style">© MERCURY AUCTION LLC 2024</div>
-      </div>
+<Footer/>
+
     </>
   );
 }

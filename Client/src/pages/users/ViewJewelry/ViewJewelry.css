@@ -1,5 +1,5 @@
 .ViewJewelry{
-  margin-top: 60px;
+  margin-top: 150px;
   padding: 30px 35px 9px;
   position: relative;
   max-width: fit-content; 
@@ -14,14 +14,6 @@
   padding: 0 25px 0;
   font-style: italic;
   font-size: 35px;
-
-}
-body{
-  width: 100%;
-  background-color: black;
-  display: flex;
-  align-content: center;
-  text-align: left;
 
 }
 .Jewelry{
@@ -57,7 +49,7 @@ top: 72px;
   min-width: 539px;
   width: 0;
   border: black;
-
+  margin-bottom: 50px;
 }
 .JewelryName{
   font-weight: bold;

@@ -98,6 +98,7 @@ public class PostController {
         return new ResponseEntity<>(postDTOList, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getById/{id}")
     public ResponseEntity<PostDTO> getPostById(@PathVariable int id) {
         PostDTO postDTO = postService.getPostById(id);

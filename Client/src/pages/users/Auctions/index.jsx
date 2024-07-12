@@ -2,13 +2,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./Auctions.css";
 import Countdown from "./CountDown";
-import "./Header";
-import Header from "./Header";
+import Header from "../Header";
+import Footer from '../Footer'
 import { useEffect, useState } from "react";
 
 const AuctionSection = ({ image, auctionId, buttonTexts }) => {
   const [targetDate, setTargetDate] = useState(null);
   const [jewelryData, setJewelryData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTargetDate = async () => {
@@ -40,16 +41,22 @@ const AuctionSection = ({ image, auctionId, buttonTexts }) => {
 
   if (!targetDate || !jewelryData) return <p>Loading...</p>;
 
+  const handleItemClick = (id) => {
+    navigate('/ViewAuction', { state: { jewelryId: id } });
+  };
+
   return (
     <div className="auction-section">
       <div className="auction-content">
         <div className="auction-image-container">
           <h2 className="auction-title">{jewelryData.gemstone}</h2>
-          <img
-            src={image}
-            alt={jewelryData.jewelryName}
-            className="auction-image"
-          />
+          <button onClick={() => handleItemClick(jewelryData.jewelryId)} className="image-click">
+            <img
+              src={image}
+              alt={jewelryData.jewelryName}
+              className="auction-image"
+            />
+          </button>
           <Countdown targetDate={targetDate} />
         </div>
         <div className="auction-details">
@@ -133,9 +140,9 @@ const AuctionDataPage = () => {
           response = await axios.get("http://localhost:8088/auction/list");
           setTitle("All Auctions");
         }
-        const data = response.data;
-        setAuctionDatas(response.data);
-        data.forEach((auction) => fetchJewelryImage(auction.jewelryId));
+        const data = response.data.filter(auction => auction.status !== 'Deleted');
+          setAuctionDatas(data);
+          data.forEach((auction) => fetchJewelryImage(auction.jewelryId));
       } catch (error) {
         setError(error.message);
       }
@@ -146,7 +153,7 @@ const AuctionDataPage = () => {
   }, [opId]);
 
   if (loading) return <p className="loading-message">Loading...</p>;
-  if (error) return <p className="error-message">Error: {error}</p>;
+  if (error) return <p className="error-message">Error: {error} <a href="/">Go back</a></p>;
 
   const createRows = (items, itemsPerRow) => {
     const rows = [];
@@ -167,24 +174,30 @@ const AuctionDataPage = () => {
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
       <div className="main-content">
         <h1 className="section-title">{title}</h1>
-        <div className="auction-grid">
-          {auctionRows.map((row, rowIndex) => (
-            <div className="auction-row" key={rowIndex}>
-              {row.map((auction) => (
-                <div className="auction" key={auction.auctionId}>
-                  <div className="line">
-                    <hr />
+        {auctionRows.length > 0 ? (
+          <div className="auction-grid">
+            {auctionRows.map((row, rowIndex) => (
+              <div className="auction-row" key={rowIndex}>
+                {row.map((auction) => (
+                  <div className="auction" key={auction.auctionId}>
+                    <div className="line">
+                      <hr />
+                    </div>
+                    <AuctionSection
+                      image={imageUrl[auction.jewelryId]}
+                      auctionId={auction.auctionId}
+                    />
                   </div>
-                  <AuctionSection
-                    image={imageUrl[auction.jewelryId]}
-                    auctionId={auction.auctionId}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="error-message">No auctions found.</p>
+        )}
       </div>
+      <div><hr/><hr/></div>
+      <Footer/>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewProfile.css';
-import Header from './Header';
+import Header from "../Header";
 
 function ViewProfile() {
   const [userData, setUserData] = useState(null);
