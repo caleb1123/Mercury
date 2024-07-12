@@ -56,14 +56,14 @@ function ViewAuction() {
   const [notification, setNotification] = useState({ type: '', message: '' });
   const [winner, setWinner] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("jewelryId:", jewelryId); // Log the jewelryId
+    console.log("jewelryId:", jewelryId);
     if (jewelryId) {
       fetchJewelryData();
       fetchAuctionData();
@@ -114,7 +114,6 @@ function ViewAuction() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Chuyển đổi liên kết Google Drive thành liên kết trực tiếp
       const formattedImages = response.data.map(image => ({
         ...image,
         jewelryImageURL: image.jewelryImageURL.replace("uc?id=", "uc?export=view&id=")
@@ -175,7 +174,6 @@ function ViewAuction() {
       const bidsData = response.data;
       setBids(bidsData);
 
-      // Update current price based on bids
       if (bidsData.length > 0) {
         const highestBid = Math.max(...bidsData.map(bid => bid.bidAmount));
         setAuction(prevState => ({ ...prevState, currentPrice: highestBid }));
@@ -314,11 +312,11 @@ function ViewAuction() {
 
   const handleViewResultClick = () => {
     fetchWinnerData(auction.auctionId);
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true); 
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false); 
   };
 
   const handleThumbnailClick = (url) => {

@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ViewRequests from "./ViewRequests"; // Import the new component
 
 const defaultTheme = createTheme();
@@ -53,6 +54,14 @@ export default function SendRequest() {
   const [jewelryId, setJewelryId] = useState(null);
   const [images, setImages] = useState([]);
   const [noImages, setNoImages] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/Login"); // Redirect to Login if no token
+    }
+  }, [navigate]); // Dependency array includes navigate
 
   useEffect(() => {
     if (jewelryId) {
@@ -221,7 +230,7 @@ export default function SendRequest() {
   };
 
   const handleDeleteImage = async (fileId) => {
-    console.log("Deleting fileId:", fileId); // Log fileId on console
+    console.log("Deleting fileId:", fileId); 
     try {
       const token = localStorage.getItem("token");
       if (!token) {
