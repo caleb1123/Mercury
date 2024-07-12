@@ -25,6 +25,7 @@ import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.AuctionService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -248,5 +249,18 @@ public class AuctionServiceImpl implements AuctionService {
             return auctionRepository.findById(auctionId).get().getStartDate();
         }
         return auctionRepository.findById(auctionId).get().getEndDate();
+    }
+
+    @Override
+    public List<AuctionDTO> getWonAuctions() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Account account = accountRepository.findByUserName(name).orElse(null);
+        if (name.equals("anonymousUser")) {
+            throw new AppException(ErrorCode.NOT_LOGGED_IN);
+        } else if (account == null) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
+        return auctionConverter.toDTO(auctionRepository.getAuctionsByWinnerId(account.getAccountId()));
     }
 }

@@ -106,4 +106,10 @@ public class AuctionController {
         return ResponseEntity.ok(formattedDate);
     }
 
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/thisUser/wonAuctions")
+    public ResponseEntity<List<AuctionDTO>> getWonAuctions() {
+        List<AuctionDTO> auctionList = auctionService.getWonAuctions();
+        return new ResponseEntity<>(auctionList, HttpStatus.OK);
+    }
 }
