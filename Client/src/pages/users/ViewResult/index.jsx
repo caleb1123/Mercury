@@ -26,8 +26,8 @@ function ViewResult() {
         if (response.ok) {
           const data = await response.json();
           setAuctionData(data);
-          console.log('Fetched auction data:', data); // Log auction data
-        }  else {
+          console.log('Fetched auction data:', data);
+        } else {
           console.error('Failed to fetch auction data:', response.statusText);
         }
       } catch (error) {
@@ -37,6 +37,65 @@ function ViewResult() {
 
     fetchAuctionData();
   }, []);
+
+  useEffect(() => {
+    const fetchJewelryData = async (auction) => {
+      try {
+        const response = await fetch(`http://localhost:8088/jewelry/${auction.jewelryId}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.ok) {
+          const jewelryData = await response.json();
+          return jewelryData;
+        } else {
+          console.error('Failed to fetch jewelry data:', response.statusText);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching jewelry data:', error);
+        return null;
+      }
+    };
+
+    const fetchJewelryImage = async (jewelryId) => {
+      try {
+        const response = await fetch(`http://localhost:8088/jewelryImage/jewelry/{id}/image`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.ok) {
+          const imageData = await response.json();
+          return imageData;
+        } else {
+          console.error('Failed to fetch jewelry image:', response.statusText);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching jewelry image:', error);
+        return null;
+      }
+    };
+
+    const fetchAdditionalData = async () => {
+      const updatedAuctionData = await Promise.all(auctionData.map(async (auction) => {
+        const jewelryData = await fetchJewelryData(auction);
+        const jewelryImage = await fetchJewelryImage(auction.jewelryId);
+        return {
+          ...auction,
+          jewelryName: jewelryData ? jewelryData.jewelryName : 'N/A',
+          jewelryImageUrl: jewelryImage ? jewelryImage.jewelryImageURL : ''
+        };
+      }));
+      setAuctionData(updatedAuctionData);
+    };
+
+    if (auctionData.length) {
+      fetchAdditionalData();
+    }
+  }, [auctionData]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -62,8 +121,7 @@ function ViewResult() {
         <div className="result">
           <h2>Won Auctions</h2>
           <div className="result-details">
-          <div className="Congra"><h1>Congratulations !!!! You have won this item </h1></div>
-
+            <div className="Congra"><h1>Congratulations !!!! You have won this item</h1></div>
             {auctionData.map((auction) => (
               <div key={auction.auctionId} className="auction-item">
                 <p><strong>Auction ID:</strong> {auction.auctionId}</p>
@@ -71,7 +129,8 @@ function ViewResult() {
                 <p><strong>End Date:</strong> {auction.endDate}</p>
                 <p><strong>Current Price:</strong> {auction.currentPrice}</p>
                 <p><strong>Status:</strong> {auction.status}</p>
-                <p><strong>Jewelry ID:</strong> {auction.jewelryId}</p>
+                <p><strong>Jewelry Name:</strong> {auction.jewelryName}</p>
+                <img src={auction.jewelryImageUrl} alt="Jewelry Image" className="jewelry-image"/>
               </div>
             ))}
           </div>
