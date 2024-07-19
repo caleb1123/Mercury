@@ -22,5 +22,5 @@ public interface AuthenticationService {
 
     void resetPasswordWithOtp(String email, String otp, String newPassword);
 
-
+    void activeAccountWithOTP(String email, String otp);
 }

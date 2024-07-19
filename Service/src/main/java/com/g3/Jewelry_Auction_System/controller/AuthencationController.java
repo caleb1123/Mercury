@@ -76,4 +76,20 @@ public class AuthencationController {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @PostMapping("/signupOTP")
+    public ResponseEntity<String> activeAccountWithOTP(@RequestBody ResetPasswordRequest resetPasswordRequestDTO) {
+        try {
+            authenticationService.activeAccountWithOTP(
+                    resetPasswordRequestDTO.getEmail(),
+                    resetPasswordRequestDTO.getOtp()
+            );
+            return ResponseEntity.ok("Active account successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
+    }
 }
