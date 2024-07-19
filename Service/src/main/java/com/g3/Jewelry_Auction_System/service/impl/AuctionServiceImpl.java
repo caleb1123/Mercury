@@ -156,8 +156,7 @@ public class AuctionServiceImpl implements AuctionService {
                         (Timestamp) row[2],
                         (Timestamp) row[3],
                         (String) row[4],
-                        (int) row[6],
-                        (int) row[7]
+                        (int) row[6]
                 ));
             }
             return upcomingAuctionResponseList;

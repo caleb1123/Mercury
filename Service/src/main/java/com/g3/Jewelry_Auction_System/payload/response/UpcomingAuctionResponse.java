@@ -19,5 +19,4 @@ public class UpcomingAuctionResponse {
     private Timestamp startDate;
     private String status;
     private int jewelryId;
-    private int hourUntilStart;
 }
