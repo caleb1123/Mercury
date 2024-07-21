@@ -28,8 +28,26 @@ public class WinnerIDUpdate {
             Integer highestBidderId = bidRepository.findHighestBidderId(auction.getAuctionId());
             if (highestBidderId != null) {
                 auction.setWinnerId(highestBidderId);
-                auctionService.sendEmailToWinner(auction.getAuctionId());
                 auctionRepository.save(auction);
+
+                // Logging for debugging
+                System.out.println("Auction ID: " + auction.getAuctionId() + ", Highest Bidder ID: " + highestBidderId);
+
+                try {
+                    // Ensure auctionId is not null
+                    Integer auctionId = auction.getAuctionId();
+                    if (auctionId != null) {
+                        auctionService.sendEmailToWinner(auctionId);
+                    } else {
+                        System.err.println("Auction ID is null for auction: " + auction);
+                    }
+                } catch (Exception e) {
+                    // Logging the exception
+                    System.err.println("Error sending email to winner for auction: " + auction.getAuctionId());
+                    e.printStackTrace();
+                }
+            } else {
+                System.err.println("Highest Bidder ID is null for auction: " + auction.getAuctionId());
             }
         }
     }

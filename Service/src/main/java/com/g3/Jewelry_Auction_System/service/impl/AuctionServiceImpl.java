@@ -260,4 +260,15 @@ public class AuctionServiceImpl implements AuctionService {
         }
         return auctionConverter.toDTO(auctionRepository.getAuctionsByWinnerId(account.getAccountId()));
     }
+
+    @Override
+    public void stopAuction(int auctionId) {
+        Auction auction = auctionRepository.findAuctionByAuctionId(auctionId);
+        if (auction != null && auction.getStatus().equals("Ongoing")) {
+            auction.setStatus("Ended");
+            auctionRepository.save(auction);
+        } else {
+            throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
+        }
+    }
 }
