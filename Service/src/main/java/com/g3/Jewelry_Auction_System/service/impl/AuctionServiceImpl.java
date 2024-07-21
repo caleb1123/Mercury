@@ -267,8 +267,24 @@ public class AuctionServiceImpl implements AuctionService {
         if (auction != null && auction.getStatus().equals("Ongoing")) {
             auction.setStatus("Ended");
             auctionRepository.save(auction);
+            String auctionName = auction.getJewelry().getJewelryName();
+            List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+            for (Bid bid : bids) {
+                Account account = bid.getAccount();
+                String email = account.getEmail();
+                String fullname =  account.getFullName();
+
+                try {
+                    emailService.sendApologyEmail(email, auctionName, fullname);
+                } catch (MessagingException e) {
+                    // Handle exception or log it
+                    System.err.println("Failed to send apology email to " + email);
+                    e.printStackTrace();
+                }
+            }
         } else {
-            throw new AppException(ErrorCode.AUCTION_NOT_CLOSED);
+            System.err.println("Auction not found for ID: " + auctionId);
         }
+
     }
 }

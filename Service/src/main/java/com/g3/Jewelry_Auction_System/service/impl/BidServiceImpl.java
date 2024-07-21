@@ -58,18 +58,7 @@ public class BidServiceImpl implements BidService {
         Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
-        if (auction.getEndDate().isBefore(LocalDateTime.now()) ||
-                Objects.equals(auction.getStatus(), "Pending")) {
-            throw new AppException(ErrorCode.AUCTION_CLOSED);
-        } else
-//        if
-//        (auction.getStartDate().isAfter(LocalDateTime.now())) {
-//            bidDTO.setBidTime(LocalDateTime.now());
-//            Bid bid = bidConverter.toEntity(bidDTO);
-//            bidRepository.save(bid);
-//            return bidConverter.toDTO(bid);
-//        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
-        {
+        if (auction.getStatus().equals("Ongoing")) {
             Bid highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId()).orElse(null);
 
@@ -89,6 +78,10 @@ public class BidServiceImpl implements BidService {
             } else {
                 throw new RuntimeException("Bid amount exceeds current price");
             }
+
+        }else
+        {
+            throw new AppException(ErrorCode.AUCTION_CLOSED);
         }
     }
 

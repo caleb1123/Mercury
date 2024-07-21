@@ -1,11 +1,13 @@
 package com.g3.Jewelry_Auction_System.controller;
 
 import com.g3.Jewelry_Auction_System.entity.Account;
+import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.entity.Bid;
 import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
 import com.g3.Jewelry_Auction_System.payload.response.BidResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IncrementResponse;
+import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.service.AccountService;
 import com.g3.Jewelry_Auction_System.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,6 +29,8 @@ public class BidController {
     AccountService accountService;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    AuctionRepository auctionRepository;
 
     @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/create")
@@ -125,6 +130,32 @@ public class BidController {
     public ResponseEntity<List<IncrementResponse>> getIncrementList(@PathVariable int auctionId) {
         List<IncrementResponse> incrementResponses = bidService.incrementList(auctionId);
         return new ResponseEntity<>(incrementResponses, HttpStatus.OK);
+    }
+
+    @PutMapping("/test")
+    public ResponseEntity<String> test() {
+        LocalDateTime now = LocalDateTime.now();
+
+        // Tìm các phiên đấu giá cần cập nhật trạng thái
+        List<Auction> auctionsToStart = auctionRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now, now, "Pending");
+        List<Auction> auctionsToEnd = auctionRepository.findByEndDateBeforeAndStatus(now, "Ongoing");
+
+        // Cập nhật trạng thái các phiên đấu giá bắt đầu
+        for (Auction auction : auctionsToStart) {
+            if (now.isAfter(auction.getStartDate()) && now.isBefore(auction.getEndDate())) {
+                auction.setStatus("Ongoing");
+                auctionRepository.save(auction);
+            }
+        }
+
+        // Cập nhật trạng thái các phiên đấu giá kết thúc
+        for (Auction auction : auctionsToEnd) {
+            if (now.isAfter(auction.getEndDate())) {
+                auction.setStatus("Ended");
+                auctionRepository.save(auction);
+            }
+        }
+        return new ResponseEntity<>("Test", HttpStatus.OK);
     }
 }
 
