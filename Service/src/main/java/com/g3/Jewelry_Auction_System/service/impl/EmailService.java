@@ -71,4 +71,21 @@ public class EmailService {
 
         sendNewMail(to, subject, body, fullname);
     }
+
+    public void sendOTPtoActiveAccount(String to, String otp,String fullname) throws MessagingException {
+        String subject = "OTP to active account - Mercury Jewelry Auction";
+        String body = "<html>" +
+                "<body>" +
+                "<h2 style=\"color: #0D6EFD;\">OTP code</h2>" +
+                "<p>Dear " +  fullname +",</p>" +
+                "<p>We received a request to active your account for the Mercury Jewelry Auction account associated with this email address. If you did not request this change, you can ignore this email.</p>" +
+                "<p>To active your account, please use the following OTP code:</p>" +
+                "<h3 style=\"color: #0D6EFD;\">" + otp + "</h3>" +
+                "<p>This OTP code will expire in 15 minutes.</p>" +
+                "<p>Thank you for using Mercury Jewelry Auction!</p>" +
+                "<p>Best regards,<br/>Mercury</p>" +
+                "</body>" +
+                "</html>";
+        sendNewMail(to, subject, body,fullname);
+    }
 }

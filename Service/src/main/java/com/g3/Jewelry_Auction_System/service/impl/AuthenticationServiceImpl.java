@@ -1,17 +1,20 @@
 package com.g3.Jewelry_Auction_System.service.impl;
 
+import com.g3.Jewelry_Auction_System.converter.AccountConverter;
 import com.g3.Jewelry_Auction_System.entity.Account;
 import com.g3.Jewelry_Auction_System.entity.BlackListToken;
 import com.g3.Jewelry_Auction_System.entity.OTPToken;
 import com.g3.Jewelry_Auction_System.entity.Role;
 import com.g3.Jewelry_Auction_System.exception.AppException;
 import com.g3.Jewelry_Auction_System.exception.ErrorCode;
+import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.request.*;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
 import com.g3.Jewelry_Auction_System.repository.AccountRepository;
 import com.g3.Jewelry_Auction_System.repository.BlackListTokenRepository;
 import com.g3.Jewelry_Auction_System.repository.OTPTokenRepository;
+import com.g3.Jewelry_Auction_System.repository.RoleRepository;
 import com.g3.Jewelry_Auction_System.service.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -45,6 +48,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     EmailService emailService;
     @Autowired
     OTPTokenRepository otpTokenRepository;
+    @Autowired
+    AccountConverter accountConverter;
 
 
     @Value("${app.jwt-secret}")
@@ -55,6 +60,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Value("${app.jwt-refresh-expiration-milliseconds}")
     private long REFRESHABLE_DURATION;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -63,6 +70,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Account user = accountRepository
                 .findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!user.getStatus()) throw new AppException(ErrorCode.ACCOUNT_INACTIVE);
 
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
@@ -241,6 +250,55 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         accountRepository.save(account);
 
         otpTokenRepository.delete(otpToken);
+    }
+    @Transactional
+    @Override
+    public void generateAndSendOtpforActive(String email) throws MessagingException {
+        var account = accountRepository.findByEmail(email).orElseThrow(
+                () -> new AppException(ErrorCode.EMAIL_NOT_EXISTED)
+        );
+
+        String otp = String.valueOf(100000 + new Random().nextInt(900000)); // Generate a 6-digit OTP
+        OTPToken otpToken = new OTPToken(); // OTP expires in 15 minutes
+        otpToken.setEmail(email);
+        otpToken.setOtp(otp);
+        otpToken.setExpiryDate(Instant.now().plus(15,ChronoUnit.MINUTES));
+
+        otpTokenRepository.save(otpToken);
+        emailService.sendOTPtoActiveAccount(email,otp,account.getFullName());
+    }
+
+
+    @Override
+    public AccountDTO createAccountByUser(SignUpRequest signUpRequest) {
+        Account existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail()).orElse(null);
+        Account existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone()).orElse(null);
+        Account existingUserName = accountRepository.findByUserName(signUpRequest.getUserName()).orElse(null);
+        if (existingUserEmail != null) {
+            throw new AppException(ErrorCode.EMAIL_TAKEN);
+        }
+        if (existingUserPhone != null) {
+            throw new AppException(ErrorCode.PHONE_TAKEN);
+        }
+        if (existingUserName != null) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
+        signUpRequest.setPassword(encodedPassword);
+
+        Account createAccount = accountConverter.toEntity(signUpRequest);
+
+        Role userRole = roleRepository.findById(4)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+        createAccount.setRole(userRole);
+        createAccount.setStatus(false);
+
+        accountRepository.save(createAccount);
+
+        return accountConverter.toDTO(createAccount);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.g3.Jewelry_Auction_System.controller;
 
+import com.g3.Jewelry_Auction_System.payload.DTO.AccountDTO;
 import com.g3.Jewelry_Auction_System.payload.request.*;
 import com.g3.Jewelry_Auction_System.payload.response.AuthenticationResponse;
 import com.g3.Jewelry_Auction_System.payload.response.IntrospectResponse;
@@ -7,6 +8,7 @@ import com.g3.Jewelry_Auction_System.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,5 +93,24 @@ public class AuthencationController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @PostMapping("/sendOTPtoActive")
+    public ResponseEntity<String> generateAndSendOtpforActive(@RequestBody OTPRequest otpRequestDTO) {
+        try {
+            authenticationService.generateAndSendOtpforActive(otpRequestDTO.getEmail());
+            return ResponseEntity.ok("OTP sent successfully!");
+        } catch (MessagingException e) {
+            return ResponseEntity.status(500).body("Error sending OTP: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
+    }
+    @CrossOrigin(origins = "http://localhost:3001")
+    @PostMapping("/signUp")
+    public ResponseEntity<AccountDTO> signUp(@RequestBody SignUpRequest accountDTO) {
+        AccountDTO createdAccount = authenticationService.createAccountByUser(accountDTO);
+        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
 }
