@@ -26,23 +26,23 @@ export default function OtpPage() {
     event.preventDefault();
 
     try {
-        const response2 = await axios.get(`http://localhost:8088/account/${userName}`);
-        setEmail(response2.data.email);
-      const response = await axios.post('http://localhost:8088/auth/signupOTP', {
-        email,
-        otp
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+        const response1 = await axios.get(`http://localhost:8088/account/${userName}`);
+        setEmail(response1.data.email);
+        const response = await axios.post('http://localhost:8088/auth/signupOTP', {
+            email,
+            otp
+        }, {
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        });
 
-      if (response.status === 200) {
-        alert('Sign up successful');
-        navigate('/login');
-      } else {
-        alert('Failed to sign up');
-      }
+        if (response.status === 200) {
+            alert('Sign up successful');
+            navigate('/login');
+        } else {
+            alert('Failed to sign up');
+        }
     } catch (error) {
       console.error('Error during sign up progress:', error);
       alert('Error occurred, please try again');
