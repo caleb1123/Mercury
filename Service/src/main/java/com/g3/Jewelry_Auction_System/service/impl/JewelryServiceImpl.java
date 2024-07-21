@@ -138,8 +138,16 @@ public class JewelryServiceImpl implements JewelryService {
     public AuctionDTO getAuctionByJewelry(int jewelryId) {
         Jewelry jewelry = jewelryRepository.findByJewelryId(jewelryId)
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
-        Auction auction = auctionRepository.getLastAuctionByJewelryId(jewelryId).orElse(null);
-        return auctionConverter.toDTO(auction);
+
+        List<Auction> auctions = auctionRepository.findByJewelry(jewelry);
+        Collections.reverse(auctions);
+
+        for (Auction auction : auctions) {
+            if (!"Deleted".equals(auction.getStatus())) {
+                return auctionConverter.toDTO(auction);
+            }
+        }
+        throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
     }
     @Override
     public List<JewelryDTO> getJewelryForAuction() {
