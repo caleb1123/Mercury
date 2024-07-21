@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -133,6 +135,7 @@ public class PostServiceImpl implements PostService {
         if (list.isEmpty()) {
             throw new AppException(ErrorCode.ITEM_NOT_FOUND);
         }
+        Collections.reverse(list);
         return list;
     }
 

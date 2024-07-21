@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -136,6 +137,7 @@ public class AccountServiceImpl implements AccountService {
             AccountDTO accountDTO = accountConverter.toDTO(account);
             accountDTOList.add(accountDTO);
         }
+        Collections.reverse(accountDTOList);
         return accountDTOList;
     }
 

@@ -133,7 +133,7 @@ function Sidebar() {
   });
 
   return (
-    <Grid container sx={{ height: '100vh', backgroundColor: '#000', color: '#fff' }}>
+    <Grid container sx={{ height: 'auto', backgroundColor: '#000', color: '#fff' }}>
       <Grid item xs={2} container direction="column" justifyContent="space-between" alignItems="center">
         <Grid item>
           <List>
@@ -197,59 +197,72 @@ function Sidebar() {
                 Add
               </Button>
             </Grid>
-            <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+            <TableContainer component={Paper} sx={{ minHeight: '100vh', backgroundColor: '#fff', p: 2 }}>
               <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ width: '10%' }}>Account ID</TableCell>
+                    <TableCell sx={{ width: '5%' }}>Account ID</TableCell>
                     <TableCell sx={{ width: '15%' }}>Address</TableCell>
                     <TableCell sx={{ width: '10%' }}>Date of Birth</TableCell>
                     <TableCell sx={{ width: '15%' }}>Email</TableCell>
                     <TableCell sx={{ width: '15%' }}>Full Name</TableCell>
-                    <TableCell sx={{ width: '10%' }}>Phone</TableCell>
-                    <TableCell sx={{ width: '5%' }}>Sex</TableCell>
-                    <TableCell sx={{ width: '5%' }}>Status</TableCell>
+                    <TableCell sx={{ width: '12%' }}>Phone</TableCell>
+                    <TableCell sx={{ width: '8%' }}>Sex</TableCell>
+                    <TableCell sx={{ width: '8%' }}>Status</TableCell>
                     <TableCell sx={{ width: '10%' }}>Role</TableCell>
                     <TableCell sx={{ width: '5%' }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredAndSearchedAccounts.map((account) => (
-                    <TableRow key={account.accountId}>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.accountId || 'NULL'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.address || 'NULL'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.dob || 'NULL'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.email || 'NULL'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.fullName || 'NULL'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.phone || 'NULL'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.sex ? 'Female' : 'Male'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>{account.status ? 'Enable' : 'Disable'}</TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>
-                        {(() => {
-                          switch (account.roleId) {
-                            case 1: return 'ADMIN';
-                            case 2: return 'MANAGER';
-                            case 3: return 'STAFF';
-                            case 4: return 'USER';
-                            default: return '-';
-                          }
-                        })()}
-                      </TableCell>
-                      <TableCell sx={{ wordWrap: 'break-word' }}>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={() => handleEditClick(account.accountId)}
-                        >
-                          Edit
-                        </Button>
+                  {filteredAndSearchedAccounts.length > 0 ? (
+                    filteredAndSearchedAccounts.map((account) => (
+                      <TableRow key={account.accountId}>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.accountId || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.address || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.dob || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.email || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.fullName || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.phone || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.sex ? 'Female' : 'Male'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.status ? 'Enable' : 'Disable'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>
+                          {(() => {
+                            switch (account.roleId) {
+                              case 1: return 'ADMIN';
+                              case 2: return 'MANAGER';
+                              case 3: return 'STAFF';
+                              case 4: return 'USER';
+                              default: return '-';
+                            }
+                          })()}
+                        </TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={() => handleEditClick(account.accountId)}
+                          >
+                            Edit
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={10} sx={{ textAlign: 'center' }}>
+                        No data available
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </React.Fragment>
+        )}
+        {selectedIndex === 2 && (
+          <Paper sx={{ height: '100vh', backgroundColor: '#fff', paddingRight: '195vh' }}>
+            {/* Nội dung của bảng trắng có thể được đặt ở đây */}
+          </Paper>
         )}
         {selectedIndex === 4 && <AddAccount />}
         {selectedIndex === 5 && selectedAccount && (

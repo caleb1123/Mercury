@@ -40,7 +40,7 @@ function ViewJewelryList() {
 
   const fetchJewelryData = async () => {
     try {
-      const response = await axios.get('http://localhost:8088/jewelry/getAll', {
+      const response = await axios.get('http://localhost:8088/jewelry/list/onAuction', {
         headers: {
           'Content-Type': 'application/json',
         },
