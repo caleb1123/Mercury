@@ -70,23 +70,28 @@
 }
 
 .CategoryItem:hover {
-  background-color: #555;
-  color: white;
+  background-color: #e8e8e8;
+  color: rgb(255, 255, 255);
 }
 .ProfileDropdown{
   border-style: solid;
-  border: black;
-
+  border: rgb(0, 0, 0);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(0, 0, 0); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
-.ProfileItem{
-  color: black;
-  border: black;
+.ProfileItem, .Logout {
+  padding: 20px;
   cursor: pointer;
-  margin-top: 7px;
 }
-.Logout{
-  color: red;
-  margin-top: 7px;
-  cursor: pointer;
-  
+.Logout:hover {
+  background-color: #fb0707; 
+}
+.ProfileItem:hover{
+  background-color: #333;
+}
+.ProfileMenu {
+  position: relative;
 }

@@ -79,6 +79,8 @@ const AddJewelry = ({ fetchJewelry }) => {
         jewelryCategoryId: ''
       }); // Reset form
       setImageFile(null); // Reset image file
+      alert('Jewelry added successfully!'); // Alert on success
+
     } catch (error) {
       console.error('Error adding jewelry:', error.response ? error.response.data : error.message);
     }

@@ -28,7 +28,7 @@ import {
   ExitToApp as ExitToAppIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import AddAuction from './AddAuction';
 import EditAuction from './EditAuction';
 import RequestDetails from './RequestDetails';
@@ -37,6 +37,13 @@ import AddJewelry from './AddJewelry';
 import JewelryDetails from './JewelryDetails';
 import EditJewelryImages from './EditJewelryImages';
 import { useNavigate } from 'react-router-dom';
+import PostIcon from '@mui/icons-material/Description';
+import PostDetail from './PostDetail';
+import CreatePost from './CreatePost';
+import EditPostImages from './EditPostImages';
+import { Dialog } from '@mui/material';
+
+
 
 function ManagerPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -61,6 +68,11 @@ function ManagerPage() {
   const [showAddAuction, setShowAddAuction] = useState(false);
   const [showEditAuction, setShowEditAuction] = useState(false);
   const [selectedAuction, setSelectedAuction] = useState(null);
+  const [postList, setPostList] = useState([]);
+const [selectedPostId, setSelectedPostId] = useState(null);
+const [editPostImageMode, setEditPostImageMode] = useState(false);
+const [selectedPost, setSelectedPost] = useState(null);
+
 
   const navigate = useNavigate();
 
@@ -73,6 +85,8 @@ function ManagerPage() {
       fetchAuctions();
     } else if (selectedIndex === 3) {
       fetchRequests();
+    } else if (selectedIndex === 5) {
+      fetchPosts();
     }
     setShowAddAuction(false);
     setShowEditAuction(false);
@@ -133,6 +147,19 @@ function ManagerPage() {
       console.error('Error fetching request data:', error.response?.data || error.message);
     }
   };
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get('http://localhost:8088/posts/getAll', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setPostList(response.data);
+    } catch (error) {
+      console.error('Error fetching posts data:', error);
+    }
+  };
+
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
@@ -191,6 +218,23 @@ function ManagerPage() {
     setSelectedJewelry(jewelry);
     setEditMode(true);
   };
+  const handleCreatePostClick = () => {
+    setEditMode(true);
+  };
+
+  const handleDeleteClickPost = async (postId) => {
+    try {
+      await axios.put(`http://localhost:8088/posts/delete/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      fetchPosts();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
 
   const handleDeleteClick = async (jewelry) => {
     try {
@@ -296,6 +340,25 @@ function ManagerPage() {
     fetchAuctions();
     setShowEditAuction(false);
   };
+  const handleEditPostImageClick = (postId) => {
+    setSelectedPostId(postId);
+    setEditPostImageMode(true);
+  };
+  
+  const closeEditPostImageDialog = () => {
+    setEditPostImageMode(false);
+    setSelectedPostId(null);
+  };
+  
+  const handleViewPostClick = (post) => {
+    setSelectedPost(post);
+    setEditPostImageMode(false);
+  };
+  
+  const handleUpdatePost = (updatedPost) => {
+    setPostList(postList.map(post => post.postId === updatedPost.postId ? updatedPost : post));
+  };
+  
 
   const categories = [
     { jewelry_category_id: 1, category_name: 'RINGS' },
@@ -344,6 +407,13 @@ function ManagerPage() {
               </ListItemIcon>
               <ListItemText primary="Requests" />
             </ListItem>
+            <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }}>
+              <ListItemIcon sx={{ color: '#fff' }}>
+                <PostIcon />
+              </ListItemIcon>
+              <ListItemText primary="View All Posts" />
+            </ListItem>
+
             <Divider sx={{ backgroundColor: '#fff' }} />
             <ListItem button onClick={handleLogout} sx={{ color: '#fff' }}>
               <ListItemIcon sx={{ color: '#fff' }}>
@@ -498,10 +568,10 @@ function ManagerPage() {
                           <TableCell>{auction.jewelryId}</TableCell>
                           <TableCell>
                             <Button variant="contained" color="primary" onClick={() => handleAuctionEditClick(auction)}>Edit</Button>
-                            <Button 
-                              variant="contained" 
-                              color="secondary" 
-                              sx={{ ml: 1 }} 
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              sx={{ ml: 1 }}
                               onClick={() => handleDeleteAuction(auction.auctionId)}
                             >
                               Delete
@@ -514,6 +584,61 @@ function ManagerPage() {
                 </TableContainer>
               </React.Fragment>
             )}
+
+            {selectedIndex === 5 && !selectedPost && !editPostImageMode && !editMode && (
+              <React.Fragment>
+                <Typography variant="h6">All Posts</Typography>
+                <Button variant="contained" color="primary" onClick={handleCreatePostClick} sx={{ mt: 2 }}>
+                  Create Post
+                </Button>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                  <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>ID</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '20%' }}>Title</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '40%' }}>Content</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Date</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>Status</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {postList.map((post) => (
+                        <TableRow key={post.postId}>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>{post.postId}</TableCell>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>{post.content}</TableCell>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>{post.status ? 'True' : 'False'}</TableCell>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>
+                            <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
+                            <Button variant="contained" color="error" onClick={() => handleDeleteClickPost(post.postId)}>Delete</Button>
+                            <Button variant="contained" onClick={() => handleEditPostImageClick(post.postId)}>Edit Image</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </React.Fragment>
+            )}
+            {selectedIndex === 5 && editMode && (
+              <CreatePost fetchPosts={fetchPosts} setEditMode={setEditMode} />
+            )}
+            {selectedIndex === 5 && selectedPost && !editPostImageMode && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+                <Box sx={{ width: '100%', maxWidth: '800px', backgroundColor: '#fff', padding: 4, borderRadius: 2 }}>
+                  <PostDetail post={selectedPost} onClose={() => setSelectedPost(null)} handleUpdatePost={handleUpdatePost} />
+                </Box>
+              </Box>
+            )}
+            {editPostImageMode && (
+              <Dialog open={editPostImageMode} onClose={closeEditPostImageDialog} fullWidth maxWidth="md">
+                <EditPostImages postId={selectedPostId} onClose={closeEditPostImageDialog} />
+              </Dialog>
+            )}
+
             {selectedIndex === 3 && !viewRequestId && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Requests</Typography>
@@ -556,12 +681,12 @@ function ManagerPage() {
               </Paper>
             )}
             {selectedIndex === 3 && selectedRequest && (
-              <RequestDetails 
-                request={selectedRequest} 
+              <RequestDetails
+                request={selectedRequest}
                 onSave={handleSaveFinalPrice}
                 onFinalPriceChange={handleFinalPriceChange}
                 finalPrice={finalPrice}
-                onCancel={() => setSelectedRequest(null)} 
+                onCancel={() => setSelectedRequest(null)}
               />
             )}
             {selectedIndex === 4 && !showAddAuction && !showEditAuction && (

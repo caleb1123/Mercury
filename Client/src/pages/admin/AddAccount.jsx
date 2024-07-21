@@ -50,8 +50,8 @@ function AddAccount() {
   };
 
   return (
-    <Grid container justifyContent="center" sx={{ marginTop: 2 }}>
-      <Paper sx={{ padding: 4 }}>
+    <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh', marginRight: '100vh' }}>
+      <Paper sx={{ padding: 8, width: '100%', maxWidth: 10000 }}>
         <Typography variant="h6" gutterBottom>Create New Account</Typography>
         {error && <Typography color="error" gutterBottom>{error}</Typography>}
         <form onSubmit={handleSubmit}>
