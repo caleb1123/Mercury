@@ -18,7 +18,7 @@ import About from './pages/users/About/AboutMercury';
 import ResetPassword from './pages/users/ResetPassword';
 import ViewPostDetail from './pages/users/ViewPostDetail';
 import ViewResult from './pages/users/ViewResult';
-
+import OTP from './pages/users/Login/OTP';
 
 function App() {
   return (
@@ -43,6 +43,7 @@ function App() {
         <Route path="/about-mercury" element={<About/>} />
         <Route path="/ViewPostDetail/:id" element={<ViewPostDetail/>} />
         <Route path="/ViewResult" element={<ViewResult/>} />
+        <Route path="/otp-page" element={<OTP/>} />
         </Routes>
 
     </Router>

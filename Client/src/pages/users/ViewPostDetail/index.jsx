@@ -19,6 +19,7 @@ const ImageContainer = ({ images }) => {
       />
       <div className="thumbnail-container">
         {images.slice(1).map((image, index) => (
+          // eslint-disable-next-line jsx-a11y/img-redundant-alt
           <img
             key={index}
             loading="lazy"
