@@ -28,8 +28,8 @@ public class WinnerIDUpdate {
             Integer highestBidderId = bidRepository.findHighestBidderId(auction.getAuctionId());
             if (highestBidderId != null) {
                 auction.setWinnerId(highestBidderId);
-                auctionService.sendEmailToWinner(auction.getAuctionId());
                 auctionRepository.save(auction);
+                auctionService.sendEmailToWinner(auction.getAuctionId());
             }
         }
     }

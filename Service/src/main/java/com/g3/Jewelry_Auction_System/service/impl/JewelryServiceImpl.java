@@ -45,6 +45,7 @@ public class JewelryServiceImpl implements JewelryService {
         newJewelry.setStatus(false);
         String code = generateJewelryCode(newJewelry.getJewelryCategory().getCategoryName());
         newJewelry.setJewelryCode(code);
+        newJewelry.setEstimate(Math.ceil(jewelryDTO.getStartingPrice()*1.2/100)*100);
         Jewelry newJewelrySaved = jewelryRepository.save(newJewelry);
         return jewelryConverter.toDTO(newJewelrySaved);
     }

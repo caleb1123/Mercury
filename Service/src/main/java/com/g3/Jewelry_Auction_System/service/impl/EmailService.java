@@ -71,4 +71,5 @@ public class EmailService {
 
         sendNewMail(to, subject, body, fullname);
     }
+
 }
