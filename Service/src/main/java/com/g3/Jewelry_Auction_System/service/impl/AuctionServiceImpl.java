@@ -66,10 +66,10 @@ public class AuctionServiceImpl implements AuctionService {
                 .findByJewelryId(auctionDTO
                         .getJewelryId()).orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
         List<Auction> existingAuctions = auctionRepository.findByJewelry(jewelry);
-//        if (!startDate.isAfter(LocalDateTime.now().plusDays(1))) {
-//            throw new IllegalArgumentException("Start date has to be at least 24h after today");
-//        }
-        if (startDate.isAfter(endDate)) {
+        if (!endDate.isAfter(startDate.plusMinutes(5))) {
+            throw new IllegalArgumentException("End date has to be at least 5m after start date");
+        }
+        if (startDate.isAfter(endDate) || startDate.isBefore(LocalDateTime.now())) {
             throw new AppException(ErrorCode.INVALID_STARTDATE);
         }
         if (LocalDateTime.now().isAfter(endDate)) {
@@ -78,7 +78,7 @@ public class AuctionServiceImpl implements AuctionService {
         if (auctionDTO.getCurrentPrice() < 1) {
             throw new AppException(ErrorCode.INVALID_VALUE);
         }
-        if (existingAuctions.stream().anyMatch(auction -> "ACTIVE".equals(auction.getStatus())) || !jewelry.getStatus()) {
+        if (existingAuctions.stream().anyMatch(auction -> "Ongoing".equals(auction.getStatus())) || !jewelry.getStatus()) {
             throw new AppException(ErrorCode.JEWELRY_NOT_VALID);
         }
 
@@ -130,9 +130,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public List<AuctionDTO> getAuctionByStatus(String status) {
-        //List<AuctionDTO> auctionDTOList = getAuctionList();
-        //auctionDTOList.removeIf(auctionDTO -> !auctionDTO.getStatus().equals(status.toUpperCase()));
-        return auctionConverter.toDTO(auctionRepository.getAuctionByStatus(status));
+        return auctionConverter.toDTO(auctionRepository.getLatestAuctionByStatus(status));
     }
     @Override
     public List<AuctionDTO> getLiveAuctionList() {

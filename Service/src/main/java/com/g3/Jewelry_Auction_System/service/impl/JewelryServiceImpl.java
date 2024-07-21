@@ -167,5 +167,9 @@ public class JewelryServiceImpl implements JewelryService {
         }
         return null;
     }
+    @Override
+    public List<JewelryDTO> getJewelryOnAuction() {
+        return jewelryConverter.convertToJewelryDTOList(jewelryRepository.getJewelriesOnAuction());
+    }
 }
 

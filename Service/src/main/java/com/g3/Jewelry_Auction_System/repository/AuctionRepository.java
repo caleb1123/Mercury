@@ -70,4 +70,9 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     Auction findAuctionByAuctionId(int auctionId);
     @Query(value = "SELECT * from Auction where winner_id = :id and status = 'Ended'", nativeQuery = true)
     List<Auction> getAuctionsByWinnerId (int id);
+    @Query(value = "SELECT * FROM Auction a WHERE a.status != 'Deleted' AND a.jewelry_id = :id AND a.auction_id =" +
+            "(SELECT MAX(auction_id) FROM Auction WHERE jewelry_id = :id AND status != 'Deleted')", nativeQuery = true)
+    Optional<Auction> getLastAuctionByJewelryId(int id);
+    @Query(value = "SELECT a.* FROM Auction a WHERE a.auction_id IN ( SELECT MAX(auction_id)FROM Auction GROUP BY jewelry_id) AND a.status = :status", nativeQuery = true)
+    List<Auction> getLatestAuctionByStatus(String status);
 }
