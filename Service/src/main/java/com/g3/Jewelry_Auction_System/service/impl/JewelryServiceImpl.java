@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -138,6 +139,7 @@ public class JewelryServiceImpl implements JewelryService {
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
 
         List<Auction> auctions = auctionRepository.findByJewelry(jewelry);
+        Collections.reverse(auctions);
 
         for (Auction auction : auctions) {
             if (!"Deleted".equals(auction.getStatus())) {
