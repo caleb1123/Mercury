@@ -79,8 +79,8 @@ function CreatePost() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Paper sx={{ padding: 4, backgroundColor: '#f5f5f5', color: '#000', boxShadow: 3 }}>
+    <Container maxWidth="100%" sx={{ mt: 4, marginRight: 73, paddingBottom: 9.5 }}>
+      <Paper sx={{ padding: 2, backgroundColor: '#f5f5f5', color: '#000', boxShadow: 3, width: '100%' }}>
         <Typography variant="h4" gutterBottom>Create a Post</Typography>
         <form onSubmit={handleSubmit}>
           <TextField

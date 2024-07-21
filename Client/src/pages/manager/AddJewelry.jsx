@@ -51,16 +51,16 @@ const AddJewelry = ({ fetchJewelry }) => {
   const handleAddJewelry = async () => {
     try {
       // Upload image first
-      // if (imageFile) {
-      //   const formData = new FormData();
-      //   formData.append('file', imageFile);
-      //   const imageUploadResponse = await axios.post('http://localhost:8088/jewelryImage/upload/101', formData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data'
-      //     }
-      //   });
-      //   newJewelry.image = imageUploadResponse.data.imageUrl; // Assuming the server returns the image URL in imageUrl field
-      // }
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        const imageUploadResponse = await axios.post('http://localhost:8088/jewelryImage/upload/101', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        newJewelry.image = imageUploadResponse.data.imageUrl; // Assuming the server returns the image URL in imageUrl field
+      }
 
       // Add jewelry details
       const response = await axios.post('http://localhost:8088/jewelry/add', newJewelry);
@@ -79,6 +79,8 @@ const AddJewelry = ({ fetchJewelry }) => {
         jewelryCategoryId: ''
       }); // Reset form
       setImageFile(null); // Reset image file
+      alert('Jewelry added successfully!'); // Alert on success
+
     } catch (error) {
       console.error('Error adding jewelry:', error.response ? error.response.data : error.message);
     }
