@@ -109,52 +109,54 @@ function ViewJewelryList() {
   return (
     <>
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
+      <div className="page-container">
+        <div className="search-container">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            placeholder="Search jewelry..."
+          />
+          <select value={selectedCategory} onChange={handleCategoryChange}>
+            <option value="">All Categories</option>
+            {categories.map((category) => (
+              <option key={category.jewelryCategoryId} value={category.jewelryCategoryId}>
+                {category.category_name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="search-container">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleChange}
-          placeholder="Search jewelry..."
-        />
-        <select value={selectedCategory} onChange={handleCategoryChange}>
-          <option value="">All Categories</option>
-          {categories.map((category) => (
-            <option key={category.jewelryCategoryId} value={category.jewelryCategoryId}>
-              {category.category_name}
-            </option>
-          ))}
-        </select>
-      </div>
+        {searchError && <div className="error-message">{searchError}</div>}
 
-      {searchError && <div className="error-message">{searchError}</div>}
-
-      <div className="ViewJewelryList">
-        {filteredJewelryList.length > 0 ? (
-          filteredJewelryList.map((jewelry) => (
-            <div key={jewelry.jewelryId} className="jewelry-item">
-              <button onClick={() => handleItemClick(jewelry.jewelryId)} className="image-button">
-                {imageUrls[jewelry.jewelryId] ? (
-                  <img
-                    src={imageUrls[jewelry.jewelryId]}
-                    alt={jewelry.jewelryName}
-                    className="jewelry-image"
-                  />
-                ) : (
-                  <div>Loading image...</div>
-                )}
-              </button>
-              <div className="jewelry-info">
-                <h3>{jewelry.jewelryName}</h3>
-                <p>Starting Price: ${jewelry.startingPrice}</p>
+        <div className="ViewJewelryList">
+          {filteredJewelryList.length > 0 ? (
+            filteredJewelryList.map((jewelry) => (
+              <div key={jewelry.jewelryId} className="jewelry-item">
+                <button onClick={() => handleItemClick(jewelry.jewelryId)} className="image-button">
+                  {imageUrls[jewelry.jewelryId] ? (
+                    <img
+                      src={imageUrls[jewelry.jewelryId]}
+                      alt={jewelry.jewelryName}
+                      className="jewelry-image"
+                    />
+                  ) : (
+                    <div>Loading image...</div>
+                  )}
+                </button>
+                <div className="jewelry-info">
+                  <h3>{jewelry.jewelryName}</h3>
+                  <p>Starting Price: ${jewelry.startingPrice}</p>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          !searchError && <div>No jewelry available</div>
-        )}
+            ))
+          ) : (
+            !searchError && <div>No jewelry available</div>
+          )}
+        </div>
       </div>
-      <Footer/>
+
+      <Footer />
     </>
   );
 }

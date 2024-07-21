@@ -1,5 +1,8 @@
 .Header {
   color: #3f2305;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .UpHeader,
