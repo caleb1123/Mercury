@@ -25,14 +25,18 @@ public class AuctionStatusUpdater {
 
         // Cập nhật trạng thái các phiên đấu giá bắt đầu
         for (Auction auction : auctionsToStart) {
-            auction.setStatus("Ongoing");
-            auctionRepository.save(auction);
+            if (now.isAfter(auction.getStartDate()) && now.isBefore(auction.getEndDate())) {
+                auction.setStatus("Ongoing");
+                auctionRepository.save(auction);
+            }
         }
 
         // Cập nhật trạng thái các phiên đấu giá kết thúc
         for (Auction auction : auctionsToEnd) {
-            auction.setStatus("Ended");
-            auctionRepository.save(auction);
+            if (now.isAfter(auction.getEndDate())) {
+                auction.setStatus("Ended");
+                auctionRepository.save(auction);
+            }
         }
     }
 }

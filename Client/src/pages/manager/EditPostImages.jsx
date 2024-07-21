@@ -59,7 +59,7 @@ function EditPostImages({ postId, onClose }) {
     }
   };
 
-  const handleDeletePostImage = async (fileId) => {
+  const handleDeleteImage = async (fileId) => {
     console.log('Deleting fileId:', fileId); // Log fileId on console
     try {
       await axios.delete(`http://localhost:8088/postImage/delete/${fileId}`, {
@@ -72,7 +72,6 @@ function EditPostImages({ postId, onClose }) {
       console.error('Error deleting image:', error);
     }
   };
-  
 
   return (
     <Dialog open onClose={onClose}>
@@ -86,7 +85,7 @@ function EditPostImages({ postId, onClose }) {
               <Grid item key={image.postImageId}>
                 <Paper sx={{ padding: 2 }}>
                   <img src={image.postImageURL} alt={`Post ${postId}`} style={{ width: '100px', height: '100px' }} />
-                  <IconButton onClick={() => handleDeletePostImage(image.fileId)}>
+                  <IconButton onClick={() => handleDeleteImage(image.fileId)}>
                     <DeleteIcon />
                   </IconButton>
                 </Paper>

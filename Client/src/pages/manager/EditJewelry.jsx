@@ -58,8 +58,9 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
       // Update jewelry details
       const url = `http://localhost:8088/jewelry/update/${editedJewelry.jewelryId}`;
       await axios.put(url, editedJewelry);
-      fetchJewelry(); // Refresh the list
-      setEditMode(false); // Exit edit mode
+      fetchJewelry(); 
+      alert('Jewelry added successfully!');
+      setEditMode(false); 
     } catch (error) {
       console.error('Error updating jewelry:', error);
     }
@@ -108,12 +109,12 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
         fullWidth
         margin="normal"
       />
-      <input
+      {/* <input
         accept="image/*"
         type="file"
         onChange={handleFileChange}
         style={{ margin: '20px 0' }}
-      />
+      /> */}
       <TextField
         label="Jewelry Name"
         name="jewelryName"
