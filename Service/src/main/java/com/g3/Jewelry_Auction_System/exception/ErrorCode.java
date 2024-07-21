@@ -42,7 +42,9 @@ public enum ErrorCode {
     POST_NOT_FOUND(1033,"Post not found",HttpStatus.BAD_REQUEST ),
     INVALID_STATUS(1034,"Invalid status",HttpStatus.BAD_REQUEST ),
     NO_IMAGE_FOUND(1035,"Image not found",HttpStatus.NOT_FOUND),
-    IMAGE_MANY(1036,"Too many photos",HttpStatus.BAD_REQUEST);
+    IMAGE_MANY(1036,"Too many photos",HttpStatus.BAD_REQUEST),
+    USERNAME_EXISTED(1037,"Username already existed",HttpStatus.BAD_REQUEST),
+    INVALID_AGE(1038,"User must be 18 years old or over",HttpStatus.BAD_REQUEST);
 
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

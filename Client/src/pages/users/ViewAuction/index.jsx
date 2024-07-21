@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewAuction.css";
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import Header from "../Header";
 import Footer from '../Footer'
+
+
 
 const categoryMapping = {
   1: 'RINGS',
@@ -54,14 +56,14 @@ function ViewAuction() {
   const [notification, setNotification] = useState({ type: '', message: '' });
   const [winner, setWinner] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("jewelryId:", jewelryId); // Log the jewelryId
+    console.log("jewelryId:", jewelryId);
     if (jewelryId) {
       fetchJewelryData();
       fetchAuctionData();
@@ -73,6 +75,8 @@ function ViewAuction() {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
+    } else {
+      navigate('/login');
     }
     fetchJewelryData();
   }, []);
@@ -93,22 +97,24 @@ function ViewAuction() {
 
       setJewelry(response.data);
     } catch (error) {
-      console.error('Error fetching jewelry data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: 'Error fetching jewelry data' });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching jewelry data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: 'Error fetching jewelry data' });
+      }
     }
   };
 
   const fetchImagesData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/jewelryImage/list/${jewelryId}`);
-      const data = response.data.filter(img => img.status !== false);
+      const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`);
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Chuyển đổi liên kết Google Drive thành liên kết trực tiếp
-      const formattedImages = data.map(image => ({
+      const formattedImages = response.data.map(image => ({
         ...image,
         jewelryImageURL: image.jewelryImageURL.replace("uc?id=", "uc?export=view&id=")
       }));
@@ -141,9 +147,13 @@ function ViewAuction() {
       setAuction(auctionData);
       fetchBidsData(auctionData.auctionId);
     } catch (error) {
-      console.error('Error fetching auction data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching auction data: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching auction data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching auction data: ${error.message}` });
+      }
     }
   };
 
@@ -164,7 +174,6 @@ function ViewAuction() {
       const bidsData = response.data;
       setBids(bidsData);
 
-      // Update current price based on bids
       if (bidsData.length > 0) {
         const highestBid = Math.max(...bidsData.map(bid => bid.bidAmount));
         setAuction(prevState => ({ ...prevState, currentPrice: highestBid }));
@@ -172,9 +181,13 @@ function ViewAuction() {
         setAuction(prevState => ({ ...prevState, currentPrice: jewelry.startingPrice }));
       }
     } catch (error) {
-      console.error('Error fetching bids data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching bids data: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching bids data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching bids data: ${error.message}` });
+      }
     }
   };
 
@@ -194,9 +207,13 @@ function ViewAuction() {
 
       setWinner(response.data);
     } catch (error) {
-      console.error('Error fetching winner data:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching winner data: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching winner data:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching winner data: ${error.message}` });
+      }
     }
   };
 
@@ -252,10 +269,14 @@ function ViewAuction() {
       setNotification({ type: 'success', message: 'Bid placed successfully!' });
       window.location.reload();
     } catch (error) {
-      console.error('Error creating bid:', error);
-      console.error(error.response ? error.response.data : error.message);
-      const errorMessage = error.response?.data || 'Unknown error occurred';
-      setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error creating bid:', error);
+        console.error(error.response ? error.response.data : error.message);
+        const errorMessage = error.response?.data || 'Unknown error occurred';
+        setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
+      }
     }
   };
 
@@ -275,9 +296,13 @@ function ViewAuction() {
 
       return response.data.bidAmount;
     } catch (error) {
-      console.error('Error fetching highest bid:', error);
-      console.error(error.response ? error.response.data : error.message);
-      setNotification({ type: 'error', message: `Error fetching highest bid: ${error.message}` });
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        console.error('Error fetching highest bid:', error);
+        console.error(error.response ? error.response.data : error.message);
+        setNotification({ type: 'error', message: `Error fetching highest bid: ${error.message}` });
+      }
     }
   };
 
@@ -287,11 +312,11 @@ function ViewAuction() {
 
   const handleViewResultClick = () => {
     fetchWinnerData(auction.auctionId);
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true); 
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false); 
   };
 
   const handleThumbnailClick = (url) => {
@@ -307,7 +332,7 @@ function ViewAuction() {
   return (
     <>
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
-      
+
       <div className="ViewAuction">
         <div className="PageName_ViewAuction">View Auction</div>
         {notification.message && (
@@ -417,7 +442,8 @@ function ViewAuction() {
         </div>
       )}
 
-      <Footer/>
+<Footer/>
+
     </>
   );
 }

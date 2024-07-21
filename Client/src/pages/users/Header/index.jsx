@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
 
-
 const auction_op = [
   { id: 1, name: "LIVE AUCTIONS" },
   { id: 2, name: "UPCOMING AUCTIONS" },
@@ -43,6 +42,10 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
     window.location.href = "/Auctions/all";
   };
 
+  const handleViewResult = () => {
+    navigate("/ViewResult");
+  };
+
   return (
     <div className="Header">
       <div className="UpHeader">
@@ -61,7 +64,9 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
               </IconButton>
               {showProfileMenu && (
                 <div className="ProfileDropdown">
-      
+                  <div className="ProfileItem" onClick={handleViewResult}>
+                    View Result
+                  </div>
                   <div className="Logout" onClick={handleLogout}>
                     Logout
                   </div>
@@ -86,7 +91,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
             className="world_bar_style"
           >
             <div onClick={handleClick}>
-            AUCTIONS
+              AUCTIONS
             </div>
             {showAuctionOp && (
               <div
@@ -109,30 +114,6 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
           <NavLink to="/SendRequest" className="world_bar_style">
             SELL
           </NavLink>
-          {/* <div
-            onMouseEnter={handleCategoryMouseEnter}
-            onMouseLeave={handleCategoryMouseLeave}
-            className="world_bar_style"
-          >
-            CATEGORY
-            {showCategories && (
-              <div
-                className="CategoryList"
-                onMouseEnter={handleCategoryMouseEnter}
-                onMouseLeave={handleCategoryMouseLeave}
-              >
-                {categories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="CategoryItem"
-                    onClick={() => navigate(`/ViewJewelryList/Category/${category.id}`)}
-                  >
-                    {category.name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div> */}
           <NavLink to="/ViewJewelryList" className="world_bar_style">CATEGORY</NavLink>
           <NavLink to="/ViewPost" className="world_bar_style">BLOG</NavLink>
         </div>

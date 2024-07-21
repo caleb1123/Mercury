@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -111,7 +113,12 @@ public class AccountServiceImpl implements AccountService {
             user.setSex(updateDTO.getSex());
         }
         if (updateDTO.getDob() != null) {
-            user.setDob(updateDTO.getDob());
+            long age = ChronoUnit.YEARS.between(updateDTO.getDob(), LocalDateTime.now());
+            if (age < 18 || age > 150) {
+                throw new AppException(ErrorCode.INVALID_AGE);
+            } else {
+                user.setDob(updateDTO.getDob());
+            }
         }
         if (updateDTO.getStatus() != null) {
             user.setStatus(updateDTO.getStatus());
@@ -192,11 +199,15 @@ public class AccountServiceImpl implements AccountService {
     public AccountDTO createAccountByUser(SignUpRequest signUpRequest) {
         Account existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail()).orElse(null);
         Account existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone()).orElse(null);
+        Account existingUserName = accountRepository.findByUserName(signUpRequest.getUserName()).orElse(null);
         if (existingUserEmail != null) {
             throw new AppException(ErrorCode.EMAIL_TAKEN);
         }
         if (existingUserPhone != null) {
             throw new AppException(ErrorCode.PHONE_TAKEN);
+        }
+        if (existingUserName != null) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
@@ -209,7 +220,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
         createAccount.setRole(userRole);
-        createAccount.setStatus(true);
+        createAccount.setStatus(false);
 
         accountRepository.save(createAccount);
 

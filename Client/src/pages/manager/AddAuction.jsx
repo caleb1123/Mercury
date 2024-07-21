@@ -23,7 +23,8 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setJewelryList(response.data);
+      const filteredJewelry = response.data.filter(jewelry => jewelry.status === true);
+      setJewelryList(filteredJewelry);
     } catch (error) {
       console.error('Error fetching available jewelry:', error);
     }

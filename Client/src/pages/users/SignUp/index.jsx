@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,6 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -28,7 +30,9 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+function SignUp({onSuccess}) {
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,6 +44,7 @@ export default function SignUp() {
       password: data.get('password'),
       confirmPassword: data.get('confirm-password'),
     };
+    const email = data.get('email');
 
     try {
       const response = await axios.post('http://localhost:8088/account/signUp', userData, {
@@ -49,14 +54,33 @@ export default function SignUp() {
       });
       
       if (response.status === 201) {
-        alert('Sign up successful');
-        window.location.href = '/Login'
+        try {
+          const response = await axios.post('http://localhost:8088/auth/forgot-password', { email }, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          if (response.status === 200) {
+            alert('OTP has been send to your email address');
+            onSuccess(email);
+          } else {
+            alert('Failed to send OTP');
+          }
+        } catch (error) {
+          console.error('Error during sign up: ', error);
+          alert('Error occurred, please try again');
+        }
       } else {
-        alert('Sign up failed');
+        setErrorMessage('Sign up failed');
       }
     } catch (error) {
+      if (error.response.data) {
+        setErrorMessage(error.response.data);
+      } else {
+        setErrorMessage('Invalid information, please try again');
+      }
       console.error('Error during sign up:', error);
-      alert('Invalid information, please try again');
     }
   };
 
@@ -94,6 +118,11 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
+            {errorMessage && (
+              <Typography color="error" variant="body2">
+                {errorMessage}
+              </Typography>
+            )}
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -188,3 +217,107 @@ export default function SignUp() {
     </div>
   );
 }
+
+function ConfirmSignUp({ email }) {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const otp = data.get('otp');
+    try {
+      const response = await axios.post('http://localhost:8088/auth/signupOTP', {
+        email,
+        otp
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        alert('Sign up successful');
+        window.location.href = '/login';
+      } else {
+        alert('Failed to sign up');
+      }
+    } catch (error) {
+      console.error('Error during sign up progress:', error);
+      alert('Error occurred, please try again');
+    }
+  };
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs" sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <CssBaseline />
+        <Paper elevation={6} sx={{ padding: 4, borderRadius: '8px', textAlign: 'center' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h4">
+            Sign up
+          </Typography>
+          <Typography component="h2" variant="subtitle1" color="text.secondary" sx={{ mt: 2 }}>
+            Please enter the OTP sent to your email.
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 4 }}>
+            <TextField
+              required
+              fullWidth
+              id="otp"
+              label="OTP"
+              name="otp"
+              autoComplete="one-time-code"
+              sx={{ mb: 2 }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Submit
+            </Button>
+            <Link href="/login" variant="body2">
+              Back to sign in
+            </Link>
+          </Box>
+        </Paper>
+      </Container>
+    </ThemeProvider>
+  );
+}
+
+export default function SignUpContainer() {
+  const [step, setStep] = useState('request');
+  const [email, setEmail] = useState('');
+
+  const handleSuccess = (email) => {
+    setEmail(email);
+    setStep('confirm');
+  };
+
+  return (
+    <div className='Middle'>
+      <style jsx global>{`
+        body, html {
+          height: 100%;
+          margin: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #f0f0f0;
+        }
+
+        .Middle {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+        }
+      `}</style>
+      {step === 'request' && <SignUp onSuccess={handleSuccess} />}
+      {step === 'confirm' && <ConfirmSignUp email={email} />}
+    </div>
+  );
+}
+

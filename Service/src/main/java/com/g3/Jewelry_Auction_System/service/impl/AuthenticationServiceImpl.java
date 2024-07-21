@@ -147,10 +147,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         otpToken.setExpiryDate(Instant.now().plus(15,ChronoUnit.MINUTES));
 
         otpTokenRepository.save(otpToken);
-
-
-        String subject = "Your OTP Code";
-        String body = "Your OTP code is " + otp;
         emailService.sendResetPasswordEmail(email,otp,account.getFullName());
     }
 
@@ -229,6 +225,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return "";
     }
 
+    @Override
+    public void activeAccountWithOTP(String email, String otp) {
+        OTPToken otpToken = otpTokenRepository.findByEmailAndOtp(email, otp);
+        if (otpToken == null || otpToken.isExpired()) {
+            throw new IllegalArgumentException("Invalid or expired OTP");
+        }
 
+        var account = accountRepository.findByEmail(email).orElseThrow(
+                () -> new AppException(ErrorCode.EMAIL_NOT_EXISTED)
+        );
+
+        account.setStatus(true);
+
+        accountRepository.save(account);
+
+        otpTokenRepository.delete(otpToken);
+    }
 
 }

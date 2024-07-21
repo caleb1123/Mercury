@@ -19,15 +19,20 @@ import {
   TableRow,
   TableCell,
   Box,
+  Dialog,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import JewelryIcon from '@mui/icons-material/Stars';
 import AuctionIcon from '@mui/icons-material/Gavel';
 import RequestIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PostIcon from '@mui/icons-material/Description';
 import axios from 'axios';
-import  {jwtDecode}  from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import PostDetail from './PostDetail';
 import CreatePost from './CreatePost';
+import EditPostImages from './EditPostImages';
+
 import AddJewelry from './AddJewelry';
 import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
@@ -41,6 +46,7 @@ function StaffPage() {
   const [filteredJewelryList, setFilteredJewelryList] = useState([]);
   const [auctionList, setAuctionList] = useState([]);
   const [requestList, setRequestList] = useState([]);
+  const [postList, setPostList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(''); // State to manage selected status filter
   const [editMode, setEditMode] = useState(false);
@@ -50,7 +56,12 @@ function StaffPage() {
   const [viewRequestId, setViewRequestId] = useState(null);
   const [editImageMode, setEditImageMode] = useState(false); // State to manage image editing mode
   const [selectedJewelryId, setSelectedJewelryId] = useState(null); // State to store selected jewelry ID
-  const [username, setUsername] = useState(''); // State to store username
+  const [selectedPost, setSelectedPost] = useState(null); // State to store selected post
+  const [username, setUsername] = useState(''); 
+  const [editPostImageMode, setEditPostImageMode] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  
+
 
   const navigate = useNavigate(); // Initialize navigate
 
@@ -75,6 +86,8 @@ function StaffPage() {
       });
       setProfile(response.data);
       setUsername(response.data.userName); // Lấy username từ API
+      fetchPosts(response.data.accountId);
+
 
     } catch (error) {
       console.error('Error fetching profile data:', error);
@@ -107,6 +120,16 @@ function StaffPage() {
       console.error('Error fetching auction data:', error);
     }
   };
+  const handleEditPostImageClick = (postId) => {
+    setSelectedPostId(postId);
+    setEditPostImageMode(true);
+  };
+  
+  const closeEditPostImageDialog = () => {
+    setEditPostImageMode(false);
+    setSelectedPostId(null);
+  };
+  
 
   const fetchRequests = async () => {
     try {
@@ -121,8 +144,17 @@ function StaffPage() {
     }
   };
 
-  const fetchPosts = async () => {
-    // Fetch post data
+  const fetchPosts = async (accountId) => {
+    try {
+      const response = await axios.get(`http://localhost:8088/posts/getByAccountId/${accountId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setPostList(response.data);
+    } catch (error) {
+      console.error('Error fetching posts data:', error);
+    }
   };
 
   const handleCategoryChange = (event) => {
@@ -166,6 +198,19 @@ function StaffPage() {
     }
   };
 
+  const handleDeleteClickPost = async (postId) => {
+    try {
+      await axios.put(`http://localhost:8088/posts/delete/${postId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      //setPostList(postList.filter(post => post.postId !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
   const handleViewJewelryClick = (jewelryId, requestId) => {
     setViewJewelryId(jewelryId);
     setViewRequestId(requestId);
@@ -204,6 +249,15 @@ function StaffPage() {
     }
   };
 
+  const handleViewPostClick = (post) => {
+    setSelectedPost(post);
+    setEditPostImageMode(false);
+
+  };
+  const handleUpdatePost = (updatedPost) => {
+    setPostList(postList.map(post => post.postId === updatedPost.postId ? updatedPost : post));
+  };
+  
 
   useEffect(() => {
     if (selectedIndex === 0) {
@@ -214,6 +268,8 @@ function StaffPage() {
       fetchAuctions();
     } else if (selectedIndex === 3) {
       fetchRequests();
+    } else if (selectedIndex === 5) {
+      fetchPosts();
     }
   }, [selectedIndex]);
 
@@ -264,10 +320,11 @@ function StaffPage() {
               </ListItemIcon>
               <ListItemText primary="Requests" sx={{ color: '#fff' }} />
             </ListItem>
-            <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }} key="createPost">
+            <ListItem button selected={selectedIndex === 5} onClick={() => handleListItemClick(5)} sx={{ color: '#fff' }} key="viewMyPosts">
               <ListItemIcon sx={{ color: '#fff' }}>
+                <PostIcon />
               </ListItemIcon>
-              <ListItemText primary="Create Post" sx={{ color: '#fff' }} />
+              <ListItemText primary="View My Posts" sx={{ color: '#fff' }} />
             </ListItem>
           </List>
           <Divider sx={{ backgroundColor: '#fff' }} />
@@ -351,39 +408,41 @@ function StaffPage() {
                   </Select>
                 </Box>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Designer</TableCell>
-                        <TableCell>Gemstone</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {filteredJewelryList.map((jewelry) => (
-                        <TableRow key={jewelry.jewelryId}>
-                          <TableCell>{jewelry.jewelryId}</TableCell>
-                          <TableCell>{jewelry.jewelryName}</TableCell>
-                          <TableCell>{jewelry.designer}</TableCell>
-                          <TableCell>{jewelry.gemstone}</TableCell>
-                          <TableCell>{categories.find(category => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}</TableCell>
-                          <TableCell>{jewelry.startingPrice}</TableCell>
-                          <TableCell>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
-                          <TableCell>
-                            <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
-                            <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
-                            <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Name</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Designer</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Gemstone</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Category</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Price</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Status</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredJewelryList.map((jewelry) => (
+            <TableRow key={jewelry.jewelryId}>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.jewelryId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.jewelryName}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.designer}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.gemstone}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>
+                {categories.find(category => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}
+              </TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.startingPrice}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>
+                <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
+                <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
+                <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
                 <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
                   Add Jewelry
                 </Button>
@@ -402,33 +461,33 @@ function StaffPage() {
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Auctions</Typography>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Current Price</TableCell>
-                        <TableCell>End Date</TableCell>
-                        <TableCell>Start Date</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Winner ID</TableCell>
-                        <TableCell>Jewelry ID</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {auctionList.map((auction) => (
-                        <TableRow key={auction.auctionId}>
-                          <TableCell>{auction.auctionId}</TableCell>
-                          <TableCell>{auction.currentPrice}</TableCell>
-                          <TableCell>{auction.endDate}</TableCell>
-                          <TableCell>{auction.startDate}</TableCell>
-                          <TableCell>{auction.status}</TableCell> 
-                          <TableCell>{auction.winnerId || 'N/A'}</TableCell>
-                          <TableCell>{auction.jewelryId}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Current Price</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>End Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Start Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Status</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Winner ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Jewelry ID</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {auctionList.map((auction) => (
+            <TableRow key={auction.auctionId}>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.auctionId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.currentPrice}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.endDate}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.startDate}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.status}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.winnerId || 'N/A'}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{auction.jewelryId}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
               </Paper>
 
             )}
@@ -436,41 +495,41 @@ function StaffPage() {
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Requests</Typography>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Request ID</TableCell>
-                        <TableCell>Evaluation Date</TableCell>
-                        <TableCell>Final Price</TableCell>
-                        <TableCell>Preliminary Price</TableCell>
-                        <TableCell>Request Date</TableCell>
-                        <TableCell>Delivery Date</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Seller ID</TableCell>
-                        <TableCell>Jewelry ID</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {requestList.map((request) => (
-                        <TableRow key={request.requestId}>
-                          <TableCell>{request.requestId}</TableCell>
-                          <TableCell>{request.evaluationDate || 'N/A'}</TableCell>
-                          <TableCell>{request.finalPrice}</TableCell>
-                          <TableCell>{request.preliminaryPrice}</TableCell>
-                          <TableCell>{request.requestDate}</TableCell>
-                          <TableCell>{request.deliveryDate}</TableCell>
-                          <TableCell>{request.status}</TableCell>
-                          <TableCell>{request.sellerId}</TableCell>
-                          <TableCell>{request.jewelryId}</TableCell>
-                          <TableCell>
-                            <Button variant="contained" onClick={() => handleViewJewelryClick(request.jewelryId, request.requestId)}>View Jewelry</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Request ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Evaluation Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Final Price</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Preliminary Price</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Request Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Delivery Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Status</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Seller ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Jewelry ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word' }}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {requestList.map((request) => (
+            <TableRow key={request.requestId}>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.requestId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.evaluationDate || 'N/A'}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.finalPrice}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.preliminaryPrice}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.requestDate}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.deliveryDate}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.status}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.sellerId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{request.jewelryId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>
+                <Button variant="contained" onClick={() => handleViewJewelryClick(request.jewelryId, request.requestId)}>View Jewelry</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
               </Paper>
             )}
             {selectedIndex === 3 && viewJewelryId && (
@@ -479,21 +538,69 @@ function StaffPage() {
             {selectedIndex === 4 && (
               <AddJewelry fetchJewelry={fetchJewelry} />
             )}
-            {selectedIndex === 5 && (
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ height: '100%' }}
-              >
-                <Box sx={{ width: '100vh', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
-                  <CreatePost />
-                </Box>
-              </Box>
-            )}
-            {editImageMode && (
+                        {editImageMode && (
               <EditJewelryImages jewelryId={selectedJewelryId} onClose={closeEditImageDialog} />
             )}
+{selectedIndex === 5 && !selectedPost && !editPostImageMode && (
+  <React.Fragment>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+      <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>ID</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '20%' }}>Title</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '40%' }}>Content</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Date</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>Status</TableCell>
+            <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {postList.map((post) => (
+            <TableRow key={post.id}>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.postId}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.content}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>{post.status ? 'True' : 'False'}</TableCell>
+              <TableCell sx={{ wordWrap: 'break-word' }}>
+                <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>
+                <Button variant="contained" color="error" onClick={() => handleDeleteClickPost(post.postId)}>Delete</Button>
+                <Button variant="contained" onClick={() => handleEditPostImageClick(post.postId)}>Edit Image</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    <Button variant="contained" color="primary" onClick={() => setEditMode(true)} sx={{ mt: 2 }}>
+      Create Post
+    </Button>
+  </React.Fragment>
+)}
+{selectedIndex === 5 && editMode && (
+  <CreatePost fetchPosts={fetchPosts} setEditMode={setEditMode} />
+)}
+
+{selectedIndex === 5 && selectedPost && !editPostImageMode && (
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+    <Box sx={{ width: '100%', maxWidth: '800px', backgroundColor: '#fff', padding: 4, borderRadius: 2 }}>
+      <PostDetail 
+        post={selectedPost} 
+        onClose={() => setSelectedPost(null)} 
+        handleUpdatePost={handleUpdatePost} 
+      />
+    </Box>
+  </Box>
+)}
+{editPostImageMode && (
+  <Dialog open={editPostImageMode} onClose={closeEditPostImageDialog} fullWidth maxWidth="md">
+    <EditPostImages postId={selectedPostId} onClose={closeEditPostImageDialog} />
+  </Dialog>
+)}
+
+
+  
           </Box>
         </Box>
       </Grid>

@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.scheduledtask;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.repository.AuctionRepository;
 import com.g3.Jewelry_Auction_System.repository.BidRepository;
+import com.g3.Jewelry_Auction_System.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,11 @@ import java.util.List;
 @Component
 public class WinnerIDUpdate {
     @Autowired
-    private BidRepository bidRepository;
+    BidRepository bidRepository;
     @Autowired
-    private AuctionRepository auctionRepository;
+    AuctionRepository auctionRepository;
+    @Autowired
+    AuctionService auctionService;
     @Scheduled(fixedRate = 60000) // 1 minute
     public void updateWinners() {
         LocalDateTime now = LocalDateTime.now();
@@ -25,6 +28,7 @@ public class WinnerIDUpdate {
             Integer highestBidderId = bidRepository.findHighestBidderId(auction.getAuctionId());
             if (highestBidderId != null) {
                 auction.setWinnerId(highestBidderId);
+                auctionService.sendEmailToWinner(auction.getAuctionId());
                 auctionRepository.save(auction);
             }
         }

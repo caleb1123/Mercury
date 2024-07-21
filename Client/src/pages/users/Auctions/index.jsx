@@ -196,7 +196,6 @@ const AuctionDataPage = () => {
           <p className="error-message">No auctions found.</p>
         )}
       </div>
-      <div><hr/><hr/></div>
       <Footer/>
     </>
   );
