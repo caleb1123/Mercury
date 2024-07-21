@@ -1,3 +1,4 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/caleb1123/mercury/badge)](https://www.codefactor.io/repository/github/caleb1123/mercury)
                      
 <h1 align="center" style="font-weight: bold;">Mercury 💎</h1>
 
@@ -17,7 +18,6 @@
 
 <p align="center">
 <a href="https://github.com/caleb1123/Mercury">📱 Visit this Project</a>
-[![CodeFactor](https://www.codefactor.io/repository/github/caleb1123/mercury/badge)](https://www.codefactor.io/repository/github/caleb1123/mercury)
 </p>
  
 <h2 id="technologies">💻 Technologies</h2>
