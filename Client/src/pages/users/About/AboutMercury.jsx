@@ -84,7 +84,7 @@ function AboutMercury() {
                     is unparalleled in the <br /> industry and made available to
                     all of our clients—not just a select few.
                   </p>
-                  <button className="action-button">Selling At Auction</button>
+                  {/* <button className="action-button">Selling At Auction</button> */}
                 </div>
                 <div className="buyer-info">
                   <h2 className="buyer-title">For our bidders / buyers</h2>
@@ -100,7 +100,7 @@ function AboutMercury() {
                   that any questions they have or <br /> information they need
                   is provided.
                 </p>
-                <button className="action-button">Buying at Auction</button>
+                {/* <button className="action-button">Buying at Auction</button> */}
                 <p className="additional-info">
                   In addition to bi-weekly live and online auctions, MERCURY
                   offers appraisal service arrangements. If you <br /> have an

@@ -81,12 +81,6 @@ public class AccountController {
     }
 
     @CrossOrigin(origins = "http://localhost:3001")
-    @PostMapping("/signUp")
-    public ResponseEntity<AccountDTO> signUp(@RequestBody SignUpRequest accountDTO) {
-        AccountDTO createdAccount = accountService.createAccountByUser(accountDTO);
-        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
-    }
-    @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/{username}")
     public ResponseEntity<AccountDTO> getAccountByUsername(@PathVariable String username) {
         AccountDTO accountDTO = accountService.getAccountByUsername(username);

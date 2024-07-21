@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./ViewAuction.css";
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Correct this import
 import Header from "../Header";
-import Footer from '../Footer'
-
-
+import Footer from '../Footer';
 
 const categoryMapping = {
   1: 'RINGS',
@@ -48,7 +46,6 @@ const getNextBids = (startingPrice) => {
 function ViewAuction() {
   const { state } = useLocation();
   const { jewelryId } = state || {};
-  const [inputValue, setInputValue] = useState('');
   const [jewelry, setJewelry] = useState(null);
   const [auction, setAuction] = useState(null);
   const [bids, setBids] = useState([]);
@@ -78,8 +75,17 @@ function ViewAuction() {
     } else {
       navigate('/login');
     }
-    fetchJewelryData();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchJewelryData();
+      fetchAuctionData();
+      fetchImagesData();
+    }, 30000); // 30 seconds interval
+
+    return () => clearInterval(interval);
+  }, [jewelryId]);
 
   const fetchJewelryData = async () => {
     try {
@@ -216,10 +222,6 @@ function ViewAuction() {
       }
     }
   };
-
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
-  };
   
   const handleProfileClick = () => {
     navigate('/viewProfile');
@@ -267,7 +269,7 @@ function ViewAuction() {
       setAuction(prevState => ({ ...prevState, currentPrice: selectedBid }));
 
       setNotification({ type: 'success', message: 'Bid placed successfully!' });
-      window.location.reload();
+      fetchBidsData(auctionId); // Refresh bids immediately after placing a bid
     } catch (error) {
       if (error.response && error.response.status === 401) {
         navigate('/login');
@@ -276,32 +278,6 @@ function ViewAuction() {
         console.error(error.response ? error.response.data : error.message);
         const errorMessage = error.response?.data || 'Unknown error occurred';
         setNotification({ type: 'error', message: `Error creating bid: ${errorMessage}` });
-      }
-    }
-  };
-
-  const fetchHighestBid = async (auctionId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/auction/${auctionId}/highestBid`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return response.data.bidAmount;
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        navigate('/login');
-      } else {
-        console.error('Error fetching highest bid:', error);
-        console.error(error.response ? error.response.data : error.message);
-        setNotification({ type: 'error', message: `Error fetching highest bid: ${error.message}` });
       }
     }
   };
@@ -442,8 +418,7 @@ function ViewAuction() {
         </div>
       )}
 
-<Footer/>
-
+      <Footer />
     </>
   );
 }

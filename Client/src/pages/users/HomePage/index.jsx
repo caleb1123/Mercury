@@ -75,10 +75,7 @@ function HomePage() {
             </div>
           </div>
         </div>
-
-
       </div>
-      
       <Footer/>
     </>
   );
