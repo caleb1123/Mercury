@@ -71,5 +71,21 @@ public class EmailService {
 
         sendNewMail(to, subject, body, fullname);
     }
+    public void sendApologyEmail(String to, String auctionName, String fullname) throws MessagingException {
+        String subject = "Apology for the Auction Issue - Mercury Jewelry Auction";
+        String body = "<html>" +
+                "<body>" +
+                "<h2 style=\"color: #DC3545;\">Apology for the Auction Issue</h2>" +
+                "<p>Dear " + fullname + ",</p>" +
+                "<p>We regret to inform you that there was an issue with the auction for <strong>" + auctionName + "</strong>.</p>" +
+                "<p>We sincerely apologize for any inconvenience caused. We are working to resolve the issue and will notify you once the auction is back on track.</p>" +
+                "<p>Thank you for your understanding and continued support of Mercury Jewelry Auction.</p>" +
+                "<p>Best regards,<br/>Mercury</p>" +
+                "</body>" +
+                "</html>";
+
+        sendNewMail(to, subject, body, fullname);
+    }
+
 
 }

@@ -114,6 +114,7 @@ public class JewelryServiceImpl implements JewelryService {
         if (jewelryDTOs.isEmpty()) {
             throw new AppException(ErrorCode.LIST_EMPTY);
         }
+        Collections.reverse(jewelryDTOs);
         return jewelryDTOs;
     }
 

@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,22 +55,18 @@ public class BidServiceImpl implements BidService {
         Auction auction = auctionRepository.findById(bidDTO.getAuctionId()).orElseThrow(
                 () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
         );
-        if (auction.getEndDate().isBefore(LocalDateTime.now()) ||
-                Objects.equals(auction.getStatus(), "Pending")) {
-            throw new AppException(ErrorCode.AUCTION_CLOSED);
-        } else
-//        if
-//        (auction.getStartDate().isAfter(LocalDateTime.now())) {
-//            bidDTO.setBidTime(LocalDateTime.now());
-//            Bid bid = bidConverter.toEntity(bidDTO);
-//            bidRepository.save(bid);
-//            return bidConverter.toDTO(bid);
-//        } else if (auction.getEndDate().isAfter(LocalDateTime.now()))
-        {
+        if (auction.getStatus().equals("Ongoing")) {
             Bid highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId()).orElse(null);
+
             double currentPrice = highestBid != null && highestBid.getBidAmount() > auction.getCurrentPrice() ?
                     highestBid.getBidAmount() : auction.getCurrentPrice();
+
+            // Check if the current user is the highest bidder
+            if (highestBid != null && highestBid.getAccount().getAccountId() ==(account.getAccountId())) {
+                throw new AppException(ErrorCode.HIGHEST_BIDDER_CANNOT_BID_AGAIN);
+            }
+
             if (bidDTO.getBidAmount() > currentPrice) {
                 bidDTO.setBidTime(LocalDateTime.now());
                 Bid bid = bidConverter.toEntity(bidDTO);
@@ -82,6 +75,10 @@ public class BidServiceImpl implements BidService {
             } else {
                 throw new RuntimeException("Bid amount exceeds current price");
             }
+
+        }else
+        {
+            throw new AppException(ErrorCode.AUCTION_CLOSED);
         }
     }
 
@@ -110,7 +107,9 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public List<BidDTO> getAllBid() {
-        return bidConverter.toDTOList(bidRepository.findAll());
+        List<BidDTO> bidDTOS= bidConverter.toDTOList(bidRepository.findAll());
+        Collections.reverse(bidDTOS);
+        return bidDTOS;
     }
 
     @Override

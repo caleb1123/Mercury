@@ -26,4 +26,5 @@ public interface AuctionService {
     void sendEmailToWinner(int auctionId);
     LocalDateTime getTargetDate(int auctionId);
     List<AuctionDTO> getWonAuctions();
+    void stopAuction(int auctionId);
 }

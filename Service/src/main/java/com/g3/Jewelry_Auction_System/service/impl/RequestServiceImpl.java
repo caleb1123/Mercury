@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -133,7 +134,9 @@ public class RequestServiceImpl implements RequestService {
     }
     @Override
     public List<RequestDTO> getRequestList() {
-        return requestConverter.toDTOList(requestRepository.findAll());
+        List<RequestDTO> requestDTOS = requestConverter.toDTOList(requestRepository.findAll());
+        Collections.reverse(requestDTOS);
+        return requestDTOS;
     }
     @Override
     public List<RequestDTO> getRequestByStatus(String status) {
