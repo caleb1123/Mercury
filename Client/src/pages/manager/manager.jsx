@@ -489,6 +489,9 @@ const [selectedPost, setSelectedPost] = useState(null);
                     <MenuItem value="active">Active</MenuItem>
                     <MenuItem value="inactive">Inactive</MenuItem>
                   </Select>
+                  <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
+                  Add Jewelry
+                </Button>
                 </Box>
                 <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
                   <Table>
@@ -524,9 +527,6 @@ const [selectedPost, setSelectedPost] = useState(null);
                     </TableBody>
                   </Table>
                 </TableContainer>
-                <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
-                  Add Jewelry
-                </Button>
               </React.Fragment>
             )}
             {selectedIndex === 1 && editMode && selectedJewelry && (
@@ -595,10 +595,11 @@ const [selectedPost, setSelectedPost] = useState(null);
                   <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>ID</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '5%' }}>ID</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word', width: '20%' }}>Title</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word', width: '40%' }}>Content</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Date</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Account ID</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word', width: '10%' }}>Status</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word', width: '15%' }}>Actions</TableCell>
                       </TableRow>
@@ -610,6 +611,7 @@ const [selectedPost, setSelectedPost] = useState(null);
                           <TableCell sx={{ wordWrap: 'break-word' }}>{post.title}</TableCell>
                           <TableCell sx={{ wordWrap: 'break-word' }}>{post.content}</TableCell>
                           <TableCell sx={{ wordWrap: 'break-word' }}>{post.postDate}</TableCell>
+                          <TableCell sx={{ wordWrap: 'break-word' }}>{post.accountId}</TableCell>
                           <TableCell sx={{ wordWrap: 'break-word' }}>{post.status ? 'True' : 'False'}</TableCell>
                           <TableCell sx={{ wordWrap: 'break-word' }}>
                             <Button variant="contained" onClick={() => handleViewPostClick(post)}>View Details</Button>

@@ -60,6 +60,8 @@ function StaffPage() {
   const [username, setUsername] = useState('');
   const [editPostImageMode, setEditPostImageMode] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
+  const [accountId, setAccountId] = useState('');
+
 
 
 
@@ -77,7 +79,6 @@ function StaffPage() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const decodedToken = jwtDecode(token);
 
       const response = await axios.get(`http://localhost:8088/account/myinfor`, {
         headers: {
@@ -85,8 +86,9 @@ function StaffPage() {
         },
       });
       setProfile(response.data);
-      setUsername(response.data.userName); // Lấy username từ API
+      setUsername(response.data.userName); 
       fetchPosts(response.data.accountId);
+      setAccountId(response.data.accountId);
 
 
     } catch (error) {
@@ -205,12 +207,16 @@ const fetchPosts = async (accountId) => {
 
   const handleDeleteClickPost = async (postId) => {
     try {
-      await axios.put(`http://localhost:8088/posts/delete/${postId}`, {
+      await axios.put(`http://localhost:8088/posts/delete/${postId}`,  {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      //setPostList(postList.filter(post => post.postId !== postId));
+
+      alert('Post deleted successfully! ');
+      fetchPosts(accountId);
+
+
     } catch (error) {
       console.error('Error deleting post:', error);
     }

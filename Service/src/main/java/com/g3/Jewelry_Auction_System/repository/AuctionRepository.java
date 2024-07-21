@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     Optional<Auction> findById(int id);
     List<Auction> findByJewelry(Jewelry jewelry);
+
     @Query(value="SELECT \n" +
             "    Account.account_id,\n" +
             "    Account.user_name,\n" +
@@ -38,6 +39,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
     List<Auction> findByStartDateBeforeAndEndDateAfterAndStatus(LocalDateTime startDate, LocalDateTime endDate, String status);
     List<Auction> findByEndDateBeforeAndStatus(LocalDateTime endDate, String status);
+
     @Query(value="SELECT a.*," +
             "  DATEDIFF(hour, CURRENT_TIMESTAMP, a.start_date) AS time_difference_hours " +
             "FROM Auction a " +
@@ -68,11 +70,14 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     List<Auction> findByEndDateBeforeAndWinnerIdIsNull(LocalDateTime endDate);
     List<Auction> getAuctionByStatus(String status);
     Auction findAuctionByAuctionId(int auctionId);
+
     @Query(value = "SELECT * from Auction where winner_id = :id and status = 'Ended'", nativeQuery = true)
     List<Auction> getAuctionsByWinnerId (int id);
+
     @Query(value = "SELECT * FROM Auction a WHERE a.status != 'Deleted' AND a.jewelry_id = :id AND a.auction_id =" +
             "(SELECT MAX(auction_id) FROM Auction WHERE jewelry_id = :id AND status != 'Deleted')", nativeQuery = true)
     Optional<Auction> getLastAuctionByJewelryId(int id);
+
     @Query(value = "SELECT a.* FROM Auction a WHERE a.auction_id IN ( SELECT MAX(auction_id)FROM Auction GROUP BY jewelry_id) AND a.status = :status", nativeQuery = true)
     List<Auction> getLatestAuctionByStatus(String status);
 }

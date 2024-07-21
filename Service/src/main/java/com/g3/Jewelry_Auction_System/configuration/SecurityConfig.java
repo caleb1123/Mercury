@@ -12,12 +12,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SercutiryConfig {
-    private final String [] PUBLIC_ENDPOINTS = {
+public class SecurityConfig {
+    private final String[] PUBLIC_ENDPOINTS = {
             "/account/**",
             "/auth/**",
             "/jewelry/**",
@@ -29,31 +28,33 @@ public class SercutiryConfig {
             "/jewelryCategory/**",
             "/payment/**",
             "/jewelryImage/**",
-            "/postImage/**"
+            "/postImage/**",
+            "/swagger-ui/**",  // Thêm endpoint Swagger UI
+            "/v3/api-docs/**"   // Thêm endpoint API docs
     };
+
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
-
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS) .permitAll()
-                .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(HttpMethod.PUT,PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(HttpMethod.DELETE,PUBLIC_ENDPOINTS).permitAll()
-                .anyRequest()
-                .authenticated());
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(request -> request
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
+                .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-        );
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }
+
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter(){
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
 
@@ -61,7 +62,4 @@ public class SercutiryConfig {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
-
-
-
 }
