@@ -72,8 +72,15 @@ public class BidServiceImpl implements BidService {
         {
             Bid highestBid = bidRepository
                     .getHighestBidAmount(auction.getAuctionId()).orElse(null);
+
             double currentPrice = highestBid != null && highestBid.getBidAmount() > auction.getCurrentPrice() ?
                     highestBid.getBidAmount() : auction.getCurrentPrice();
+
+            // Check if the current user is the highest bidder
+            if (highestBid != null && highestBid.getAccount().getAccountId() ==(account.getAccountId())) {
+                throw new AppException(ErrorCode.HIGHEST_BIDDER_CANNOT_BID_AGAIN);
+            }
+
             if (bidDTO.getBidAmount() > currentPrice) {
                 bidDTO.setBidTime(LocalDateTime.now());
                 Bid bid = bidConverter.toEntity(bidDTO);
