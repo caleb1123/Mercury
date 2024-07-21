@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -136,15 +137,8 @@ public class JewelryServiceImpl implements JewelryService {
     public AuctionDTO getAuctionByJewelry(int jewelryId) {
         Jewelry jewelry = jewelryRepository.findByJewelryId(jewelryId)
                 .orElseThrow(() -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED));
-
-        List<Auction> auctions = auctionRepository.findByJewelry(jewelry);
-
-        for (Auction auction : auctions) {
-            if (!"Deleted".equals(auction.getStatus())) {
-                return auctionConverter.toDTO(auction);
-            }
-        }
-        throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
+        Auction auction = auctionRepository.getLastAuctionByJewelryId(jewelryId).orElse(null);
+        return auctionConverter.toDTO(auction);
     }
     @Override
     public List<JewelryDTO> getJewelryForAuction() {
@@ -164,6 +158,10 @@ public class JewelryServiceImpl implements JewelryService {
             return jewelryConverter.toDTO(auction.getJewelry());
         }
         return null;
+    }
+    @Override
+    public List<JewelryDTO> getJewelryOnAuction() {
+        return jewelryConverter.convertToJewelryDTOList(jewelryRepository.getJewelriesOnAuction());
     }
 }
 
