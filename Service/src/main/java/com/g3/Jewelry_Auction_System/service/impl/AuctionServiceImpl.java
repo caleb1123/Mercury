@@ -126,11 +126,15 @@ public class AuctionServiceImpl implements AuctionService {
     }
     @Override
     public List<AuctionDTO> getAuctionList() {
-        return auctionConverter.toDTO(auctionRepository.findAll());
+        List<AuctionDTO> auctionDTOList = auctionConverter.toDTO(auctionRepository.findAll());
+        Collections.reverse(auctionDTOList);
+        return auctionDTOList;
     }
     @Override
     public List<AuctionDTO> getAuctionByStatus(String status) {
-        return auctionConverter.toDTO(auctionRepository.getLatestAuctionByStatus(status));
+        List<AuctionDTO> auctionDTOList= auctionConverter.toDTO(auctionRepository.getLatestAuctionByStatus(status));
+        Collections.reverse(auctionDTOList);
+        return auctionDTOList;
     }
     @Override
     public List<AuctionDTO> getLiveAuctionList() {
@@ -138,6 +142,7 @@ public class AuctionServiceImpl implements AuctionService {
         LocalDateTime now = LocalDateTime.now();
         auctionDTOList.removeIf(auctionDTO
                 -> now.isBefore(auctionDTO.getStartDate()) || now.isAfter(auctionDTO.getEndDate()));
+        Collections.reverse(auctionDTOList);
         return auctionDTOList;
     }
     @Override
@@ -157,6 +162,7 @@ public class AuctionServiceImpl implements AuctionService {
                         (int) row[6]
                 ));
             }
+            Collections.reverse(upcomingAuctionResponseList);
             return upcomingAuctionResponseList;
         }
     }
@@ -259,5 +265,32 @@ public class AuctionServiceImpl implements AuctionService {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
         return auctionConverter.toDTO(auctionRepository.getAuctionsByWinnerId(account.getAccountId()));
+    }
+
+    @Override
+    public void stopAuction(int auctionId) {
+        Auction auction = auctionRepository.findAuctionByAuctionId(auctionId);
+        if (auction != null && auction.getStatus().equals("Ongoing")) {
+            auction.setStatus("Ended");
+            auctionRepository.save(auction);
+            String auctionName = auction.getJewelry().getJewelryName();
+            List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+            for (Bid bid : bids) {
+                Account account = bid.getAccount();
+                String email = account.getEmail();
+                String fullname =  account.getFullName();
+
+                try {
+                    emailService.sendApologyEmail(email, auctionName, fullname);
+                } catch (MessagingException e) {
+                    // Handle exception or log it
+                    System.err.println("Failed to send apology email to " + email);
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            System.err.println("Auction not found for ID: " + auctionId);
+        }
+
     }
 }

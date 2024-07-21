@@ -112,4 +112,14 @@ public class AuctionController {
         List<AuctionDTO> auctionList = auctionService.getWonAuctions();
         return new ResponseEntity<>(auctionList, HttpStatus.OK);
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+    @PutMapping("/{auctionId}/stop")
+    public ResponseEntity<String> stopAuction(@PathVariable int auctionId) {
+        try {
+            auctionService.stopAuction(auctionId);
+            return ResponseEntity.ok("Auction stopped successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+}
 }
