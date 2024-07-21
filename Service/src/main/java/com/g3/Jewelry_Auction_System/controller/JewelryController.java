@@ -120,4 +120,10 @@ public class JewelryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/list/onAuction")
+    public ResponseEntity<List<JewelryDTO>> getJewelryOnAuction() {
+        List<JewelryDTO> list = jewelryService.getJewelryOnAuction();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

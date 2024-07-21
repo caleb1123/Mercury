@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -111,7 +113,12 @@ public class AccountServiceImpl implements AccountService {
             user.setSex(updateDTO.getSex());
         }
         if (updateDTO.getDob() != null) {
-            user.setDob(updateDTO.getDob());
+            long age = ChronoUnit.YEARS.between(updateDTO.getDob(), LocalDateTime.now());
+            if (age < 18 || age > 150) {
+                throw new AppException(ErrorCode.INVALID_AGE);
+            } else {
+                user.setDob(updateDTO.getDob());
+            }
         }
         if (updateDTO.getStatus() != null) {
             user.setStatus(updateDTO.getStatus());
