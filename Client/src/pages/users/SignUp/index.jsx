@@ -46,6 +46,7 @@ function SignUp() {
       confirmPassword: data.get('confirm-password'),
     };
     const email = data.get('email');
+    const userName = data.get('userName');
 
     try {
       const response = await axios.post('http://localhost:8088/auth/signUp', userData, {
@@ -64,7 +65,7 @@ function SignUp() {
     
           if (otpResponse.status === 200) {
             alert('OTP has been sent to your email address');
-            navigate(`/otp-page?email=${email}`);
+            navigate(`/otp-page?userName=${userName}`);
           } else {
             alert('Failed to send OTP');
           }
