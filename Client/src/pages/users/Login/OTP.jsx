@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -18,34 +18,56 @@ const defaultTheme = createTheme();
 export default function OtpPage() {
   const [otp, setOtp] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const userName = new URLSearchParams(window.location.search).get('userName'); // Get email from URL
+  const userName = new URLSearchParams(window.location.search).get('userName'); // Get userName from URL
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      try {
+        const emailResponse = await axios.get(`http://localhost:8088/account/${userName}`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (emailResponse.status === 200) {
+          setEmail(emailResponse.data.email);
+        } else {
+          setMessage("Cannot get email from that userName");
+        }
+      } catch (error) {
+        console.error("Error fetching email:", error);
+        setMessage("Error fetching email. Please try again.");
+      }
+    };
+    fetchEmail();
+  }, [userName]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-        const response1 = await axios.get(`http://localhost:8088/account/${userName}`);
-        setEmail(response1.data.email);
-        const response = await axios.post('http://localhost:8088/auth/signupOTP', {
-            email,
-            otp
-        }, {
-            headers: {
-            'Content-Type': 'application/json',
-            },
-        });
+      const response = await axios.post('http://localhost:8088/auth/signupOTP', {
+        email,
+        otp,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (response.status === 200) {
-            alert('Sign up successful');
-            navigate('/login');
-        } else {
-            alert('Failed to sign up');
-        }
+      if (response.status === 200) {
+        alert('Account activated successfully');
+        navigate('/login');
+      } else {
+        setMessage('Invalid OTP. Please try again.');
+      }
     } catch (error) {
-      console.error('Error during sign up progress:', error);
-      alert('Error occurred, please try again');
+      if (error.response && error.response.data) {
+        setMessage(error.response.data);
+      } else {
+        setMessage('Error during sign up. Please try again.');
+      }
+      console.error('Error during sign up:', error);
     }
   };
 
@@ -58,13 +80,13 @@ export default function OtpPage() {
       });
 
       if (response.status === 200) {
-        setMessage('OTP has been resent to your email address');
+        alert('OTP has been resent to your email address');
       } else {
-        setMessage('Failed to resend OTP');
+        setMessage('Failed to resend OTP. Please try again.');
       }
     } catch (error) {
-      console.error('Error during resending OTP: ', error);
-      setMessage('Error occurred, please try again');
+      console.error('Error during resending OTP:', error);
+      setMessage('Error occurred. Please try again.');
     }
   };
 
