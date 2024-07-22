@@ -203,38 +203,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO createAccountByUser(SignUpRequest signUpRequest) {
-        Account existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail()).orElse(null);
-        Account existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone()).orElse(null);
-        Account existingUserName = accountRepository.findByUserName(signUpRequest.getUserName()).orElse(null);
-        if (existingUserEmail != null) {
-            throw new AppException(ErrorCode.EMAIL_TAKEN);
-        }
-        if (existingUserPhone != null) {
-            throw new AppException(ErrorCode.PHONE_TAKEN);
-        }
-        if (existingUserName != null) {
-            throw new AppException(ErrorCode.USERNAME_EXISTED);
-        }
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
-        signUpRequest.setPassword(encodedPassword);
-
-        Account createAccount = accountConverter.toEntity(signUpRequest);
-
-        Role userRole = roleRepository.findById(4)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-
-        createAccount.setRole(userRole);
-        createAccount.setStatus(false);
-
-        accountRepository.save(createAccount);
-
-        return accountConverter.toDTO(createAccount);
-    }
-
-    @Override
     public AccountDTO getAccountByAccountId(int id) {
        Account user = accountRepository.findById(id)
                .orElseThrow(()-> new AppException(ErrorCode.USER_EXISTED));

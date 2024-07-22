@@ -129,7 +129,7 @@ export default function SendRequest() {
       };
 
       const requestResponse = await axios.post(
-        "http://localhost:8088/equest/create",
+        "http://localhost:8088/request/create",
         requestData,
         {
           headers: {

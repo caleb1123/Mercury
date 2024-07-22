@@ -120,31 +120,32 @@ const AuctionDataPage = () => {
     };
 
     const fetchAuctionData = async () => {
+      setError(null);
       setLoading(true);
       try {
         let response;
         if (opId === "1") {
-          response = await axios.get("http://localhost:8088/auction/list/live");
           setTitle("Live Auctions");
+          response = await axios.get("http://localhost:8088/auction/list/live");
         } else if (opId === "2") {
+          setTitle("Upcoming Auctions");
           response = await axios.get(
             "http://localhost:8088/auction/list/upcoming"
           );
-          setTitle("Upcoming Auctions");
         } else if (opId === "3") {
+          setTitle("Past Auctions");
           response = await axios.get(
             "http://localhost:8088/auction/list/Ended"
           );
-          setTitle("Past Auctions");
         } else {
-          response = await axios.get("http://localhost:8088/auction/list");
           setTitle("All Auctions");
+          response = await axios.get("http://localhost:8088/auction/list");
         }
         const data = response.data.filter(auction => auction.status !== 'Deleted');
           setAuctionDatas(data);
           data.forEach((auction) => fetchJewelryImage(auction.jewelryId));
       } catch (error) {
-        setError(error.message);
+          setError({ status: error.response.status, message: error.message });
       }
       setLoading(false);
     };
@@ -153,7 +154,9 @@ const AuctionDataPage = () => {
   }, [opId]);
 
   if (loading) return <p className="loading-message">Loading...</p>;
-  if (error) return <p className="error-message">Error: {error} <a href="/">Go back</a></p>;
+  if (error){
+    if (error.status !== 404) return <p className="error-message">Error: {error} <a href="/">Go back</a></p>;
+  }
 
   const createRows = (items, itemsPerRow) => {
     const rows = [];
@@ -174,7 +177,7 @@ const AuctionDataPage = () => {
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
       <div className="main-content">
         <h1 className="section-title">{title}</h1>
-        {auctionRows.length > 0 ? (
+        {!error ? (
           <div className="auction-grid">
             {auctionRows.map((row, rowIndex) => (
               <div className="auction-row" key={rowIndex}>

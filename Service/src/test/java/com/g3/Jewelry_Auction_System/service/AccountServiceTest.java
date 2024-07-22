@@ -242,21 +242,7 @@ public class AccountServiceTest {
 
 
 
-    @Test
-    public void testCreateAccountByUserEmailTaken() {
-        // Prepare test data
-        SignUpRequest signUpRequest = new SignUpRequest();
-        Account existingAccount = new Account();
 
-        // Mock behavior
-        when(accountRepository.findByEmail(signUpRequest.getEmail())).thenReturn(Optional.of(existingAccount));
-
-        // Call the method and verify exception
-        AppException exception = assertThrows(AppException.class, () -> {
-            accountService.createAccountByUser(signUpRequest);
-        });
-        assertEquals(ErrorCode.EMAIL_TAKEN, exception.getErrorCode());
-    }
 
     @Test
     public void testGetAccountByAccountId() {
@@ -325,43 +311,6 @@ public class AccountServiceTest {
         });
         assertEquals(ErrorCode.USER_NOT_EXISTED, exception.getErrorCode());
     }
-    @Test
-    public void testCreateAccountByUser_EmailTaken() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setEmail("taken@example.com");
-
-        when(accountRepository.findByEmail(signUpRequest.getEmail())).thenReturn(Optional.of(new Account()));
-
-        AppException thrown = assertThrows(AppException.class, () -> accountService.createAccountByUser(signUpRequest));
-        assertEquals(ErrorCode.EMAIL_TAKEN, thrown.getErrorCode());
-    }
-
-    @Test
-    public void testCreateAccountByUser_PhoneTaken() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setPhone("123456789");
-
-        when(accountRepository.findByEmail(signUpRequest.getEmail())).thenReturn(Optional.empty());
-        when(accountRepository.findByPhone(signUpRequest.getPhone())).thenReturn(Optional.of(new Account()));
-
-        AppException thrown = assertThrows(AppException.class, () -> accountService.createAccountByUser(signUpRequest));
-        assertEquals(ErrorCode.PHONE_TAKEN, thrown.getErrorCode());
-    }
-
-    @Test
-    public void testCreateAccountByUser_UsernameTaken() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUserName("username");
-
-        when(accountRepository.findByEmail(signUpRequest.getEmail())).thenReturn(Optional.empty());
-        when(accountRepository.findByPhone(signUpRequest.getPhone())).thenReturn(Optional.empty());
-        when(accountRepository.findByUserName(signUpRequest.getUserName())).thenReturn(Optional.of(new Account()));
-
-        AppException thrown = assertThrows(AppException.class, () -> accountService.createAccountByUser(signUpRequest));
-        assertEquals(ErrorCode.USERNAME_EXISTED, thrown.getErrorCode());
-    }
-
-
     @Test
     public void testUpdateAccount_EmailTaken() {
         // Prepare test data
