@@ -379,7 +379,7 @@ const [selectedPost, setSelectedPost] = useState(null);
   ];
 
   return (
-    <Grid container sx={{ height: '100vh', width: '100vw', backgroundColor: '#000', color: '#fff' }}>
+    <Grid container sx={{ height: 'auto', width: '100vw', backgroundColor: '#000', color: '#fff' }}>
       <Grid item xs={2} container direction="column" justifyContent="space-between" alignItems="center">
         <Grid item>
           <List>

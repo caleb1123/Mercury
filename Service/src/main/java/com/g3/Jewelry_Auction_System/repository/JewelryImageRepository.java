@@ -30,6 +30,6 @@ public interface JewelryImageRepository extends JpaRepository<JewelryImage, Inte
     @Query(value = "SELECT * FROM Jewelry_Image where jewelry_id = :id and status = 1" , nativeQuery = true)
     List<JewelryImage> getByJewelryIdWithoutStatusFalse(int id);
 
-    @Query(value = "SELECT COUNT(jewelry_image_id) AS image_count FROM jewelry_image where jewelry_id = :id GROUP BY jewelry_id ;\n",nativeQuery = true)
+    @Query(value = "SELECT COUNT(jewelry_image_id) AS image_count FROM jewelry_image where jewelry_id = :id and status = 1 GROUP BY jewelry_id ;\n",nativeQuery = true)
     Integer getImageCountByJewelryId(int id);
 }

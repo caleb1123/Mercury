@@ -46,7 +46,8 @@ public enum ErrorCode {
     USERNAME_EXISTED(1037,"Username already existed",HttpStatus.BAD_REQUEST),
     INVALID_AGE(1038,"User must be 18 years old or over",HttpStatus.BAD_REQUEST),
     HIGHEST_BIDDER_CANNOT_BID_AGAIN(1039,"You are the highest bidder",HttpStatus.BAD_REQUEST),
-    ACCOUNT_INACTIVE(1040, "Account is inactive", HttpStatus.FORBIDDEN);
+    AUCTION_NOT_ONGOING(1040,"Auction is not ongoing",HttpStatus.BAD_REQUEST),
+    ACCOUNT_INACTIVE(1041, "Account has not been activated", HttpStatus.FORBIDDEN);
 
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

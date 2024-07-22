@@ -15,11 +15,12 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3001")
+
 @RequestMapping("/postImage")
 public class PostImageController {
     @Autowired
     PostImageService postImageService;
-    @CrossOrigin(origins = "http://localhost:3001")
     @PostMapping("/upload/{postId}")
     public ResponseEntity<String> addPostImage(@RequestParam("file") MultipartFile file, @PathVariable int postId) {
         try {
