@@ -4,6 +4,8 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
+import {useAuth} from "../authContext";
+
 
 const auction_op = [
   { id: 1, name: "LIVE AUCTIONS" },
@@ -13,12 +15,13 @@ const auction_op = [
 
 const Header = ({ isLoggedIn, handleProfileClick }) => {
   const navigate = useNavigate();
+  const {user, logout} = useAuth();
   const [showCategories, setShowCategories] = useState(false);
   const [showAuctionOp, setShowAuctionOp] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
+    console.log(user);
     window.location.href = "/";
   };
 
@@ -39,7 +42,7 @@ const Header = ({ isLoggedIn, handleProfileClick }) => {
   };
 
   const handleClick = () => {
-    window.location.href = "/Auctions/all";
+    navigate("/Auctions/all");
   };
 
   const handleViewResult = () => {

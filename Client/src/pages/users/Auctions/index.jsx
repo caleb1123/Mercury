@@ -5,6 +5,7 @@ import Countdown from "./CountDown";
 import Header from "../Header";
 import Footer from '../Footer'
 import { useEffect, useState } from "react";
+import {useAuth} from "../authContext";
 
 const AuctionSection = ({ image, auctionId, buttonTexts }) => {
   const [targetDate, setTargetDate] = useState(null);
@@ -85,10 +86,10 @@ const AuctionDataPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [imageUrl, setImageUrl] = useState({});
   const navigate = useNavigate();
+  const {user} = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    if (user) {
       setIsLoggedIn(true);
     }
 
@@ -141,9 +142,10 @@ const AuctionDataPage = () => {
           setTitle("All Auctions");
           response = await axios.get("http://localhost:8088/auction/list");
         }
+        console.log(response);
         const data = response.data.filter(auction => auction.status !== 'Deleted');
-          setAuctionDatas(data);
-          data.forEach((auction) => fetchJewelryImage(auction.jewelryId));
+        setAuctionDatas(data);
+        data.forEach((auction) => fetchJewelryImage(auction.jewelryId));
       } catch (error) {
           setError({ status: error.response.status, message: error.message });
       }

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,7 +13,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'; // Correct import
+import { useAuth } from '../authContext';
+import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
+
 
 const defaultTheme = createTheme();
 
@@ -22,7 +24,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit">
+      <Link color="inherit" href="#">
         Mercury
       </Link>{' '}
       {new Date().getFullYear()}
@@ -35,6 +37,8 @@ export default function SignIn() {
   const [message, setMessage] = useState('');
   const [otpError, setOtpError] = useState(false);
   const [userName, setUserName] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -51,17 +55,27 @@ export default function SignIn() {
 
       if (response.status === 200) {
         const token = response.data.token;
-        localStorage.setItem('token', token);
-        const decodedToken = jwtDecode(token); // Decode the token
+        login(token);
 
-        if (decodedToken.scope === 'ADMIN') {
-          window.location.href = '/Admin';
-        } else if (decodedToken.scope === 'USER') {
-          window.location.href = '/';
-        } else if (decodedToken.scope === 'STAFF') {
-          window.location.href = '/Staff';
-        } else if (decodedToken.scope === 'MANAGER') {
-          window.location.href = '/Manager';
+        const decodedToken = jwtDecode(token); // Decode the token to get the role
+        const role = decodedToken.scope;
+
+        // Navigate based on the role
+        switch (role) {
+          case 'ADMIN':
+            navigate('/Admin');
+            break;
+          case 'USER':
+            navigate('/');
+            break;
+          case 'STAFF':
+            navigate('/Staff');
+            break;
+          case 'MANAGER':
+            navigate('/Manager');
+            break;
+          default:
+            setMessage('Role not recognized');
         }
 
         setMessage('Login successfully');
@@ -112,6 +126,9 @@ export default function SignIn() {
               alignItems: 'center',
             }}
           >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
             <Typography component="h1" variant="h2">
               Welcome to Mercury
             </Typography>
@@ -124,10 +141,10 @@ export default function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="UserName"
+                id="userName"
                 label="UserName"
                 name="userName"
-                autoComplete="UserName"
+                autoComplete="userName"
                 autoFocus
               />
               <TextField

@@ -9,8 +9,10 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import axios from 'axios';
 import AddAccount from './AddAccount';
 import EditAccount from './EditAccount';
+import { useAuth } from '../users/authContext';
 
 function Sidebar() {
+  const { user, token, logout } = useAuth();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -122,10 +124,8 @@ function Sidebar() {
   };
 
   const handleLogout = () => {
-    // Remove the token from local storage
-    localStorage.removeItem('token');
-    // Redirect to the home page
-    window.location.href = '/';
+    logout();
+    window.location.href = '/'; 
   };
 
   const filteredAndSearchedAccounts = filteredAccounts.filter((account) => {
