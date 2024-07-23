@@ -6,7 +6,7 @@ const ProtectedRoute = ({ element: Component, notAllowedRoles, ...rest }) => {
   const { user } = useAuth();
   const isNotAllowed = user && notAllowedRoles.includes(user.scope);
 
-  if (!user || isNotAllowed) {
+  if (isNotAllowed) {
     return <Navigate to="/unauthorized" />;
   }
 
