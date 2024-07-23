@@ -28,14 +28,21 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/Category" element={<Category />} />
           <Route path="/Login" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/about-mercury" element={<About />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
+          <Route 
+          path="/" 
+          element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={HomePage} />} 
+          />
+          <Route path="/Category" 
+          element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={Category} />}
+          />
+          <Route path="/ResetPassword" 
+          element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ResetPassword} />}
+          />
           <Route
             path="/SendRequest"
             element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={SendRequest} />}

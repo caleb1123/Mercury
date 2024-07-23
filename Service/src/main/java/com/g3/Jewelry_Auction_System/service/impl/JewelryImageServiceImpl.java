@@ -13,6 +13,11 @@ import com.g3.Jewelry_Auction_System.repository.JewelryImageRepository;
 import com.g3.Jewelry_Auction_System.repository.JewelryRepository;
 import com.g3.Jewelry_Auction_System.repository.PostImageRepository;
 import com.g3.Jewelry_Auction_System.service.JewelryImageService;
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File; // Ensure this import is correct
+
+import com.google.api.services.drive.model.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

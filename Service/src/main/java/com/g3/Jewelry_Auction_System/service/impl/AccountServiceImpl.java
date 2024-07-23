@@ -170,6 +170,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private AccountResponse convertToAccountResponse(Account account) {
+        if (account.getRole() == null) {
+            throw new AppException(ErrorCode.ROLE_NOT_FOUND); // Hoặc một mã lỗi phù hợp
+        }
+
         return AccountResponse.builder()
                 .accountId(account.getAccountId())
                 .fullName(account.getFullName())
@@ -184,7 +188,8 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
-    private AccountSearchByRoleResponse convertToAccountSearchByRoleResponse(Object[] account) {
+    public AccountSearchByRoleResponse convertToAccountSearchByRoleResponse(Object[] account) {
+
         return AccountSearchByRoleResponse.builder()
                 .accountId((Integer) account[0])
                 .address((String) account[1])
