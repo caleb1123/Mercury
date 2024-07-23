@@ -61,8 +61,7 @@ npm start
  
 <h2 id="routes">📍 API Endpoints</h2>
 
-[[http://localhost:8088/swagger-ui/index.htm](https://mercury-backend-production-1a6d.up.railway.app/swagger-ui/index.html#/)l#/](https://mercury-backend-production-1a6d.up.railway.app/swagger-ui/index.html#/)
- 
+https://mercury-backend-production-1a6d.up.railway.app/swagger-ui/index.html#/
 <h2 id="colab">🤝 Collaborators</h2>
 
 <p>Special thank you for all people that contributed for this project.</p>
