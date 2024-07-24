@@ -9,7 +9,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import axios from 'axios';
 import AddAccount from './AddAccount';
 import EditAccount from './EditAccount';
-import { useAuth } from '../users/authContext';
+import { useAuth } from '../../authContext';
 
 function Sidebar() {
   const { user, token, logout } = useAuth();

@@ -4,7 +4,7 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import line from "./image/line-3.svg";
 import "./Header.css";
-import {useAuth} from "../authContext";
+import {useAuth} from "../../../authContext";
 
 
 const auction_op = [

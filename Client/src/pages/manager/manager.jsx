@@ -42,6 +42,7 @@ import PostDetail from './PostDetail';
 import CreatePost from './CreatePost';
 import EditPostImages from './EditPostImages';
 import { Dialog } from '@mui/material';
+import {useAuth} from '../../authContext';
 
 
 
@@ -72,6 +73,7 @@ function ManagerPage() {
 const [selectedPostId, setSelectedPostId] = useState(null);
 const [editPostImageMode, setEditPostImageMode] = useState(false);
 const [selectedPost, setSelectedPost] = useState(null);
+const {user, logout} = useAuth();
 
 
   const navigate = useNavigate();
@@ -264,7 +266,7 @@ const [selectedPost, setSelectedPost] = useState(null);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    logout(user);
     navigate('/');
   };
 

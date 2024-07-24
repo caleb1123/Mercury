@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../users/authContext';
+import { useAuth } from '../../authContext';
 
 
 const Unauthorized = () => {

@@ -5,7 +5,7 @@ import Countdown from "./CountDown";
 import Header from "../Header";
 import Footer from '../Footer'
 import { useEffect, useState } from "react";
-import {useAuth} from "../authContext";
+import {useAuth} from "../../../authContext";
 
 const AuctionSection = ({ image, auctionId, buttonTexts }) => {
   const [targetDate, setTargetDate] = useState(null);

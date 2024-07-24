@@ -38,6 +38,7 @@ import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
 import EditJewelryImages from './EditJewelryImages'; // Import EditJewelryImages
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import {useAuth} from '../../authContext';
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -60,7 +61,7 @@ function StaffPage() {
   const [username, setUsername] = useState('');
   const [editPostImageMode, setEditPostImageMode] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
-
+  const {user, logout} = useAuth();
 
 
   const navigate = useNavigate(); // Initialize navigate
@@ -232,7 +233,7 @@ const fetchPosts = async (accountId) => {
   };
 
   const handleLogout = () => { // Function to handle logout
-    localStorage.removeItem('token');
+    logout(user);
     navigate('/'); // Redirect to home page
   };
 
