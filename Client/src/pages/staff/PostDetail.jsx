@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, Button, TextField, Typography, Select, MenuItem } from '@mui/material';
+import { Box, Button, TextField, Typography, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 
 const PostDetail = ({ post, onClose, handleUpdatePost }) => {
@@ -7,14 +7,12 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    // Fetch categories from the database or use the given categories
     const fetchCategories = async () => {
       try {
         const response = await axios.get('http://localhost:8088/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
-        // Fallback to hardcoded categories if fetching fails
         setCategories([
           { category_id: 1, category_name: 'AUCTION_INSIGHTS' },
           { category_id: 2, category_name: 'BIDDER_GUIDE' },
@@ -61,8 +59,7 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
   };
 
   return (
-    <Paper sx={{ height: '80vh', backgroundColor: '#fff', marginRight: '700vh' }}>
-      <Box mt={2} sx={{ width: '100vh', height: '80vh'}}>
+    <Box mt={2} sx={{ width: '100%', marginBottom: '20vh', boxSizing: 'border-box'  }}>
       <Typography variant="h6">Post Details</Typography>
       <TextField
         label="Title"
@@ -110,8 +107,6 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
       <Button variant="contained" onClick={handleSaveChanges}>Save Changes</Button>
       <Button variant="contained" onClick={onClose} sx={{ ml: 2 }}>Back</Button>
     </Box>
-  </Paper>
-    
   );
 };
 

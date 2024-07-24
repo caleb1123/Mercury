@@ -270,27 +270,31 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void stopAuction(int auctionId) {
         Auction auction = auctionRepository.findAuctionByAuctionId(auctionId);
-        if (auction != null && auction.getStatus().equals("Ongoing")) {
-            auction.setStatus("Ended");
-            auctionRepository.save(auction);
-            String auctionName = auction.getJewelry().getJewelryName();
-            List<Bid> bids = bidRepository.findByAuctionId(auctionId);
-            for (Bid bid : bids) {
-                Account account = bid.getAccount();
-                String email = account.getEmail();
-                String fullname =  account.getFullName();
-
-                try {
-                    emailService.sendApologyEmail(email, auctionName, fullname);
-                } catch (MessagingException e) {
-                    // Handle exception or log it
-                    System.err.println("Failed to send apology email to " + email);
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.err.println("Auction not found for ID: " + auctionId);
+        if (auction == null) {
+            throw new AppException(ErrorCode.AUCTION_NOT_FOUND);
         }
 
+        if (!auction.getStatus().equals("Ongoing")) {
+            throw new AppException(ErrorCode.AUCTION_NOT_ONGOING);
+        }
+
+        auction.setStatus("Ended");
+        auctionRepository.save(auction);
+
+        String auctionName = auction.getJewelry().getJewelryName();
+        List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+        for (Bid bid : bids) {
+            Account account = bid.getAccount();
+            String email = account.getEmail();
+            String fullname = account.getFullName();
+
+            try {
+                emailService.sendApologyEmail(email, auctionName, fullname);
+            } catch (MessagingException e) {
+                System.err.println("Failed to send apology email to " + email);
+                e.printStackTrace();
+            }
+        }
     }
+
 }

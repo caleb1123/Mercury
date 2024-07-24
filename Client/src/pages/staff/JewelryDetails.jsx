@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './JewelryDetails.css';
-
+import './JewelryDetails.css'; 
 function JewelryDetails({ jewelryId, requestId, onClose }) {
   const [jewelry, setJewelry] = useState(null);
   const [images, setImages] = useState([]);

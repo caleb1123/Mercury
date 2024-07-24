@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from "../Header";
-import Footer from '../Footer'
+import Footer from '../Footer';
 import "./HomePage.css";
 import Homebackground from './image/Website-banner-2-1.png';
-import pic1 from './image/Untitled-2560-×-1703-px-1-1-scaled.jpg'
-import pic2 from './image/pic2.jpg'
-import pic3 from './image/pic3.jpg'
+import pic1 from './image/Untitled-2560-×-1703-px-1-1-scaled.jpg';
+import pic2 from './image/pic2.jpg';
+import pic3 from './image/pic3.jpg';
+import {useAuth} from "../../../authContext";
 
 function HomePage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const {user} = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    if (user !== null) {
       setIsLoggedIn(true);
     }
-
-    
   }, []);
 
   const handleClick = () => {
@@ -75,10 +74,7 @@ function HomePage() {
             </div>
           </div>
         </div>
-
-
       </div>
-      
       <Footer/>
     </>
   );

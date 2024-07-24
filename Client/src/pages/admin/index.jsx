@@ -9,8 +9,10 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import axios from 'axios';
 import AddAccount from './AddAccount';
 import EditAccount from './EditAccount';
+import { useAuth } from '../../authContext';
 
 function Sidebar() {
+  const { user, token, logout } = useAuth();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -122,10 +124,8 @@ function Sidebar() {
   };
 
   const handleLogout = () => {
-    // Remove the token from local storage
-    localStorage.removeItem('token');
-    // Redirect to the home page
-    window.location.href = '/';
+    logout();
+    window.location.href = '/'; 
   };
 
   const filteredAndSearchedAccounts = filteredAccounts.filter((account) => {
@@ -202,7 +202,7 @@ function Sidebar() {
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ width: '5%' }}>Account ID</TableCell>
-                    <TableCell sx={{ width: '15%' }}>Address</TableCell>
+                    <TableCell sx={{ width: '15%' }}>User Name</TableCell>
                     <TableCell sx={{ width: '10%' }}>Date of Birth</TableCell>
                     <TableCell sx={{ width: '15%' }}>Email</TableCell>
                     <TableCell sx={{ width: '15%' }}>Full Name</TableCell>
@@ -218,7 +218,7 @@ function Sidebar() {
                     filteredAndSearchedAccounts.map((account) => (
                       <TableRow key={account.accountId}>
                         <TableCell sx={{ wordWrap: 'break-word' }}>{account.accountId || 'NULL'}</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.address || 'NULL'}</TableCell>
+                        <TableCell sx={{ wordWrap: 'break-word' }}>{account.userName || 'NULL'}</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word' }}>{account.dob || 'NULL'}</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word' }}>{account.email || 'NULL'}</TableCell>
                         <TableCell sx={{ wordWrap: 'break-word' }}>{account.fullName || 'NULL'}</TableCell>

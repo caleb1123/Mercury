@@ -38,6 +38,7 @@ import EditJewelry from './EditJewelry';
 import JewelryDetails from './JewelryDetails';
 import EditJewelryImages from './EditJewelryImages'; // Import EditJewelryImages
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import {useAuth} from '../../authContext';
 
 function StaffPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -63,6 +64,7 @@ function StaffPage() {
   const [accountId, setAccountId] = useState('');
 
 
+  const {user, logout} = useAuth();
 
 
   const navigate = useNavigate(); // Initialize navigate
@@ -227,25 +229,24 @@ const fetchPosts = async (accountId) => {
     setViewRequestId(requestId);
   };
 
-  const handleEditImageClick = (jewelryId) => { // Function to handle edit image button click
+  const handleEditImageClick = (jewelryId) => { 
     setSelectedJewelryId(jewelryId);
     setEditImageMode(true);
   };
 
-  const closeEditImageDialog = () => { // Function to close the image editing dialog
+  const closeEditImageDialog = () => { 
     setEditImageMode(false);
     setSelectedJewelryId(null);
   };
 
-  const handleLogout = () => { // Function to handle logout
-    localStorage.removeItem('token');
-    navigate('/'); // Redirect to home page
+  const handleLogout = () => { 
+    logout(user);
+    navigate('/'); 
   };
 
   const updateProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const decodedToken = jwtDecode(token);
 
       await axios.put(`http://localhost:8088/account/update/${username}`, profile, {
         headers: {
@@ -358,7 +359,7 @@ const fetchPosts = async (accountId) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          sx={{ height: '100%', width: '100%' }} // Full width adjustment
+          sx={{ height: '100%', width: '100%' }} 
         >
           <Box sx={{ width: '100%', backgroundColor: '#fff', padding: 4, borderRadius: 2, color: '#000' }}>
             {selectedIndex === 0 && (

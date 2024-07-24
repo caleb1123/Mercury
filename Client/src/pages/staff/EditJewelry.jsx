@@ -60,7 +60,7 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
       await axios.put(url, editedJewelry);
       fetchJewelry(); 
       setEditMode(false);
-      alert('Jewelry added successfully!');
+      alert('Jewelry updated successfully!');
 
     } catch (error) {
       console.error('Error updating jewelry:', error);

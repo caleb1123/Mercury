@@ -7,14 +7,12 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    // Fetch categories from the database or use the given categories
     const fetchCategories = async () => {
       try {
         const response = await axios.get('http://localhost:8088/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
-        // Fallback to hardcoded categories if fetching fails
         setCategories([
           { category_id: 1, category_name: 'AUCTION_INSIGHTS' },
           { category_id: 2, category_name: 'BIDDER_GUIDE' },
@@ -61,7 +59,7 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
   };
 
   return (
-    <Box mt={2} sx={{ width: '100%' }}>
+    <Box mt={2} sx={{ width: '100%', marginBottom: '20vh' }}>
       <Typography variant="h6">Post Details</Typography>
       <TextField
         label="Title"
