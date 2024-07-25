@@ -1,0 +1,36 @@
+.payment-success-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f8ff;
+    text-align: center;
+    min-width: 100vw;
+
+  }
+  
+  .payment-success-container h1 {
+    color: #4CAF50; /* Màu xanh lá cây cho thành công */
+    margin-bottom: 20px;
+  }
+  
+  .payment-success-container p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .payment-success-container button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007BFF; /* Màu xanh dương */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .payment-success-container button:hover {
+    background-color: #0056b3; /* Đổi màu khi hover */
+  }
+  

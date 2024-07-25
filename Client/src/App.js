@@ -22,6 +22,8 @@ import ViewResult from './pages/users/ViewResult';
 import OTP from './pages/users/Login/OTP';
 import Unauthorized from './pages/unauthorized/unauthorized';
 import ProtectedRoute from './protectedRoute';
+import PaymentSuccess from './pages/users/ViewResult/PaymentSuccess';
+import PaymentFailed from './pages/users/ViewResult/PaymentFailed';
 
 const App = () => {
   return (
@@ -33,15 +35,15 @@ const App = () => {
           <Route path="/about-mercury" element={<About />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
-          <Route 
-          path="/" 
-          element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={HomePage} />} 
+          <Route
+            path="/"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={HomePage} />}
           />
-          <Route path="/Category" 
-          element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={Category} />}
+          <Route path="/Category"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={Category} />}
           />
-          <Route path="/ResetPassword" 
-          element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ResetPassword} />}
+          <Route path="/ResetPassword"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ResetPassword} />}
           />
           <Route
             path="/SendRequest"
@@ -98,6 +100,14 @@ const App = () => {
           <Route
             path="/manager"
             element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'USER']} element={ManagerPage} />}
+          />
+          <Route
+            path="/PaymentSuccess"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={PaymentSuccess} />}
+          />
+          <Route
+            path="/PaymentFailed"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={PaymentFailed} />}
           />
         </Routes>
       </Router>

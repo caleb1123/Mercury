@@ -1,0 +1,34 @@
+.payment-failed-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #ffcccc; 
+    text-align: center;
+    min-width: 100vw;
+}
+
+.payment-failed-container h1 {
+    color: #ff0000; 
+    margin-bottom: 20px;
+}
+
+.payment-failed-container p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.payment-failed-container button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007BFF; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.payment-failed-container button:hover {
+    background-color: #0056b3;  
+}
