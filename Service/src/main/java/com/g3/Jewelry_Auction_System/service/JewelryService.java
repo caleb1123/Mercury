@@ -4,6 +4,7 @@ import com.g3.Jewelry_Auction_System.entity.Jewelry;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface JewelryService {
     void delistJewelry(int jewelryId);
     JewelryDTO addJewelry(JewelryDTO jewelryDTO);
     JewelryDTO updateJewelry(JewelryDTO jewelryDTO, int id);
-    Page<JewelryDTO> getAllJewelry(int id);
+    Page<JewelryDTO> getAllJewelry(Pageable pageable);
     List<JewelryDTO> getAll();
     List<JewelryDTO> searchName(String jewelryName);
     JewelryDTO getJewelryDetail(int jewelryId);
