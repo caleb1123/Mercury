@@ -421,8 +421,8 @@ const fetchPosts = async (accountId) => {
                 <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
                   Add Jewelry
                 </Button>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-                  <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
+                  <Table sx={{ tableLayout: 'auto', minWidth: '100%'  }}>
                     <TableHead>
                       <TableRow>
                         <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
@@ -473,7 +473,7 @@ const fetchPosts = async (accountId) => {
             {selectedIndex === 2 && (
               <Paper sx={{ padding: 1, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Auctions</Typography>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
                   <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                     <TableHead>
                       <TableRow>
@@ -505,9 +505,9 @@ const fetchPosts = async (accountId) => {
 
             )}
             {selectedIndex === 3 && !viewJewelryId && (
-              <Paper sx={{ backgroundColor: '#fff', color: '#000' }}>
+              <Paper sx={{ backgroundColor: '#fff', color: '#000'  }}>
                 <Typography variant="h6">Requests</Typography>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
                   <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                     <TableHead>
                       <TableRow>
@@ -560,7 +560,7 @@ const fetchPosts = async (accountId) => {
     <Button variant="contained" color="primary" onClick={handleCreatePostClick} sx={{ mt: 2 }}>
       Create Post
     </Button>
-    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
       <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
         <TableHead>
           <TableRow>
