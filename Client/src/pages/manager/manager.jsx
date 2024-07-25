@@ -74,6 +74,7 @@ function ManagerPage() {
   const [editPostImageMode, setEditPostImageMode] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const { user, logout } = useAuth();
+  const [searchCode, setSearchCode] = useState('');
 
 
   const navigate = useNavigate();
@@ -333,6 +334,19 @@ function ManagerPage() {
     }
   };
 
+
+  const handleSearchcode = async () => {
+    if (searchCode) {
+      try {
+        const response = await axios.get(`http://localhost:8088/jewelry/list/code/${searchCode}`);
+        setFilteredJewelryList(response.data);
+      } catch (error) {
+        console.error('Error fetching jewelry:', error);
+      }
+    }
+  };
+  
+
   const handleAuctionAdded = () => {
     fetchAuctions();
     setShowAddAuction(false);
@@ -461,78 +475,92 @@ function ManagerPage() {
               </Paper>
             )}
 
-            {selectedIndex === 1 && !editMode && !addJewelryMode && !viewJewelryId && (
-              <React.Fragment>
-                <Box sx={{ mb: 2 }}>
-                  <Select
-                    displayEmpty
-                    fullWidth
-                    name="jewelryCategoryId"
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    sx={{ backgroundColor: '#fff' }}
-                  >
-                    <MenuItem value=""><em>All Categories</em></MenuItem>
-                    {categories.map((category) => (
-                      <MenuItem key={category.jewelry_category_id} value={category.jewelry_category_id}>
-                        {category.category_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <Select
-                    displayEmpty
-                    fullWidth
-                    name="status"
-                    value={selectedStatus}
-                    onChange={handleStatusChange}
-                    sx={{ backgroundColor: '#fff', mt: 2 }}
-                  >
-                    <MenuItem value=""><em>All Status</em></MenuItem>
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="inactive">Inactive</MenuItem>
-                  </Select>
-                  <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
-                    Add Jewelry
-                  </Button>
-                </Box>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, height: '100vh' }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>No.</TableCell>
-                        <TableCell>Jewelry Code</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Designer</TableCell>
-                        <TableCell>Gemstone</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {filteredJewelryList.map((jewelry, index) => (
-                        <TableRow key={jewelry.jewelryId}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{jewelry.jewelryCode}</TableCell>
-                          <TableCell>{jewelry.jewelryName}</TableCell>
-                          <TableCell>{jewelry.designer}</TableCell>
-                          <TableCell>{jewelry.gemstone}</TableCell>
-                          <TableCell>{categories.find((category) => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}</TableCell>
-                          <TableCell>{jewelry.startingPrice}</TableCell>
-                          <TableCell>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
-                          <TableCell>
-                            <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
-                            <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
-                            <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </React.Fragment>
-            )}
+{selectedIndex === 1 && !editMode && !addJewelryMode && !viewJewelryId && (
+  <React.Fragment>
+    <Box sx={{ mb: 2 }}>
+      <Select
+        displayEmpty
+        fullWidth
+        name="jewelryCategoryId"
+        value={selectedCategory}
+        onChange={handleCategoryChange}
+        sx={{ backgroundColor: '#fff' }}
+      >
+        <MenuItem value=""><em>All Categories</em></MenuItem>
+        {categories.map((category) => (
+          <MenuItem key={category.jewelry_category_id} value={category.jewelry_category_id}>
+            {category.category_name}
+          </MenuItem>
+        ))}
+      </Select>
+      <Select
+        displayEmpty
+        fullWidth
+        name="status"
+        value={selectedStatus}
+        onChange={handleStatusChange}
+        sx={{ backgroundColor: '#fff', mt: 2 }}
+      >
+        <MenuItem value=""><em>All Status</em></MenuItem>
+        <MenuItem value="active">Active</MenuItem>
+        <MenuItem value="inactive">Inactive</MenuItem>
+      </Select>
+      <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
+        Add Jewelry
+      </Button>
+      
+      <Box sx={{ display: 'flex', mt: 2 }}>
+        <TextField
+          label="Search Code"
+          variant="outlined"
+          fullWidth
+          value={searchCode}
+          onChange={(e) => setSearchCode(e.target.value)}
+        />
+        <Button variant="contained" color="primary" onClick={handleSearchcode} sx={{ ml: 2 }}>
+          Search
+        </Button>
+      </Box>
+    </Box>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, height: '100vh' }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>No.</TableCell>
+            <TableCell>Jewelry Code</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Designer</TableCell>
+            <TableCell>Gemstone</TableCell>
+            <TableCell>Category</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredJewelryList.map((jewelry, index) => (
+            <TableRow key={jewelry.jewelryId}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{jewelry.jewelryCode}</TableCell>
+              <TableCell>{jewelry.jewelryName}</TableCell>
+              <TableCell>{jewelry.designer}</TableCell>
+              <TableCell>{jewelry.gemstone}</TableCell>
+              <TableCell>{categories.find((category) => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}</TableCell>
+              <TableCell>{jewelry.startingPrice}</TableCell>
+              <TableCell>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
+              <TableCell>
+                <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
+                <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
+                <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </React.Fragment>
+)}
+
             {selectedIndex === 1 && editMode && selectedJewelry && (
               <EditJewelry jewelry={selectedJewelry} fetchJewelry={fetchJewelry} setEditMode={setEditMode} />
             )}

@@ -62,7 +62,6 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
   const handleSave = async () => {
     try {
-      // Update preliminary price
       const updateResponse = await axios.put(
         `http://localhost:8088/request/update/preliminary/${requestId}`,
         {
