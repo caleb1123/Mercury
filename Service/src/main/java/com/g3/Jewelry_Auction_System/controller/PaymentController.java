@@ -9,12 +9,14 @@ import com.g3.Jewelry_Auction_System.repository.PaymentRepository;
 import com.g3.Jewelry_Auction_System.service.PaymentService;
 import com.g3.Jewelry_Auction_System.vnpay.ResponseObject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,12 +36,14 @@ public class PaymentController {
     }
 
     @GetMapping("/return")
-    public ResponseObject<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
+    public void payCallbackHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String url = "http://localhost:3001/PaymentSuccess";
+        String urlFail = "http://localhost:3001/PaymentFailed";
         PaymentResponse payment = paymentService.handleCallback(request);
         if (payment.getCode().equals("00")) {
-            return new ResponseObject<>(HttpStatus.OK, "Success", payment);
+            response.sendRedirect(url);
         } else {
-            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", payment);
+            response.sendRedirect(urlFail);
         }
     }
 }

@@ -59,7 +59,7 @@ const EditJewelry = ({ jewelry, fetchJewelry, setEditMode }) => {
       const url = `http://localhost:8088/jewelry/update/${editedJewelry.jewelryId}`;
       await axios.put(url, editedJewelry);
       fetchJewelry(); 
-      alert('Jewelry added successfully!');
+      alert('Jewelry updated successfully!');
       setEditMode(false); 
     } catch (error) {
       console.error('Error updating jewelry:', error);

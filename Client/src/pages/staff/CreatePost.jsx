@@ -12,7 +12,6 @@ import {
   InputLabel,
 } from '@mui/material';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
 import EditPostImages from './EditPostImages';
 
 const postCategories = [
@@ -42,9 +41,6 @@ function CreatePost() {
         console.error('No token found');
         return;
       }
-
-      const decodedToken = jwtDecode(token);
-      const account_id = decodedToken.account_id;
 
       const postData = {
         title,

@@ -170,6 +170,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private AccountResponse convertToAccountResponse(Account account) {
+        if (account.getRole() == null) {
+            throw new AppException(ErrorCode.ROLE_NOT_FOUND); // Hoặc một mã lỗi phù hợp
+        }
+
         return AccountResponse.builder()
                 .accountId(account.getAccountId())
                 .fullName(account.getFullName())
@@ -184,7 +188,8 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
-    private AccountSearchByRoleResponse convertToAccountSearchByRoleResponse(Object[] account) {
+    public AccountSearchByRoleResponse convertToAccountSearchByRoleResponse(Object[] account) {
+
         return AccountSearchByRoleResponse.builder()
                 .accountId((Integer) account[0])
                 .address((String) account[1])
@@ -195,38 +200,6 @@ public class AccountServiceImpl implements AccountService {
                 .status((Boolean) account[6])
                 .roleId((Integer) account[7])
                 .build();
-    }
-
-    @Override
-    public AccountDTO createAccountByUser(SignUpRequest signUpRequest) {
-        Account existingUserEmail = accountRepository.findByEmail(signUpRequest.getEmail()).orElse(null);
-        Account existingUserPhone = accountRepository.findByPhone(signUpRequest.getPhone()).orElse(null);
-        Account existingUserName = accountRepository.findByUserName(signUpRequest.getUserName()).orElse(null);
-        if (existingUserEmail != null) {
-            throw new AppException(ErrorCode.EMAIL_TAKEN);
-        }
-        if (existingUserPhone != null) {
-            throw new AppException(ErrorCode.PHONE_TAKEN);
-        }
-        if (existingUserName != null) {
-            throw new AppException(ErrorCode.USERNAME_EXISTED);
-        }
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
-        signUpRequest.setPassword(encodedPassword);
-
-        Account createAccount = accountConverter.toEntity(signUpRequest);
-
-        Role userRole = roleRepository.findById(4)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-
-        createAccount.setRole(userRole);
-        createAccount.setStatus(false);
-
-        accountRepository.save(createAccount);
-
-        return accountConverter.toDTO(createAccount);
     }
 
     @Override

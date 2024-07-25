@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './JewelryDetails.css';
-
+import './JewelryDetails.css'; 
 function JewelryDetails({ jewelryId, requestId, onClose }) {
   const [jewelry, setJewelry] = useState(null);
   const [images, setImages] = useState([]);
@@ -63,7 +62,6 @@ function JewelryDetails({ jewelryId, requestId, onClose }) {
 
   const handleSave = async () => {
     try {
-      // Update preliminary price
       const updateResponse = await axios.put(
         `http://localhost:8088/request/update/preliminary/${requestId}`,
         {

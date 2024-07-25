@@ -7,6 +7,8 @@ import com.g3.Jewelry_Auction_System.payload.request.JewelryPageRequest;
 import com.g3.Jewelry_Auction_System.service.JewelryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,9 +54,9 @@ public class JewelryController {
 
     @CrossOrigin(origins = "http://localhost:3001")
     @GetMapping("/getAll/{page}")
-    public Page<JewelryDTO> getAllJewelries(@PathVariable(value = "page") Integer offset){
-        JewelryPageRequest pageRequest = new JewelryPageRequest(2, offset);
-        return jewelryService.getAllJewelry(offset);
+    public Page<JewelryDTO> getAllJewelry(@RequestParam int page, @RequestParam int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jewelryService.getAllJewelry(pageable);
     }
 
     @CrossOrigin(origins = "http://localhost:3001")

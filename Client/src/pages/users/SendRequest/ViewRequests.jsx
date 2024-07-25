@@ -9,9 +9,12 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
+import EditJewelryImages from './EditJewelryImages';
 
 export default function ViewRequests({ open, onClose }) {
   const [requests, setRequests] = useState([]);
+  const [selectedJewelryId, setSelectedJewelryId] = useState(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -42,11 +45,21 @@ export default function ViewRequests({ open, onClose }) {
     }
   };
 
+  const handleEditImages = (jewelryId) => {
+    setSelectedJewelryId(jewelryId);
+    setEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setEditDialogOpen(false);
+    setSelectedJewelryId(null);
+  };
+
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      maxWidth="md" // Increase dialog width
+      maxWidth="md"
       fullWidth
     >
       <DialogTitle>My Requests</DialogTitle>
@@ -75,6 +88,13 @@ export default function ViewRequests({ open, onClose }) {
               <Typography variant="body1">
                 <strong>Final Price:</strong> {request.finalPrice}
               </Typography>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleEditImages(request.jewelryId)}
+              >
+                Edit Image
+              </Button>
             </Box>
           ))
         ) : (
@@ -84,6 +104,12 @@ export default function ViewRequests({ open, onClose }) {
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>
+      {selectedJewelryId && (
+        <EditJewelryImages
+          jewelryId={selectedJewelryId}
+          onClose={handleCloseEditDialog}
+        />
+      )}
     </Dialog>
   );
 }

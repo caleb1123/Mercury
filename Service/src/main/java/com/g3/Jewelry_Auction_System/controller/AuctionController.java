@@ -44,7 +44,7 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDTO>> getAuctionList() {
         List<AuctionDTO> auctionList = auctionService.getAuctionList();
         if (auctionList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
@@ -54,7 +54,7 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDTO>> getAuctionByStatus(@PathVariable String status) {
         List<AuctionDTO> auctionList = auctionService.getAuctionByStatus(status);
         if (auctionList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }
@@ -64,7 +64,7 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDTO>> getLiveAuctionList() {
         List<AuctionDTO> auctionList = auctionService.getLiveAuctionList();
         if (auctionList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(auctionList, HttpStatus.OK);
         }

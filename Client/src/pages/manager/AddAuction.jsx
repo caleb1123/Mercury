@@ -66,7 +66,7 @@ const AddAuction = ({ onClose, onAuctionAdded }) => {
   };
 
   return (
-    <Paper sx={{ padding: 2 }}>
+    <Paper sx={{ padding: 2, marginBottom: '36vh', color: 'black' }}>
       <Typography variant="h6">Add New Auction</Typography>
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         <Grid item xs={12}>

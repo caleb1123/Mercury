@@ -62,24 +62,26 @@ const AddJewelry = ({ fetchJewelry }) => {
         newJewelry.image = imageUploadResponse.data.imageUrl; // Assuming the server returns the image URL in imageUrl field
       }
 
-      // Add jewelry details
       const response = await axios.post('http://localhost:8088/jewelry/add', newJewelry);
       console.log('Server response:', response);
-      fetchJewelry(); // Refresh the list
+       // Refresh the list
       setNewJewelry({
         condition: '',
         description: '',
         designer: '',
         estimate: '',
         gemstone: '',
-        image: '',
         jewelryName: '',
         startingPrice: '',
         status: true,
         jewelryCategoryId: ''
-      }); // Reset form
-      setImageFile(null); // Reset image file
-      alert('Jewelry added successfully!'); // Alert on success
+      }); 
+      setImageFile(null); 
+      alert('Jewelry added successfully!');
+      fetchJewelry();
+      window.location.reload();
+
+      
 
     } catch (error) {
       console.error('Error adding jewelry:', error.response ? error.response.data : error.message);

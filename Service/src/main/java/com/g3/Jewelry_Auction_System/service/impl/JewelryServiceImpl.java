@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JewelryServiceImpl implements JewelryService {
@@ -95,17 +96,13 @@ public class JewelryServiceImpl implements JewelryService {
             jewelryRepository.save(jewelry);
             return jewelryConverter.toDTO(jewelry);
     }
-
     @Override
-    public Page<JewelryDTO> getAllJewelry(int offset) {
-        Pageable jewelryPageable = new JewelryPageRequest(2, offset);
-        Page<Jewelry> allPosts = jewelryRepository.findAll(jewelryPageable);
-        List<JewelryDTO> jewelryDTOs = new ArrayList<>();
-        for (Jewelry j : allPosts) {
-            JewelryDTO dto = jewelryConverter.toDTO(j);
-            jewelryDTOs.add(dto);
-        }
-        return new PageImpl<>(jewelryDTOs, jewelryPageable, allPosts.getTotalElements());
+    public Page<JewelryDTO> getAllJewelry(Pageable pageable) {
+        Page<Jewelry> allPosts = jewelryRepository.findAll(pageable);
+        List<JewelryDTO> jewelryDTOs = allPosts.stream()
+                .map(jewelryConverter::toDTO)
+                .collect(Collectors.toList());
+        return new PageImpl<>(jewelryDTOs, pageable, allPosts.getTotalElements());
     }
 
     @Override

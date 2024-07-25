@@ -1,19 +1,33 @@
 .jewelry-details {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.jewelry-details__container {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 80%;
+  height: 120%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
   
-  .jewelry-details__container {
-    margin-left: 200px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 800px;
-  }
+}
+
+.jewelry-details__images img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px 0; 
+}
+
   
   .jewelry-details h2,
   .jewelry-details h3 {

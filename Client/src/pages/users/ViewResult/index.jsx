@@ -73,10 +73,10 @@ function ViewResult() {
           userName: userName
         })
       });
-
-      const data = await response.json();
+  
+      const data = await response.json(); // Đảm bảo biến data được khai báo và nhận dữ liệu từ API
       console.log('Payment API response:', data); // Log dữ liệu trả về từ API
-
+  
       if (response.ok) {
         if (data.code === 200 && data.data && data.data.paymentUrl) {
           console.log('Payment link:', data.data.paymentUrl); // Log link thanh toán
@@ -96,6 +96,13 @@ function ViewResult() {
       } else {
         console.error('Failed to check payment status:', response.statusText);
       }
+  
+      // // Kiểm tra trạng thái thanh toán từ response và chuyển hướng
+      // if (data.data && data.data.message === 'FAILED') {
+      //   navigate('/PaymentFailed');
+      // } else {
+      //   navigate('/PaymentSuccess');
+      // }
     } catch (error) {
       console.error('Error checking payment status:', error);
       setPaymentStatus(prevStatus => ({
@@ -104,6 +111,7 @@ function ViewResult() {
       }));
     }
   };
+  
 
   const handlePaymentClick = (auctionId) => {
     const paymentInfo = paymentStatus[auctionId];

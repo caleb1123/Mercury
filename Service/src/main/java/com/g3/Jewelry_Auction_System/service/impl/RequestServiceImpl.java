@@ -79,7 +79,7 @@ public class RequestServiceImpl implements RequestService {
         if (request.getPreliminaryPrice() != requestDTO.getPreliminaryPrice()) {
             request.setPreliminaryPrice(requestDTO.getPreliminaryPrice());
             request.setEvaluationDate(LocalDate.now());
-            request.setDeliveryDate(LocalDate.now().plusDays(5));
+            request.setDeliveryDate(LocalDate.now().plusDays(7));
             request.setStatus(ERequestStatus.AWAITING_APPROVAL);
         }
         requestRepository.save(request);
@@ -153,6 +153,7 @@ public class RequestServiceImpl implements RequestService {
                     .findByUserName(name)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             List<Request> requestList = requestRepository.getRequestsBySellerId(account.getAccountId());
+            Collections.reverse(requestList);
             return requestConverter.toDTOList(requestList);
         }
     }
@@ -165,6 +166,9 @@ public class RequestServiceImpl implements RequestService {
         Jewelry jewelry = jewelryRepository.findByJewelryId(requestDTO.getJewelryId()).orElseThrow(
                 () -> new AppException(ErrorCode.JEWELRY_NOT_EXISTED)
         );
+
+        Request request = requestRepository.findByRequestId(requestDTO.getRequestId()).orElseThrow();
+        requestDTO.setDeliveryDate(request.getDeliveryDate());
 
         emailService.  sendPreliminaryValuationCompleteEmail(
                 account.getEmail(),

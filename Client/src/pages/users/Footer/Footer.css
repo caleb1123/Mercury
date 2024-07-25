@@ -1,3 +1,14 @@
+html, body {
+  display: flex;
+}
+.HomePage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.HomeBackGround, .auction-container {
+  flex: 1;
+}
 #footer {
     background-color: #292929;
     padding: 20px 0;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './authContext';
 import HomePage from './pages/users/HomePage';
 import Category from './pages/users/Category';
 import SignIn from './pages/users/Login';
@@ -18,35 +19,100 @@ import About from './pages/users/About/AboutMercury';
 import ResetPassword from './pages/users/ResetPassword';
 import ViewPostDetail from './pages/users/ViewPostDetail';
 import ViewResult from './pages/users/ViewResult';
+import OTP from './pages/users/Login/OTP';
+import Unauthorized from './pages/unauthorized/unauthorized';
+import ProtectedRoute from './protectedRoute';
+import PaymentSuccess from './pages/users/ViewResult/PaymentSuccess';
+import PaymentFailed from './pages/users/ViewResult/PaymentFailed';
 
-
-function App() {
+const App = () => {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
         <Routes>
-        <Route path="/" element={<HomePage/>} />
-        <Route path="/Category" element={<Category/>} />
-        <Route path="/Login" element={<SignIn/>} />
-        <Route path="/SignUp" element={<SignUp/>} />
-        <Route path="/SendRequest" element={<SendRequest/>} />
-        <Route path="/ViewJewelryList" element={<ViewJewelryList/>}/>
-        <Route path="/Admin" element={<Admin/>}/>
-        <Route path="/ViewJewelry/:id" element={<ViewJewelry/>} />
-        <Route path="/ViewAuction" element={<ViewAuction/>} />
-        <Route path="/Staff" element={<StaffPage/>} />
-        <Route path="/viewProfile" element={<ViewProfile/>} />
-        <Route path="/manager" element={<ManagerPage/>} />
-        <Route path="/ViewPost" element={<ViewPost/>} />
-        <Route path="/Auctions/:opId" element={<Auctions/>} />
-        <Route path="/ResetPassword" element={<ResetPassword/>} />
-        <Route path='/ViewJewelryList/Category/:Cateid' element={<ViewJewelryList/>}/>
-        <Route path="/about-mercury" element={<About/>} />
-        <Route path="/ViewPostDetail/:id" element={<ViewPostDetail/>} />
-        <Route path="/ViewResult" element={<ViewResult/>} />
-        </Routes>
+          <Route path="/Login" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/about-mercury" element={<About />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
-    </Router>
+          <Route
+            path="/"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={HomePage} />}
+          />
+          <Route path="/Category"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={Category} />}
+          />
+          <Route path="/ResetPassword"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ResetPassword} />}
+          />
+          <Route
+            path="/SendRequest"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={SendRequest} />}
+          />
+          <Route
+            path="/ViewJewelryList"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewJewelryList} />}
+          />
+          <Route
+            path="/ViewJewelry/:id"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewJewelry} />}
+          />
+          <Route
+            path="/ViewAuction"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewAuction} />}
+          />
+          <Route
+            path="/viewProfile"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewProfile} />}
+          />
+          <Route
+            path="/ViewPost"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewPost} />}
+          />
+          <Route
+            path="/Auctions/:opId"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={Auctions} />}
+          />
+          <Route
+            path="/ViewJewelryList/Category/:Cateid"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewJewelryList} />}
+          />
+          <Route
+            path="/ViewPostDetail/:id"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewPostDetail} />}
+          />
+          <Route
+            path="/ViewResult"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewResult} />}
+          />
+          <Route
+            path="/otp-page"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={OTP} />}
+          />
+          <Route
+            path="/Admin"
+            element={<ProtectedRoute notAllowedRoles={['STAFF', 'MANAGER', 'USER']} element={Admin} />}
+          />
+          <Route
+            path="/Staff"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'MANAGER', 'USER']} element={StaffPage} />}
+          />
+          <Route
+            path="/manager"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'USER']} element={ManagerPage} />}
+          />
+          <Route
+            path="/PaymentSuccess"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={PaymentSuccess} />}
+          />
+          <Route
+            path="/PaymentFailed"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={PaymentFailed} />}
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
