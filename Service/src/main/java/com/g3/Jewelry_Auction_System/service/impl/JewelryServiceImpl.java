@@ -173,5 +173,11 @@ public class JewelryServiceImpl implements JewelryService {
     public List<JewelryDTO> getJewelryOnAuction() {
         return jewelryConverter.convertToJewelryDTOList(jewelryRepository.getJewelriesOnAuction());
     }
+
+    @Override
+    public List<JewelryDTO> getJewelryByCode(String code) {
+        List<Jewelry> jewelries = jewelryRepository.getByJewelryCode(code);
+        return jewelryConverter.convertToJewelryDTOList(jewelries);
+    }
 }
 

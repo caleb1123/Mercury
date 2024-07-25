@@ -126,4 +126,11 @@ public class JewelryController {
         List<JewelryDTO> list = jewelryService.getJewelryOnAuction();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/list/code/{code}")
+    public ResponseEntity<List<JewelryDTO>> getJewelryByCode(@PathVariable String code) {
+        List<JewelryDTO> list = jewelryService.getJewelryByCode(code);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
