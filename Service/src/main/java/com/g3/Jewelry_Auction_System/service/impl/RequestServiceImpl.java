@@ -153,6 +153,7 @@ public class RequestServiceImpl implements RequestService {
                     .findByUserName(name)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             List<Request> requestList = requestRepository.getRequestsBySellerId(account.getAccountId());
+            Collections.reverse(requestList);
             return requestConverter.toDTOList(requestList);
         }
     }
