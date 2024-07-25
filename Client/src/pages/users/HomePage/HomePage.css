@@ -1,19 +1,19 @@
+/* HomePage.css */
+
 body {
   margin: 0;
   padding: 0;
   background-color: rgb(253, 253, 253);
-  /* color: rgb(0, 0, 0); */
   display: flex;
   justify-content: center;
 }
 
-
 .HomePage {
-    margin-top: 105px;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  margin-top: 105px;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .BackGrounPic {
@@ -28,164 +28,268 @@ body {
 }
 
 .Introduction {
-    position: absolute;
-    z-index: 500;
-    font-size: 20px;
-    margin: 125px 750px 300px 152px;
-    justify-content: center;
-    font-style: italic;
-    color: rgb(0, 0, 0);
-    margin-top: 180px;
+  position: absolute;
+  z-index: 500;
+  font-size: 20px;
+  margin: 125px 750px 300px 152px;
+  justify-content: center;
+  font-style: italic;
+  color: rgb(0, 0, 0);
+  margin-top: 180px;
 }
 
 .IntroText {
-    
-    margin-right: 200px;
+  margin-right: 200px;
 }
 
 .ViewJewelries {
-    background-color: #710101;
-    font-size: 24px;
-    margin-top: 20px;
-    color: #f1e9e9;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+  background-color: #710101;
+  font-size: 24px;
+  margin-top: 20px;
+  color: #f1e9e9;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .UpcomingAuctions {
-    display: flex;
+  display: flex;
 }
 
 .UpcomingAuctionsTitle {
-    margin-top: 50px;
-    padding-left: 150px;
-    display: flex;
-    color: black;
+  margin-top: 50px;
+  padding-left: 150px;
+  display: flex;
+  color: black;
 }
 
 .JewelryImg_HomePage {
-    width: 288px;
-    height: 255px;
-    border-radius: 10px;
-    border-color: white;
+  width: 288px;
+  height: 255px;
+  border-radius: 10px;
+  border-color: white;
 }
 
 .JewelryName_HomePage {
-    width: 288px;
+  width: 288px;
 }
 
 .JewelryDate_HomePage_Upcoming {
-    color: red;
+  color: red;
 }
 
 .ViewJewelry_HomePage_UpcomingAuctions {
-    padding-left: 150px;
-    color: black ;
+  padding-left: 150px;
+  color: black ;
 }
 
 .JewelryDate_HomePage_ {
-    color: white;
+  color: white;
 }
 
 .LogoutButton {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 10px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
 }
 
 .LogoutButton:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
-/* src/AuctionInfo.css */
 
 .auction-container {
-    align-items: center;
-    padding: 20px;
-    color: black;
-    padding-left: 190px;
-  }
-  
-  .auction-intro {
-    margin-bottom: 20px;
-    margin-right: 200px;
-    color: black;
-  }
-  
-  .auction-intro h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
-    padding: 20px;
-    color: black;
-  }
-  
-  .auction-intro button {
-    padding: 10px 20px;
-    margin-left: 450px;
-    font-size: 1em;
-    cursor: pointer;
-    background-color: black;
-    color: white;
-    border: none;
-  }
-  
-  .auction-sections {
-    padding: 40px;
-    padding-left: 90px;
-    display: flex;
-    width: 100%;
-    color: black;
-  }
-  
-  .auction-section {
-    text-align: center;
-    max-width: 300px;
-    margin: 0 10px;
-    color: #000;
-  }
-  
-  .auction-section img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .auction-section h2 {
-    font-size: 1.5em;
-    margin-top: 10px;
-    color: #000;
-  }
-  
-  .auction-section p {
-    font-size: 1em;
-    margin-top: 10px;
-  }
-  .Header .Down_Header .world_bar_style {
-    position: relative;
-  }
-  
-  .CategoryList {
-    position: absolute;
-    margin-left: -89px;
-    background-color: #ffffff;
-    border: 1px solid #f9e9e9;
-    color: black;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 1000; /* Đảm bảo CategoryList luôn ở trên cùng */
-  }
-  
-  .CategoryItem {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-  }
-  
-  .CategoryItem:last-child {
-    border-bottom: none;
-  }
+  align-items: center;
+  padding: 20px;
+  color: black;
+  padding-left: 240px;
+}
 
-  
+.auction-intro {
+  margin-bottom: 20px;
+  color: black;
+}
+
+.auction-intro h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  padding: 20px;
+  color: black;
+}
+
+.auction-intro button {
+  padding: 10px 20px;
+  margin-left: 450px;
+  font-size: 1em;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.auction-sections {
+  padding: 40px;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  color: black;
+  margin-left: -140px;
+}
+
+.auction-section {
+  text-align: center;
+  max-width: 300px;
+  margin: 0 10px;
+  color: #000;
+}
+
+.auction-section img {
+  width: 100%;
+  height: auto;
+}
+
+.auction-section h2 {
+  font-size: 1.5em;
+  margin-top: 10px;
+  color: #000;
+}
+
+.auction-section p {
+  font-size: 1em;
+  margin-top: 10px;
+}
+
+.Header .Down_Header .world_bar_style {
+  position: relative;
+}
+
+.CategoryList {
+  position: absolute;
+  margin-left: -89px;
+  background-color: #ffffff;
+  border: 1px solid #f9e9e9;
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000; /* Đảm bảo CategoryList luôn ở trên cùng */
+}
+
+.CategoryItem {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.CategoryItem:last-child {
+  border-bottom: none;
+}
+
+.auction-title {
+  color: #333332;
+  text-align: center;
+  margin-top: 106px;
+  font: 400 36px/145% Inter, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+@media (max-width: 991px) {
+  .auction-title {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+.div-52 {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  margin-top: 30px;
+  width: 100%;
+  max-width: 1130px;
+  padding: 20px 68px 20px 1px;
+}
+
+@media (max-width: 991px) {
+  .div-52 {
+    max-width: 100%;
+    padding-right: 20px;
+  }
+}
+
+.column-6 {
+  line-height: normal;
+  flex-direction: column;
+  width: 30%;
+  margin-left: 0px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 991px) {
+  .column-6 {
+    width: 100%;
+  }
+}
+
+.div-55 {
+  padding-bottom: 39px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  color: #333332;
+  font-weight: 400;
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .div-55 {
+    margin-top: 36px;
+  }
+}
+
+.img-9 {
+  aspect-ratio: 1.49;
+  object-fit: auto;
+  object-position: center;
+  width: 100%;
+  align-self: stretch;
+}
+
+.div-56 {
+  text-transform: uppercase;
+  margin-top: 19px;
+  font: 15px/21px Inter, sans-serif;
+}
+
+.div-57 {
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-top: 8px;
+  width: 60px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  padding: 1px 28px;
+  font: 16px/130% Inter, sans-serif;
+}
+
+@media (max-width: 991px) {
+  .div-57 {
+    white-space: initial;
+    padding: 0 20px;
+  }
+}
+
+.div-58 {
+  color: #333;
+  margin-top: 17px;
+  font: italic 300 14px/194% Inter, -apple-system, Roboto, Helvetica, sans-serif;
+}

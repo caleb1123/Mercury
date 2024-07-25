@@ -7,7 +7,7 @@ import Footer from '../Footer'
 import { useEffect, useState } from "react";
 import {useAuth} from "../../../authContext";
 
-const AuctionSection = ({ image, auctionId, buttonTexts }) => {
+const AuctionSection = ({ image, auctionId }) => {
   const [targetDate, setTargetDate] = useState(null);
   const [jewelryData, setJewelryData] = useState([]);
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const AuctionSection = ({ image, auctionId, buttonTexts }) => {
   );
 };
 
-const AuctionDataPage = () => {
+function AuctionDataPage() {
   const { opId } = useParams();
   const [title, setTitle] = useState("");
   const [auctionDatas, setAuctionDatas] = useState([]);
