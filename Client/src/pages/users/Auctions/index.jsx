@@ -43,7 +43,7 @@ const AuctionSection = ({ image, auctionId }) => {
   if (!targetDate || !jewelryData) return <p>Loading...</p>;
 
   const handleItemClick = (id) => {
-    navigate('/ViewAuction', { state: { jewelryId: id } });
+    navigate('/ViewAuctionDetail', { state: { auction: id } });
   };
 
   return (
@@ -178,7 +178,7 @@ function AuctionDataPage() {
     <>
       <Header isLoggedIn={isLoggedIn} handleProfileClick={handleProfileClick} />
       <div className="main-content">
-        <h1 className="section-title">{title}</h1>
+        <h1 className="title">{title}</h1>
         {!error ? (
           <div className="auction-grid">
             {auctionRows.map((row, rowIndex) => (

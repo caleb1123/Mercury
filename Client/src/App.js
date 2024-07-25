@@ -24,6 +24,7 @@ import Unauthorized from './pages/unauthorized/unauthorized';
 import ProtectedRoute from './protectedRoute';
 import PaymentSuccess from './pages/users/ViewResult/PaymentSuccess';
 import PaymentFailed from './pages/users/ViewResult/PaymentFailed';
+import ViewAuctionDetail from './pages/users/Auctions/ViewAuctionDetail';
 
 const App = () => {
   return (
@@ -108,6 +109,10 @@ const App = () => {
           <Route
             path="/PaymentFailed"
             element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={PaymentFailed} />}
+          />
+          <Route
+            path="/ViewAuctionDetail"
+            element={<ProtectedRoute notAllowedRoles={['ADMIN', 'STAFF', 'MANAGER']} element={ViewAuctionDetail} />}
           />
         </Routes>
       </Router>

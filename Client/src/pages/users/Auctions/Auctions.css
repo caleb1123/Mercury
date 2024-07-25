@@ -9,7 +9,7 @@
 }
 
 .line {
-  width: 100%;
+  width: 115%;
   height: 1px; 
   color: #333333; 
   margin: 0.5em 0; 
@@ -21,8 +21,13 @@
   line-height: 1.7;
 }
 
+.auction-grid {
+  margin-left: -450px;
+}
+
 .auction-image-container {
-  flex: 0 0 150%;
+  flex: 0 0 200%;
+  margin-top: 30px;
 }
 
 .auction-title {
@@ -33,7 +38,7 @@
 }
 
 .auction {
-  width: 800px;
+  width: 1000px;
 }
 
 .auction-image {
@@ -53,8 +58,9 @@
 }
 
 .auction-details {
-  flex: 0 0 97%;
+  flex: 0 0 120%;
   margin-top: 50px;
+  margin-left: 100px;
   text-align: left;
   vertical-align: middle;
 }
@@ -79,7 +85,7 @@
   color: #333;
   font-weight: 400;
   text-align: center;
-  margin: 41px 0;
+  margin-top: 81px;
   justify-content: center;
 }
 
@@ -159,12 +165,14 @@
   margin: 0 auto;
 }
 
-.section-title {
+.title {
   font-size: 38px;
   text-align: left;
   font-family:Playfair Display;
   font-weight:400;
   font-style:normal;
+  margin-left: -120px;
+  margin-top: 90px;
 }
 
 /* Header for the auction data page */
