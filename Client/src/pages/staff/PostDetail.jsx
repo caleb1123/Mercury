@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, TextField, Typography, Select, MenuItem } from '@mui/material';
+import { Box, Button, TextField, Typography, Select, MenuItem, Paper } from '@mui/material';
 import axios from 'axios';
 
 const PostDetail = ({ post, onClose, handleUpdatePost }) => {
@@ -59,7 +59,7 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
   };
 
   return (
-    <Box mt={2} sx={{ width: '100%', marginBottom: '20vh', boxSizing: 'border-box'  }}>
+    <Paper sx={{ marginBottom: '20vh', boxSizing: 'border-box'  }}>
       <Typography variant="h6">Post Details</Typography>
       <TextField
         label="Title"
@@ -76,7 +76,7 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
         onChange={handleInputChange}
         fullWidth
         multiline
-        rows={4}
+        rows={10}
         margin="normal"
       />
       <Select
@@ -106,7 +106,7 @@ const PostDetail = ({ post, onClose, handleUpdatePost }) => {
       </Select>
       <Button variant="contained" onClick={handleSaveChanges}>Save Changes</Button>
       <Button variant="contained" onClick={onClose} sx={{ ml: 2 }}>Back</Button>
-    </Box>
+    </Paper>
   );
 };
 

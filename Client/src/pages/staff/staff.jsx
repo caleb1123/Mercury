@@ -354,8 +354,7 @@ const fetchPosts = async (accountId) => {
         </Grid>
       </Grid>
 
-      <Grid item xs={10} sx={{ backgroundColor: '#000', padding: 2 }}>
-        <Box
+      <Grid item xs={10} sx={{ width: '100vw', height: 'auto', backgroundColor: '#000', padding: 2 }}>        <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -450,7 +449,7 @@ const fetchPosts = async (accountId) => {
                           <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
                           <TableCell sx={{ wordWrap: 'break-word' }}>
                             <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
-                            <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
+                            <Button variant="contained" color="error" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
                             <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
                           </TableCell>
                         </TableRow>
@@ -599,15 +598,11 @@ const fetchPosts = async (accountId) => {
 
 
             {selectedIndex === 5 && selectedPost && !editPostImageMode && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                <Box sx={{ width: '100%', maxWidth: '800px', backgroundColor: '#fff', padding: 4, borderRadius: 2 }}>
                   <PostDetail
                     post={selectedPost}
                     onClose={() => setSelectedPost(null)}
                     handleUpdatePost={handleUpdatePost}
                   />
-                </Box>
-              </Box>
             )}
             {editPostImageMode && (
               <Dialog open={editPostImageMode} onClose={closeEditPostImageDialog} fullWidth maxWidth="md">
