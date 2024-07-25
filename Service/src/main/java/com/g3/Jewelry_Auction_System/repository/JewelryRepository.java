@@ -27,5 +27,7 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Integer> {
     List<Jewelry> getJewelriesForAuction();
     @Query(value = "SELECT DISTINCT j.* FROM Jewelry j LEFT JOIN Auction a ON j.jewelry_id = a.jewelry_id WHERE (a.status = 'Pending' OR a.status = 'Ongoing') AND a.winner_id IS NULL AND j.status = 1", nativeQuery = true)
     List<Jewelry> getJewelriesOnAuction();
+    @Query(value = "SELECT * FROM jewelry WHERE jewelry_code LIKE %:code%", nativeQuery = true)
+    List<Jewelry> getByJewelryCode(@Param("code") String code);
 
 }
