@@ -15,10 +15,9 @@ function RequestDetails({ request, onSave, onFinalPriceChange, finalPrice, onCan
         },
       });
       alert('Final price updated successfully');
-      onSave(); // Notify the parent component to refresh data
+      onSave(); 
     } catch (error) {
       console.error('Error updating final price:', error);
-      alert(`Failed to update final price: ${error.response?.data}`);
     }
   };
 
