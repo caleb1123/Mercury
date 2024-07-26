@@ -43,7 +43,7 @@ const AuctionSection = ({ image, auctionId }) => {
   if (!targetDate || !jewelryData) return <p>Loading...</p>;
 
   const handleItemClick = (id) => {
-    navigate('/ViewAuctionDetail', { state: { auction: id } });
+    navigate('/ViewAuctionDetail', { state: { auctionId: id } });
   };
 
   return (
@@ -51,7 +51,7 @@ const AuctionSection = ({ image, auctionId }) => {
       <div className="auction-content">
         <div className="auction-image-container">
           <h2 className="auction-title">{jewelryData.gemstone}</h2>
-          <button onClick={() => handleItemClick(jewelryData.jewelryId)} className="image-click">
+          <button onClick={() => handleItemClick(auctionId)} className="image-click">
             <img
               src={image}
               alt={jewelryData.jewelryName}

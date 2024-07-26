@@ -98,7 +98,6 @@ function ManagerPage() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const decodedToken = jwtDecode(token);
       const response = await axios.get(`http://localhost:8088/account/myinfor`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -284,12 +283,6 @@ function ManagerPage() {
     } catch (error) {
       console.error('Error updating profile:', error);
     }
-  };
-
-  const handleEditClickRequest = (request) => {
-    setSelectedRequest(request);
-    setFinalPrice(request.finalPrice);
-    setEditMode(true);
   };
 
   const handleAuctionEditClick = (auction) => {

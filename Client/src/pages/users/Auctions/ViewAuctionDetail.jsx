@@ -45,7 +45,7 @@ const getNextBids = (startingPrice) => {
 
 function ViewAuction() {
   const { state } = useLocation();
-  const { jewelryId } = state || {};
+  const { auctionId } = state || {};
   const [jewelry, setJewelry] = useState(null);
   const [auction, setAuction] = useState(null);
   const [bids, setBids] = useState([]);
@@ -60,13 +60,13 @@ function ViewAuction() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("jewelryId:", jewelryId);
-    if (jewelryId) {
+    console.log("auctionId:", auctionId);
+    if (auctionId) {
       fetchJewelryData();
       fetchAuctionData();
       fetchImagesData();
     }
-  }, [jewelryId]);
+  }, [auctionId]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -85,12 +85,12 @@ function ViewAuction() {
     }, 30000); // 30 seconds interval
 
     return () => clearInterval(interval);
-  }, [jewelryId]);
+  }, [auctionId]);
 
   const fetchJewelryData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}`, {
+      const response = await axios.get(`http://localhost:8088/jewelry/${auctionId}/jewelry`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -115,6 +115,17 @@ function ViewAuction() {
 
   const fetchImagesData = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const response2 = await axios.get(`http://localhost:8088/jewelry/${auctionId}/jewelry`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response2.status !== 200) {
+        throw new Error(`HTTP error! status: ${response2.status}`);
+      }
+      const jewelryId = response2.data.jewelryId;
       const response = await axios.get(`http://localhost:8088/jewelryImage/all/${jewelryId}`);
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -138,7 +149,7 @@ function ViewAuction() {
   const fetchAuctionData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}/auction`, {
+      const response = await axios.get(`http://localhost:8088/auction/${auctionId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -237,14 +248,6 @@ function ViewAuction() {
 
       const decodedToken = jwtDecode(token);
       const username = decodedToken.sub;
-
-      const response = await axios.get(`http://localhost:8088/jewelry/${jewelryId}/auction`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const auctionId = response.data.auctionId;
 
       if (!auctionId) {
         throw new Error('Auction ID not found');

@@ -43,11 +43,7 @@ const AddJewelry = ({ fetchJewelry }) => {
       [name]: value,
     });
   };
-
-  const handleFileChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
-
+  
   const handleAddJewelry = async () => {
     try {
       // Upload image first
