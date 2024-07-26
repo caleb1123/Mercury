@@ -36,7 +36,7 @@ const EditAuction = ({ auction, onClose, onAuctionUpdated }) => {
   };
 
   return (
-    <Paper sx={{ padding: 2 }}>
+    <Paper sx={{ padding: 2, minHeight: '100vh' }}>
       <Typography variant="h6">Edit Auction</Typography>
       <TextField
         label="Start Date"

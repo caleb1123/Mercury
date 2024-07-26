@@ -144,10 +144,10 @@ function Sidebar() {
               <ListItemText primary="Account" sx={{ color: '#fff' }} />
             </ListItem>
             <ListItem button selected={selectedIndex === 2} onClick={() => handleListItemClick(2)} sx={{ color: '#fff' }} key="profile">
-              <ListItemIcon sx={{ color: '#fff' }}>
+              {/* <ListItemIcon sx={{ color: '#fff' }}>
                 <AssessmentIcon />
               </ListItemIcon>
-              <ListItemText primary="Report" sx={{ color: '#fff' }} />
+              <ListItemText primary="Report" sx={{ color: '#fff' }} /> */}
             </ListItem>
           </List>
           <Divider sx={{ backgroundColor: '#fff' }} />
@@ -261,7 +261,6 @@ function Sidebar() {
         )}
         {selectedIndex === 2 && (
           <Paper sx={{ height: '100vh', backgroundColor: '#fff', paddingRight: '195vh' }}>
-            {/* Nội dung của bảng trắng có thể được đặt ở đây */}
           </Paper>
         )}
         {selectedIndex === 4 && <AddAccount />}

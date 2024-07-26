@@ -319,7 +319,7 @@ function ViewAuction() {
         <div className="Current_Info">
           <div className="info_data">
             <div>Current Bid</div>
-            <div className="info_data_style">${auction.currentPrice}</div>
+            <div className="info_data_style">{auction.currentPrice}</div>
           </div>
           <div className="info_data">
             <div>Bids</div>
@@ -338,7 +338,7 @@ function ViewAuction() {
             <div className="info_data_style">{auction.status}</div>
           </div>
           <div className="PlaceBidContainer">
-            <div className="WordStyle_JewelryInfo">Maximum Bid ($)
+            <div className="WordStyle_JewelryInfo">Maximum Bid 
               <select name="Bid_List" onChange={handleBidChange}>
                 {nextBids.map(bid => (
                   <option key={bid} value={bid}>{bid}</option>
