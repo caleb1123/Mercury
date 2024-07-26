@@ -297,4 +297,15 @@ public class AuctionServiceImpl implements AuctionService {
         }
     }
 
+    @Override
+    public AuctionDTO getAuctionById(int id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.AUCTION_NOT_FOUND)
+        );
+        if (auction!= null) {
+            return auctionConverter.toDTO(auction);
+        }
+        return null;
+    }
+
 }

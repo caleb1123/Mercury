@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AuctionConverter {
@@ -52,4 +53,5 @@ public class AuctionConverter {
         }
         return auctionDTOs;
     }
+
 }

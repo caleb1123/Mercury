@@ -3,6 +3,7 @@ package com.g3.Jewelry_Auction_System.controller;
 import com.g3.Jewelry_Auction_System.entity.Auction;
 import com.g3.Jewelry_Auction_System.payload.DTO.AuctionDTO;
 import com.g3.Jewelry_Auction_System.payload.DTO.BidDTO;
+import com.g3.Jewelry_Auction_System.payload.DTO.JewelryDTO;
 import com.g3.Jewelry_Auction_System.payload.response.AuctionToEndResponse;
 import com.g3.Jewelry_Auction_System.payload.response.UpcomingAuctionResponse;
 import com.g3.Jewelry_Auction_System.payload.response.WinnerResponse;
@@ -121,5 +122,13 @@ public class AuctionController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+    @CrossOrigin(origins = "http://localhost:3001")
+    @GetMapping("/{auctionId}")
+    public ResponseEntity<AuctionDTO> getAuctionDetail(@PathVariable(value = "auctionId") int auctionId){
+        AuctionDTO auctionDetail = auctionService.getAuctionById(auctionId);
+        return new ResponseEntity<>(auctionDetail, HttpStatus.OK);
+    }
 }
-}
+
+

@@ -128,8 +128,8 @@ const ViewJewelry = () => {
           <div className="info_ViewJewelry">
             <div className="JewelryName">{jewelry.jewelryName}</div>
             <div className="WordStyle_JewelryInfo">
-              <span><strong>Estimate</strong></span> : ${minEstimate} - ${maxEstimate}<br />
-              <span name="StartBid"><strong>Starting Bid</strong></span> : ${jewelry.startingPrice}
+              <span><strong>Estimate</strong></span> : {minEstimate} -  {maxEstimate} <br />
+              <span name="StartBid"><strong>Starting Bid</strong></span> :  {jewelry.startingPrice} 
             </div>
 
             <button onClick={navigateToAuction} className="PlaceBidButton">VIEW AUCTION</button>

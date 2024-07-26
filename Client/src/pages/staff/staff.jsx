@@ -62,6 +62,8 @@ function StaffPage() {
   const [editPostImageMode, setEditPostImageMode] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [accountId, setAccountId] = useState('');
+  const [searchCode, setSearchCode] = useState('');
+
 
 
   const {user, logout} = useAuth();
@@ -243,6 +245,16 @@ const fetchPosts = async (accountId) => {
     logout(user);
     navigate('/'); 
   };
+  const handleSearchcode = async () => {
+    if (searchCode) {
+      try {
+        const response = await axios.get(`http://localhost:8088/jewelry/list/code/${searchCode}`);
+        setFilteredJewelryList(response.data);
+      } catch (error) {
+        console.error('Error fetching jewelry:', error);
+      }
+    }
+  };
 
   const updateProfile = async () => {
     try {
@@ -387,79 +399,92 @@ const fetchPosts = async (accountId) => {
                 <Button variant="contained" color="primary" onClick={updateProfile}>Update Profile</Button>
               </Paper>
             )}
-            {selectedIndex === 1 && !editMode && !addJewelryMode && !viewJewelryId && (
-              <React.Fragment>
-                <Box sx={{ mb: 2 }}>
-                  <Select
-                    displayEmpty
-                    fullWidth
-                    name="jewelryCategoryId"
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    sx={{ backgroundColor: '#fff' }}
-                  >
-                    <MenuItem value=""><em>All Categories</em></MenuItem>
-                    {categories.map((category) => (
-                      <MenuItem key={category.jewelry_category_id} value={category.jewelry_category_id}>
-                        {category.category_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <Select
-                    displayEmpty
-                    fullWidth
-                    name="status"
-                    value={selectedStatus}
-                    onChange={handleStatusChange}
-                    sx={{ backgroundColor: '#fff', mt: 2 }}
-                  >
-                    <MenuItem value=""><em>All Status</em></MenuItem>
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="inactive">Inactive</MenuItem>
-                  </Select>
-                </Box>
-                <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
-                  Add Jewelry
-                </Button>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
-                  <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>ID</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Name</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Designer</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Gemstone</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Category</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Price</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Status</TableCell>
-                        <TableCell sx={{ wordWrap: 'break-word' }}>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {filteredJewelryList.map((jewelry) => (
-                        <TableRow key={jewelry.jewelryId}>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.jewelryId}</TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.jewelryName}</TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.designer}</TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.gemstone}</TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>
-                            {categories.find(category => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}
-                          </TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.startingPrice}</TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
-                          <TableCell sx={{ wordWrap: 'break-word' }}>
-                            <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
-                            <Button variant="contained" color="error" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
-                            <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+           {selectedIndex === 1 && !editMode && !addJewelryMode && !viewJewelryId && (
+  <React.Fragment>
+    <Box sx={{ mb: 2 }}>
+      <Select
+        displayEmpty
+        fullWidth
+        name="jewelryCategoryId"
+        value={selectedCategory}
+        onChange={handleCategoryChange}
+        sx={{ backgroundColor: '#fff' }}
+      >
+        <MenuItem value=""><em>All Categories</em></MenuItem>
+        {categories.map((category) => (
+          <MenuItem key={category.jewelry_category_id} value={category.jewelry_category_id}>
+            {category.category_name}
+          </MenuItem>
+        ))}
+      </Select>
+      <Select
+        displayEmpty
+        fullWidth
+        name="status"
+        value={selectedStatus}
+        onChange={handleStatusChange}
+        sx={{ backgroundColor: '#fff', mt: 2 }}
+      >
+        <MenuItem value=""><em>All Status</em></MenuItem>
+        <MenuItem value="active">Active</MenuItem>
+        <MenuItem value="inactive">Inactive</MenuItem>
+      </Select>
+      <Button variant="contained" color="primary" onClick={() => setAddJewelryMode(true)} sx={{ mt: 2 }}>
+        Add Jewelry
+      </Button>
+      
+      <Box sx={{ display: 'flex', mt: 2 }}>
+        <TextField
+          label="Search Code"
+          variant="outlined"
+          fullWidth
+          value={searchCode}
+          onChange={(e) => setSearchCode(e.target.value)}
+        />
+        <Button variant="contained" color="primary" onClick={handleSearchcode} sx={{ ml: 2 }}>
+          Search
+        </Button>
+      </Box>
+    </Box>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, height: '100vh' }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>No.</TableCell>
+            <TableCell>Jewelry Code</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Designer</TableCell>
+            <TableCell>Gemstone</TableCell>
+            <TableCell>Category</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredJewelryList.map((jewelry, index) => (
+            <TableRow key={jewelry.jewelryId}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{jewelry.jewelryCode}</TableCell>
+              <TableCell>{jewelry.jewelryName}</TableCell>
+              <TableCell>{jewelry.designer}</TableCell>
+              <TableCell>{jewelry.gemstone}</TableCell>
+              <TableCell>{categories.find((category) => category.jewelry_category_id === jewelry.jewelryCategoryId)?.category_name}</TableCell>
+              <TableCell>{jewelry.startingPrice}</TableCell>
+              <TableCell>{jewelry.status ? 'Active' : 'Inactive'}</TableCell>
+              <TableCell>
+                <Button variant="contained" color="primary" onClick={() => handleEditClick(jewelry)}>Edit</Button>
+                <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(jewelry)}>Delete</Button>
+                <Button variant="contained" onClick={() => handleEditImageClick(jewelry.jewelryId)}>Edit Image</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </React.Fragment>
+)}
 
-              </React.Fragment>
-            )}
             {selectedIndex === 1 && editMode && selectedJewelry && (
               <EditJewelry jewelry={selectedJewelry} fetchJewelry={fetchJewelry} setEditMode={setEditMode} />
             )}
@@ -473,7 +498,7 @@ const fetchPosts = async (accountId) => {
             {selectedIndex === 2 && (
               <Paper sx={{ padding: 1, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Auctions</Typography>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
                   <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                     <TableHead>
                       <TableRow>
@@ -505,9 +530,9 @@ const fetchPosts = async (accountId) => {
 
             )}
             {selectedIndex === 3 && !viewJewelryId && (
-              <Paper sx={{ backgroundColor: '#fff', color: '#000' }}>
+              <Paper sx={{ backgroundColor: '#fff', color: '#000'  }}>
                 <Typography variant="h6">Requests</Typography>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
                   <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                     <TableHead>
                       <TableRow>
@@ -560,7 +585,7 @@ const fetchPosts = async (accountId) => {
     <Button variant="contained" color="primary" onClick={handleCreatePostClick} sx={{ mt: 2 }}>
       Create Post
     </Button>
-    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+    <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
       <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
         <TableHead>
           <TableRow>

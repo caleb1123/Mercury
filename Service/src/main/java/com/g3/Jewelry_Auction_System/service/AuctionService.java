@@ -27,4 +27,5 @@ public interface AuctionService {
     LocalDateTime getTargetDate(int auctionId);
     List<AuctionDTO> getWonAuctions();
     void stopAuction(int auctionId);
+    AuctionDTO getAuctionById(int id);
 }

@@ -569,7 +569,7 @@ function ManagerPage() {
                 <Button variant="contained" color="primary" onClick={() => setShowAddAuction(true)} sx={{ mb: 2 }}>
                   Add Auction
                 </Button>
-                <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+                <TableContainer component={Paper} sx={{ marginTop: 2 , minHeight: '100vh'}}>
                   <Table>
                     <TableHead>
                       <TableRow>
@@ -613,10 +613,7 @@ function ManagerPage() {
             {selectedIndex === 5 && !selectedPost && !editPostImageMode && !editMode && (
               <React.Fragment>
                 <Typography variant="h6">All Posts</Typography>
-                <Button variant="contained" color="primary" onClick={handleCreatePostClick} sx={{ mt: 2 }}>
-                  Create Post
-                </Button>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
                   <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                     <TableHead>
                       <TableRow>
@@ -669,7 +666,7 @@ function ManagerPage() {
             {selectedIndex === 3 && !viewRequestId && (
               <Paper sx={{ padding: 2, backgroundColor: '#fff', color: '#000' }}>
                 <Typography variant="h6">Requests</Typography>
-                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2 }}>
+                <TableContainer component={Paper} sx={{ backgroundColor: '#fff', p: 2, minHeight: '100vh' }}>
                   <Table>
                     <TableHead>
                       <TableRow>
